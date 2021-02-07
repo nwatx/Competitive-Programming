@@ -1,4 +1,5 @@
-# CP
+# CP 
+#### (VSCode version of bqi343's USACO)
 
 ## How to use
 
@@ -22,3 +23,8 @@ while len(LENGTHS) < len(FILES):
 ```
 
 Add `make.bat` to path, then you can run the file from anywhere using `make`. Ex. `make -f 1,2,3`. Make sure that the files are separated by commas and are in **one and only one** string.
+
+## Built in preset flags
+
+* `-usaco`: `-f problem1,problem2,problem3 -l v,v,v`
+* `-cf `: `-f A,B,C,D,E,F,G -l v, s`
