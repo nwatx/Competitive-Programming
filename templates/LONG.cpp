@@ -62,6 +62,7 @@ const int MX = 2e5+5;
 const ll INF = 1e18; // not too close to LLONG_MAX
 const db PI = acos((db)-1);
 const int dx[4] = {1,0,-1,0}, dy[4] = {0,1,0,-1}; // for every grid problem!!
+const char nl = '\n';
 mt19937 rng((uint32_t)chrono::steady_clock::now().time_since_epoch().count()); 
 template<class T> using pqg = priority_queue<T,vector<T>,greater<T>>;
 
@@ -120,6 +121,13 @@ tcTU> void re(pair<T,U>& p) { re(p.f,p.s); }
 tcT> void re(V<T>& x) { each(a,x) re(a); }
 tcT, size_t SZ> void re(AR<T,SZ>& x) { each(a,x) re(a); }
 tcT> void rv(int n, V<T>& x) { x.rsz(n); re(x); }
+
+// DECLARATION AND INPUT
+#define revi(x, n) vi x(n); re(x)
+#define revp(x, n) vpi x(n); re(x);
+#define revd(x, n) vd x(n); re(x);
+#define rei(x, n) int x; re(x);
+#define redb(x, n) db x; re(x);
 
 // TO_STRING
 #define ts to_string
