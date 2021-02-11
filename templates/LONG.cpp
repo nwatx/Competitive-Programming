@@ -214,7 +214,10 @@ void setIO(str s = "") {
 }
 
 int main() {
+	// clock_t start = clock();
 	setIO();
+
+	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 	
 	// you should actually read the stuff at the bottom
 }
