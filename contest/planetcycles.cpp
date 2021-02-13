@@ -1,18 +1,12 @@
 #include <bits/stdc++.h>
 using namespace std;
-
-#include <ext/pb_ds/assoc_container.hpp> // Common file
-#include <ext/pb_ds/tree_policy.hpp> // Including tree_order_statistics_node_update
-using namespace __gnu_pbds;
-
-#pragma GCC optimize("O3")
-#pragma GCC optimization ("unroll-loops")
-
-#pragma region
  
 using ll = long long;
 using db = long double; // or double, if TL is tight
 using str = string; // yay python!
+
+#pragma GCC optimize("O3")
+#pragma GCC optimization ("unroll-loops")
 
 using pi = pair<int,int>;
 using pl = pair<ll,ll>;
@@ -67,13 +61,13 @@ tcT> int lwb(V<T>& a, const T& b) { return int(lb(all(a),b)-bg(a)); }
 #define each(a,x) for (auto& a: x)
 
 const int MOD = 1e9+7; // 998244353;
+const int MX = 2e5+5;
 const ll INF = 1e18; // not too close to LLONG_MAX
 const db PI = acos((db)-1);
 const int dx[4] = {1,0,-1,0}, dy[4] = {0,1,0,-1}; // for every grid problem!!
 const char nl = '\n';
 mt19937 rng((uint32_t)chrono::steady_clock::now().time_since_epoch().count()); 
 template<class T> using pqg = priority_queue<T,vector<T>,greater<T>>;
-template<class T> using ost = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>; //order statistic tree!
 
 // bitwise ops
 // also see https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html
@@ -133,11 +127,10 @@ tcT> void rv(int n, V<T>& x) { x.rsz(n); re(x); }
 
 // DECLARATION AND INPUT
 #define revi(x, n) vi x(n); re(x)
-#define revl(x, n) vl x(n); re(x);
 #define revp(x, n) vpi x(n); re(x);
 #define revd(x, n) vd x(n); re(x);
-#define rei(x) int x; re(x);
-#define redb(x) db x; re(x);
+#define rei(x, n) int x; re(x);
+#define redb(x, n) db x; re(x);
 
 // TO_STRING
 #define ts to_string
@@ -223,15 +216,88 @@ void setIO(str s = "") {
 	if (sz(s)) setIn(s+".in"), setOut(s+".out"); // for USACO
 }
 
-#pragma endregion
+int N;
+int P[MX];
+int dist[MX];
+int vis[MX];
 
-const int MX = 2e5+1;
+vi cycle;
+
+// void dfs(int x) {
+// 	dbg(cycle);
+// 	if(vis[x] || dist[x] != MOD) return;
+// 	if(sz(cycle) && cycle[0] == x) {
+// 		each(a, cycle) {
+// 			vis[a] = true;
+// 			dist[a] = sz(cycle);
+// 		}
+// 		cycle = vi();
+// 	} else {
+// 		cycle.pb(x);
+// 		if(dist[P[x]] == MOD) dfs(P[x]);
+// 		else dist[x] = 1 + dist[P[x]], vis[x] = true;
+// 	}
+// }
+
+void dfs(int x) { // gets rid of all cycles
+	int a = P[x], b = P[P[x]];
+	while(a != b) {
+		a = P[a];
+		b = P[P[b]];
+	}
+
+	a = x;
+	while(a != b) {
+		a = P[a];
+		b = P[b];
+	}
+
+	b = P[a];
+	stack<int> cycle;
+	cycle.push(a);
+	cycle.push(b);
+	int l = 1;
+	while(a != b) {
+		b = P[b];
+		cycle.push(b);
+		l++;
+	}
+
+	while(sz(cycle)) {
+		int x = cycle.top();
+		dist[x] = l;
+		cycle.pop();
+	}
+}
+
+int dfs2(int x, int d) {
+	if(dist[P[x]] != MOD) return dist[x] = dist[P[x]] + 1;
+	else {
+		return dist[x] = dfs2(P[x], d + 1) + 1;
+	}
+}
 
 int main() {
-	// clock_t start = clock();
-	setIO();
+	clock_t start = clock();
+	setIO("planetcycles");
 
-	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
+	re(N);
+	F0R(i, N) re(P[i]);
+	F0R(i, N) --P[i];
+	F0R(i, N) dist[i] = MOD;
+
+	F0R(i, N) if(dist[i] == MOD) dfs(i); // initial dfs => gets rid of all cycles
+	F0R(i, N) if(dist[i] == MOD) dfs2(i, 1); // shortest distance to nearest cycle
+
+	// F0R(i, N) pr(dist[i], i == N-1 ? "" : " ");
+	F0R(i, N-1) {
+		pr(dist[i], " ");
+	}
+
+	pr(dist[N-1], nl);
+
+	cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
+	// you should actually read the stuff at the bottom
 }
 
 /* stuff you should look for

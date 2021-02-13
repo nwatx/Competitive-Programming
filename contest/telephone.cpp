@@ -1,13 +1,6 @@
 #include <bits/stdc++.h>
+
 using namespace std;
-
-#include <ext/pb_ds/assoc_container.hpp> // Common file
-#include <ext/pb_ds/tree_policy.hpp> // Including tree_order_statistics_node_update
-using namespace __gnu_pbds;
-
-#pragma GCC optimize("O3")
-#pragma GCC optimization ("unroll-loops")
-
 #pragma region
  
 using ll = long long;
@@ -67,6 +60,7 @@ tcT> int lwb(V<T>& a, const T& b) { return int(lb(all(a),b)-bg(a)); }
 #define each(a,x) for (auto& a: x)
 
 const int MOD = 1e9+7; // 998244353;
+const int MX = 5e4+5;
 const ll INF = 1e18; // not too close to LLONG_MAX
 const db PI = acos((db)-1);
 const int dx[4] = {1,0,-1,0}, dy[4] = {0,1,0,-1}; // for every grid problem!!
@@ -133,11 +127,10 @@ tcT> void rv(int n, V<T>& x) { x.rsz(n); re(x); }
 
 // DECLARATION AND INPUT
 #define revi(x, n) vi x(n); re(x)
-#define revl(x, n) vl x(n); re(x);
 #define revp(x, n) vpi x(n); re(x);
 #define revd(x, n) vd x(n); re(x);
 #define rei(x) int x; re(x);
-#define redb(x) db x; re(x);
+#define redb(x, n) db x; re(x);
 
 // TO_STRING
 #define ts to_string
@@ -223,15 +216,77 @@ void setIO(str s = "") {
 	if (sz(s)) setIn(s+".in"), setOut(s+".out"); // for USACO
 }
 
-#pragma endregion
+int N, K;
 
-const int MX = 2e5+1;
+map<int, set<int>> loc;
+
+/**
+ * Description: shortest path
+ * Source: own
+ * Verification: https://open.kattis.com/problems/shortestpath1
+ */
+
+template<class C, bool directed> struct Dijkstra {
+	int SZ; V<C> dist; 
+	V<V<pair<int,C>>> adj;
+	void init(int _SZ) { SZ = _SZ; adj.clear(); adj.rsz(SZ); }
+	void ae(int u, int v, C cost) {
+		adj[u].pb({v,cost}); if (!directed) adj[v].pb({u,cost}); }
+	void gen(int st) {
+		dist.assign(SZ,MOD);
+		using T = pair<C,int>; pqg<T> pq; 
+		auto ad = [&](int a, C b) {
+			if (dist[a] <= b) return;
+			pq.push({dist[a] = b,a});
+		}; ad(st,0);
+		while (sz(pq)) {
+			T x = pq.top(); pq.pop(); if (dist[x.s] < x.f) continue;
+			each(y,adj[x.s]) ad(y.f,x.f+y.s);
+		}
+	}
+};
 
 int main() {
 	// clock_t start = clock();
 	setIO();
+	// setIn("6.in");
+
+	re(N, K);
+
+	Dijkstra<int, true> dik;
+	dik.init(N+1);
+
+	FOR(i, 1, N+1) {
+		rei(a);
+		loc[a].insert(i);
+	}
+
+
+	// dbg(loc);
+
+	FOR(i, 1, K+1) FOR(j, 1, K+1) {
+		char a; re(a);
+		assert(a == '1' || a == '0');
+		if(a == '1') {
+			// all locations of A[i] must be connect to all locations of B[j];
+			each(e, loc[i]) each(ee, loc[j]) { dik.ae(e, ee, abs(e - ee)); 
+			// dbg(e, ee, abs(e-ee)); 
+			}
+		}
+	}
+
+
+	dik.gen(1);
+
+	// dbg(dik.adj);
+	// dbg(dik.dist);
+
+	if(dik.dist[N] == MOD) pr(-1, nl);
+	else pr(dik.dist[N], nl);
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
+	
+	// you should actually read the stuff at the bottom
 }
 
 /* stuff you should look for

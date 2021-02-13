@@ -67,6 +67,7 @@ tcT> int lwb(V<T>& a, const T& b) { return int(lb(all(a),b)-bg(a)); }
 #define each(a,x) for (auto& a: x)
 
 const int MOD = 1e9+7; // 998244353;
+const int MX = 2e5+5;
 const ll INF = 1e18; // not too close to LLONG_MAX
 const db PI = acos((db)-1);
 const int dx[4] = {1,0,-1,0}, dy[4] = {0,1,0,-1}; // for every grid problem!!
@@ -133,11 +134,10 @@ tcT> void rv(int n, V<T>& x) { x.rsz(n); re(x); }
 
 // DECLARATION AND INPUT
 #define revi(x, n) vi x(n); re(x)
-#define revl(x, n) vl x(n); re(x);
 #define revp(x, n) vpi x(n); re(x);
 #define revd(x, n) vd x(n); re(x);
-#define rei(x) int x; re(x);
-#define redb(x) db x; re(x);
+#define rei(x, n) int x; re(x);
+#define redb(x, n) db x; re(x);
 
 // TO_STRING
 #define ts to_string
@@ -225,13 +225,27 @@ void setIO(str s = "") {
 
 #pragma endregion
 
-const int MX = 2e5+1;
-
 int main() {
 	// clock_t start = clock();
 	setIO();
 
+	int n; re(n);
+	revi(a, n);
+	revi(b, n);
+
+	int ret = 0;
+
+	F0R(i, n) {
+		FOR(j, i+1, n) {
+			ckmax(ret, (a[i]-a[j])*(a[i]-a[j])+(b[i]-b[j])*(b[i]-b[j]));
+		}
+	}
+
+	cout << ret << "\n";
+
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
+	
+	// you should actually read the stuff at the bottom
 }
 
 /* stuff you should look for

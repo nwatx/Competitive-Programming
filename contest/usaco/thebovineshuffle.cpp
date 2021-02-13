@@ -1,14 +1,5 @@
 #include <bits/stdc++.h>
 using namespace std;
-
-#include <ext/pb_ds/assoc_container.hpp> // Common file
-#include <ext/pb_ds/tree_policy.hpp> // Including tree_order_statistics_node_update
-using namespace __gnu_pbds;
-
-#pragma GCC optimize("O3")
-#pragma GCC optimization ("unroll-loops")
-
-#pragma region
  
 using ll = long long;
 using db = long double; // or double, if TL is tight
@@ -67,13 +58,12 @@ tcT> int lwb(V<T>& a, const T& b) { return int(lb(all(a),b)-bg(a)); }
 #define each(a,x) for (auto& a: x)
 
 const int MOD = 1e9+7; // 998244353;
+const int MX = 2e5+5;
 const ll INF = 1e18; // not too close to LLONG_MAX
 const db PI = acos((db)-1);
 const int dx[4] = {1,0,-1,0}, dy[4] = {0,1,0,-1}; // for every grid problem!!
-const char nl = '\n';
 mt19937 rng((uint32_t)chrono::steady_clock::now().time_since_epoch().count()); 
 template<class T> using pqg = priority_queue<T,vector<T>,greater<T>>;
-template<class T> using ost = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>; //order statistic tree!
 
 // bitwise ops
 // also see https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html
@@ -130,14 +120,6 @@ tcTU> void re(pair<T,U>& p) { re(p.f,p.s); }
 tcT> void re(V<T>& x) { each(a,x) re(a); }
 tcT, size_t SZ> void re(AR<T,SZ>& x) { each(a,x) re(a); }
 tcT> void rv(int n, V<T>& x) { x.rsz(n); re(x); }
-
-// DECLARATION AND INPUT
-#define revi(x, n) vi x(n); re(x)
-#define revl(x, n) vl x(n); re(x);
-#define revp(x, n) vpi x(n); re(x);
-#define revd(x, n) vd x(n); re(x);
-#define rei(x) int x; re(x);
-#define redb(x) db x; re(x);
 
 // TO_STRING
 #define ts to_string
@@ -223,15 +205,41 @@ void setIO(str s = "") {
 	if (sz(s)) setIn(s+".in"), setOut(s+".out"); // for USACO
 }
 
-#pragma endregion
-
-const int MX = 2e5+1;
+int A[MX];
+int cnt[MX];
 
 int main() {
-	// clock_t start = clock();
-	setIO();
+	setIO("shuffle");
+	int n; re(n);
 
-	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
+	F0R(i, n) {
+		re(A[i]);
+		A[i]--;
+		cnt[A[i]]++;
+	}
+
+	int ret = n;
+
+	queue<int> q;
+	F0R(i, n) {
+		if(cnt[i] == 0) { 
+			q.push(i);
+			ret--;
+		}
+	}
+
+	while(!q.empty()) {
+		int top = q.front();
+		q.pop();
+		if(!--cnt[A[top]]) {
+			q.push(A[top]);
+			ret--;
+		}
+	}
+
+	cout << ret;
+
+	// you should actually read the stuff at the bottom
 }
 
 /* stuff you should look for
