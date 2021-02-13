@@ -227,6 +227,10 @@ void setIO(str s = "") {
 
 const int MX = 2e5+1;
 
+/*input
+
+*/
+
 int main() {
 	// clock_t start = clock();
 	setIO();

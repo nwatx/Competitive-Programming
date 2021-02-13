@@ -22,6 +22,10 @@ void setIO(string name = "") { // name is nonempty for USACO file I/O
 	}
 }
 
+/*input
+
+*/
+
 int main() {
 	setIO();
 	
