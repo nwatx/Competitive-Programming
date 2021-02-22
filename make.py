@@ -11,7 +11,7 @@ print(f'Arguments{str(sys.argv)}')
 FLAGS=['-f', '-l']
 
 FILES=[]
-LENGTHS=[] # s m l
+LENGTHS=[] # s m l g
 
 for i in range(0, len(ARGS)):
     ARGS[i] = ARGS[i].lower()
@@ -45,6 +45,8 @@ for i in range(0, len(LENGTHS)):
         LENGTHS[i] = 'SHORT'
     if(LENGTHS[i] == 'v'):
         LENGTHS[i] = 'VERYSHORT'
+    if(LENGTHS[i] == 'g'):
+        LENGTHS[i] = 'GUIDE'
 
 # print(FILES)
 # print(LENGTHS)
