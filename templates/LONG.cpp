@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+
 using namespace std;
 
 #include <ext/pb_ds/assoc_container.hpp> // Common file
@@ -226,10 +227,6 @@ void setIO(str s = "") {
 #pragma endregion
 
 const int MX = 2e5+1;
-
-/*input
-
-*/
 
 int main() {
 	// clock_t start = clock();

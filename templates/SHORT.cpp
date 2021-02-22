@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+
 using namespace std;
  
 using ll = long long;
@@ -113,10 +114,6 @@ template<class H, class... T> void DBG(H h, T... t) {
 #else
 #define dbg(...) 0
 #endif
-
-/*input
-
-*/
 
 int main() { 
 	cin.tie(0)->sync_with_stdio(0); 
