@@ -74,7 +74,7 @@
         "typeinfo": "cpp"
     },
     "code-runner.executorMap": {
-        "cpp": "cd $dir && g++ $fileName -O2 -Wall -Wextra -Wno-unknown-pragmas -DLOCAL && $dira"
+        "cpp": "cd $dir && g++ -std=c++17 $fileName -O2 -Wall -Wextra -Wno-unknown-pragmas -DLOCAL && $dira"
     },
     "editor.minimap.side": "right",
     "editor.renderLineHighlight": "all",

@@ -232,27 +232,15 @@ int main() {
 	// clock_t start = clock();
 	setIO();
 
-	int n, m;
-	re(n,m);
-	vi a(n);
-	vi b(m);
-	re(a);
-	re(b);
-
-	sor(a);
-	sor(b);
-
-	vi ret(n+m);
-
-	int i = 0, j = 0;
-	F0R(_, n+m) {
-		if(i == n) ret[_] = b[j++];
-		else if(j == m) ret[_] = a[i++];
-		else if(a[i] < b[j]) { ret[_] = a[i++];  }
-		else if(a[i] >= b[j]) { ret[_] = b[j++]; }
+	int n; re(n);
+	while(n--) {
+		int m,c; re(m,c);
+		vi v(m);
+		re(v);
+		int ans = MOD;
+		each(e, v) if(e>=c) ckmin(ans, e);
+		ans == MOD ? pr(-1, nl) : pr(ans, nl);
 	}
-
-	each(e, ret) pr(e, " ");
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }

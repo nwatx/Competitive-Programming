@@ -226,75 +226,11 @@ void setIO(str s = "") {
 
 #pragma endregion
 
-const int mx = 2e5+1;
-
-template<class T> struct Seg { // comb(ID,b) = b
-	const T ID = 0; T comb(T a, T b) { return a+b; } 
-	int n; vector<T> seg;
-	void init(int _n) { n = _n; seg.assign(2*n,ID); }
-	void pull(int p) { seg[p] = comb(seg[2*p],seg[2*p+1]); }
-	void upd(int p, T val) { // set val at position p
-		seg[p += n] = val; for (p /= 2; p; p /= 2) pull(p); }
-	T query(int l, int r) {	// sum on interval [l, r]
-		T ra = ID, rb = ID; 
-		for (l += n, r += n+1; l < r; l /= 2, r /= 2) {
-			if (l&1) ra = comb(ra,seg[l++]);
-			if (r&1) rb = comb(seg[--r],rb);
-		}
-		return comb(ra,rb);
-	}
-};
-
-int timer = 0;
-int st[mx];
-int en[mx];
-vl adj[mx];
-
-void dfs(int x, int p) {
-	st[x] = timer++;
-	each(e, adj[x]) if(e != p) dfs(e, x);
-	en[x] = timer-1;
-}
+const int MX = 2e5+1;
 
 int main() {
 	// clock_t start = clock();
 	setIO();
-
-	int n, q; 
-	re(n, q);
-
-	Seg<ll> seg;
-	seg.init(n+1);
-
-	vi v(n);
-	re(v);
-
-	F0R(i, n-1) {
-		int a, b; re(a, b);
-		adj[a].pb(b);
-		adj[b].pb(a);
-	}
-
-	dfs(1, 0);
-
-	FOR(i, 1, n) {
-		seg.upd(st[i], v[i]);
-	}
-
-	FOR(i, 1, n+1) dbg(i, st[i], en[i]);
-
-	dbg(seg.seg);
-
-	F0R(i, q) {
-		int type; re(type);
-		if(type == 1) {
-			int e, x; re(e, x);
-			seg.upd(st[e], x);
-		} else {
-			int a; re(a);
-			pr(seg.query(1, st[a]-1), nl);
-		}
-	}
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }

@@ -258,9 +258,45 @@ inline namespace FileIO {
 
 const int mx = 2e5+1;
 
+template<std::size_t N> // use by calling isPrime[N];
+struct Sieve 
+{
+	private:
+		bool is_prime[N];
+	public:
+		constexpr Sieve() : is_prime{0} {
+			for (int i = 2; i < N; i++) is_prime[i] = true;
+			for (int i = 2; i < N; i++)
+				if (is_prime[i])
+					for (int j = 2 * i; j < N; j += i)
+						is_prime[j] = false;
+		}
+		inline constexpr bool operator[](std::size_t index) const {
+			return is_prime[index];
+		}
+};
+
+constexpr int SVMX = 1e6+1;
+const char nl = '\n';
+const Sieve<SVMX> isPrime;
+
 int main() {
 	// clock_t start = clock();
 	setIO();
+
+	int n; re(n);
+	FOR(i, 1, n+1) {
+		str a; re(a);
+		bool valid = true;
+		F0R(i, sz(a)) {
+			FOR(j, i, sz(a)) {
+				int t = stoi(a.substr(i, max(1, j-i)));
+				if(!isPrime[t]) { valid = false; break; }
+			}
+		}
+
+		pr("Case #", i, ": ", (valid ? "BOTAN-PRIME" : "NOT BOTAN-PRIME"), nl);
+	}
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }
