@@ -264,6 +264,25 @@ int main() {
 	// clock_t start = clock();
 	setIO();
 
+	int n; re(n);
+	vd v(n);
+	re(v);
+
+	sor(v);
+
+	db ret = 0;
+
+	F0R(i, n) {
+		if(i % 2) {
+			ret -= PI*v[i]*v[i];
+		} else {
+			ret += PI*v[i]*v[i];
+		}
+	}
+
+	ps(abs(ret));
+
+
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }
 

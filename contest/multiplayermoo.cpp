@@ -63,7 +63,6 @@ tcT> int lwb(V<T>& a, const T& b) { return int(lb(all(a),b)-bg(a)); }
 const int MOD = 1e9+7; // 998244353;
 const ll INF = 1e18; // not too close to LLONG_MAX
 const db PI = acos((db)-1);
-const char nl = '\n';
 const int dx[4] = {1,0,-1,0}, dy[4] = {0,1,0,-1}; // for every grid problem!!
 mt19937 rng((uint32_t)chrono::steady_clock::now().time_since_epoch().count()); 
 template<class T> using pqg = priority_queue<T,vector<T>,greater<T>>;
@@ -92,7 +91,6 @@ tcTU> T fstTrue(T lo, T hi, U f) {
 	} 
 	return lo;
 }
-
 tcTU> T lstTrue(T lo, T hi, U f) {
 	lo --; assert(lo <= hi); // assuming f is decreasing
 	while (lo < hi) { // find first index such that f is true 
@@ -258,12 +256,89 @@ inline namespace FileIO {
 
 #pragma endregion
 
-const int mx = 2e5+1;
+const int mx = 251;
+
+/**
+ * Description: Disjoint Set Union with path compression
+	 * and union by size. Add edges and test connectivity. 
+	 * Use for Kruskal's or Boruvka's minimum spanning tree.
+ * Time: O(\alpha(N))
+ * Source: CSAcademy, KACTL
+ * Verification: *
+ */
+
+struct DSU {
+	vi e; void init(int N) { e = vi(N,-1); }
+	int get(int x) { return e[x] < 0 ? x : e[x] = get(e[x]); } 
+	bool sameSet(int a, int b) { return get(a) == get(b); }
+	int size(int x) { return -e[get(x)]; }
+	bool unite(int x, int y) { // union by size
+		x = get(x), y = get(y); if (x == y) return 0;
+		if (e[x] > e[y]) swap(x,y);
+		e[x] += e[y]; e[y] = x; return 1;
+	}
+};
+
+int mat[mx][mx];
+
+bool vis[mx][mx];
+
+int n;
+DSU c1, c2;
+
+int flatten(int x, int y) {
+	return (x * n) + y;
+}
+
+void ff(int x, int y, int c) {
+	vis[x][y] = true;
+
+	if(mat[x][y] != c) return;
+
+	for(int d = 0; d < 4; d++) {
+		int nx = x + dx[d];
+		int ny = y + dy[d];
+
+		if(nx < 0 || ny < 0 || nx >= n || ny >= n) continue;
+		if(!vis[nx][ny] && (mat[nx][ny] == c)) { 
+			ff(nx, ny, c); 
+			c1.unite(flatten(x, y), flatten(nx, ny));
+		}
+	}
+}
 
 int main() {
 	// clock_t start = clock();
-	setIO();
+	setIO("multimoo");
 
+	re(n);
+	F0R(i, n) {
+		F0R(j, n) {
+			re(mat[i][j]);
+		}
+	}
+
+	F0R(i, n) F0R(j, n) {
+		dbg(vis[i][j], i, j);
+		if(!vis[i][j]) ff(i, j, mat[i][j]);
+	}
+	dbg("here");
+
+	c1.init((n+1)*(n+1));
+	c2.init((n+1)*(n+1));
+
+	int oneMax = 0;
+
+	dbg("here");
+
+	F0R(i, n) {
+		F0R(j, n) {
+			dbg(c1.size(flatten(i, j)), i, j);
+			ckmax(oneMax, c1.size(flatten(i, j)));
+		}
+	}
+
+	ps(oneMax);
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }
 

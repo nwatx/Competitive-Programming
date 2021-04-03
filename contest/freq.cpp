@@ -260,9 +260,44 @@ inline namespace FileIO {
 
 const int mx = 2e5+1;
 
+int note(db hz) {
+	return round(log2(hz/440)*12);
+}
+
+int diff(vi a, vi b, int inc) {
+	int ret = 0;
+	F0R(i, sz(a)) {
+		ret += a[i] - b[i] + inc;
+	}
+	return abs(ret);
+}
+
 int main() {
 	// clock_t start = clock();
 	setIO();
+	ints(n);
+	vpd v(n);
+	re(v);
+
+	vi alice(n);
+	vi bob(n);
+
+	F0R(i, n) {
+		int a = note(v[i].f);
+		int b = note(v[i].s);
+		alice[i] = a, bob[i] = b;
+	}
+
+	int ret = MOD;
+
+	FOR(i, -200, 200) {
+		ckmin(ret, diff(alice, bob, i));
+	}
+
+	ps(ret);
+
+
+
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }

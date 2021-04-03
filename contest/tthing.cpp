@@ -260,9 +260,31 @@ inline namespace FileIO {
 
 const int mx = 2e5+1;
 
+map<int, int> xf, yf;
+map<int, vi> x, y;
+
 int main() {
 	// clock_t start = clock();
 	setIO();
+
+	int n; re(n);
+	F0R(i, n) {
+		int a, b; re(a, b);
+		x[a].pb(b);
+		y[b].pb(a);
+		xf[a]++;
+		yf[b]++;
+	}
+
+	int ret = 0;
+
+	each(e, x) {
+		each(a, e.s) {
+			each(b, e.s) {
+				if()
+			}
+		}
+	}
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }

@@ -258,11 +258,32 @@ inline namespace FileIO {
 
 #pragma endregion
 
-const int mx = 2e5+1;
+const int mx = 4e5+1;
+
+ll dp[mx];
+// beat #i with #n notes used
 
 int main() {
 	// clock_t start = clock();
 	setIO();
+
+	ints(m, n);
+	vi v(n);
+	re(v);
+	dp[0] = 1;
+
+	F0R(i, 4*(m+1)) {
+		each(x, v) {
+			// dbg(x, i+x, i);
+			if(i + x >= mx) continue;
+			dp[i + x] += dp[i];
+			dp[i+x] %= MOD;
+		}
+	}
+
+	// F0R(i, 10) dbg(dp[i], i);
+
+	ps(dp[4*m]);
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }

@@ -264,6 +264,13 @@ int main() {
 	// clock_t start = clock();
 	setIO();
 
+	int n; re(n);
+	V<str> v(n);
+	re(v);
+	while(n--) {
+		ps(v[n]);
+	}
+
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }
 
