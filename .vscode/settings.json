@@ -76,6 +76,7 @@
     "code-runner.executorMap": {
         "cpp": "cd $dir && g++ -std=c++17 $fileName -O2 -Wall -Wextra -Wno-unknown-pragmas -DLOCAL && $dira"
     },
+    "explorer.autoReveal": false,
     "editor.minimap.side": "right",
     "editor.renderLineHighlight": "all",
     "workbench.panel.defaultLocation": "right",
@@ -83,5 +84,6 @@
         "editorLineNumber.foreground": "#686868",
         "editorLineNumber.activeForeground": "#ffe600",
         "editor.selectionBackground": "#6b6b6b"
-    }
+    },
+    "explorer.sortOrder": "type"
 }

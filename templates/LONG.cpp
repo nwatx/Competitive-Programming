@@ -22,7 +22,6 @@ using vpd = vector<pd>;
 
 #define tcT template<class T
 #define tcTU tcT, class U
-// ^ lol this makes everything look weird but I'll try it
 tcT> using V = vector<T>; 
 tcT, size_t SZ> using AR = array<T,SZ>; 
 tcT> using PR = pair<T,T>;
@@ -33,7 +32,7 @@ tcT> using PR = pair<T,T>;
 #define s second
 
 // vectors
-// oops size(x), rbegin(x), rend(x) need C++17
+// size(x), rbegin(x), rend(x) need C++17
 #define sz(x) int((x).size())
 #define bg(x) begin(x)
 #define all(x) bg(x), end(x)
@@ -84,6 +83,7 @@ tcT> bool ckmin(T& a, const T& b) {
 tcT> bool ckmax(T& a, const T& b) {
 	return a < b ? a = b, 1 : 0; }
 
+// searching
 tcTU> T fstTrue(T lo, T hi, U f) {
 	hi ++; assert(lo <= hi); // assuming f is increasing
 	while (lo < hi) { // find first index such that f is true 
@@ -101,6 +101,21 @@ tcTU> T lstTrue(T lo, T hi, U f) {
 	} 
 	return lo;
 }
+
+tcTU> T ternMax(T l, T r, U f) { // unimodal functions
+    for(;r-l>0;) {
+        T m1 = l+(r-l)/3;T m2=r-(r-l)/3;T f1=f(m1);T f2=f(m2);
+        if(f1<f2)l=m1+1;else r=m2-1; }
+    return f(l);
+}
+
+tcTU> T ternMin(T l, T r, U f) {
+    for(;r-l>0;) {
+        T m1 = l+(r-l)/3;T m2=r-(r-l)/3;T f1=f(m1);T f2=f(m2);
+        if(f1>f2)l=m1+1;else r=m2-1; }
+    return f(l);
+}
+
 tcT> void remDup(vector<T>& v) { // sort and remove duplicates
 	sort(all(v)); v.erase(unique(all(v)),end(v)); }
 tcTU> void erase(T& t, const U& u) { // don't erase

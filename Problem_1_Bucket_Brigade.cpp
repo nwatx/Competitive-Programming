@@ -63,6 +63,7 @@ tcT> int lwb(V<T>& a, const T& b) { return int(lb(all(a),b)-bg(a)); }
 const int MOD = 1e9+7; // 998244353;
 const ll INF = 1e18; // not too close to LLONG_MAX
 const db PI = acos((db)-1);
+const char nl = '\n';
 const int dx[4] = {1,0,-1,0}, dy[4] = {0,1,0,-1}; // for every grid problem!!
 mt19937 rng((uint32_t)chrono::steady_clock::now().time_since_epoch().count()); 
 template<class T> using pqg = priority_queue<T,vector<T>,greater<T>>;
@@ -91,6 +92,7 @@ tcTU> T fstTrue(T lo, T hi, U f) {
 	} 
 	return lo;
 }
+
 tcTU> T lstTrue(T lo, T hi, U f) {
 	lo --; assert(lo <= hi); // assuming f is decreasing
 	while (lo < hi) { // find first index such that f is true 
@@ -258,48 +260,26 @@ inline namespace FileIO {
 
 const int mx = 2e5+1;
 
-int N;
-
-int adj[3001][3001];
-bool vis[3001][3001];
-int rsum = 0;
-
-void ff(int x, int y) {
-	if(vis[x][y]) return;
-	vis[x][y] = true;
-	rsum++;
-	if(vis[x][y] && adj[x][y] == 3) {
-		F0R(i, 4) {
-			ff(x + dx[i], y + dy[i]);
-		}
-	}
-	F0R(i, 4) {
-		int nx = x + dx[i], ny = y + dy[i];
-		adj[nx][ny]++;
-		if(adj[nx][ny] == 3 && vis[nx][ny]) {
-			F0R(i, 4) {
-				ff(nx + dx[i], ny + dy[i]);
-			}
-		}
-	}
-}
-
 int main() {
-	clock_t start = clock();
-	setIO("comfortablecows");
+	// clock_t start = clock();
+	setIO("buckets");
 
-	re(N);
+    pi b, r, l;
 
-	F0R(i, N) {
-		int x, y; re(x, y);
-		x += 1500, y += 1500;
-		rsum--;
-		ff(x, y);
-		pr(rsum, "\n");
-	}
+    F0R(i, 10) F0R(j, 10) {
+        char a; re(a);
+        if(a == 'B') b = {i, j};
+        if(a == 'R') r = {i, j};
+        if(a == 'L') l = {i, j};
+    }
 
+    int ret = abs(l.f - b.f) + abs(l.s - b.s) - 1;
+    // dbg(ret);
+    if((r.f == l.f && r.f == b.f && ((r.s <= l.s && r.s >= b.s) || (r.s >= l.s && r.s <= b.s)))) ret += 2;
 
-	cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
+    ps(ret);
+
+	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }
 
 /* stuff you should look for

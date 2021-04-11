@@ -63,6 +63,7 @@ tcT> int lwb(V<T>& a, const T& b) { return int(lb(all(a),b)-bg(a)); }
 const int MOD = 1e9+7; // 998244353;
 const ll INF = 1e18; // not too close to LLONG_MAX
 const db PI = acos((db)-1);
+const char nl = '\n';
 const int dx[4] = {1,0,-1,0}, dy[4] = {0,1,0,-1}; // for every grid problem!!
 mt19937 rng((uint32_t)chrono::steady_clock::now().time_since_epoch().count()); 
 template<class T> using pqg = priority_queue<T,vector<T>,greater<T>>;
@@ -91,6 +92,7 @@ tcTU> T fstTrue(T lo, T hi, U f) {
 	} 
 	return lo;
 }
+
 tcTU> T lstTrue(T lo, T hi, U f) {
 	lo --; assert(lo <= hi); // assuming f is decreasing
 	while (lo < hi) { // find first index such that f is true 
@@ -99,6 +101,7 @@ tcTU> T lstTrue(T lo, T hi, U f) {
 	} 
 	return lo;
 }
+
 tcT> void remDup(vector<T>& v) { // sort and remove duplicates
 	sort(all(v)); v.erase(unique(all(v)),end(v)); }
 tcTU> void erase(T& t, const U& u) { // don't erase
@@ -258,48 +261,37 @@ inline namespace FileIO {
 
 const int mx = 2e5+1;
 
-int N;
+tcTU> T ternMax(T l, T r, U f) {
+    for(;r-l>0;) {
+        T m1 = l+(r-l)/3;T m2=r-(r-l)/3;T f1=f(m1);T f2=f(m2);
+        if(f1<f2)l=m1+1;else r=m2-1; }
+    return f(l);
+}
 
-int adj[3001][3001];
-bool vis[3001][3001];
-int rsum = 0;
+tcTU> T ternMin(T l, T r, U f) {
+    for(;r-l>0;) {
+        T m1 = l+(r-l)/3;T m2=r-(r-l)/3;T f1=f(m1);T f2=f(m2);
+        if(f1>f2)l=m1+1;else r=m2-1; }
+    return f(l);
+}
 
-void ff(int x, int y) {
-	if(vis[x][y]) return;
-	vis[x][y] = true;
-	rsum++;
-	if(vis[x][y] && adj[x][y] == 3) {
-		F0R(i, 4) {
-			ff(x + dx[i], y + dy[i]);
-		}
-	}
-	F0R(i, 4) {
-		int nx = x + dx[i], ny = y + dy[i];
-		adj[nx][ny]++;
-		if(adj[nx][ny] == 3 && vis[nx][ny]) {
-			F0R(i, 4) {
-				ff(nx + dx[i], ny + dy[i]);
-			}
-		}
-	}
+int n;
+int A[mx];
+
+ll f(int mid) {
+    dbg(mid);
+    ll ret = 0;
+    F0R(i, n) ret += abs(mid - A[i]);
+    rtn ret;
 }
 
 int main() {
-	clock_t start = clock();
-	setIO("comfortablecows");
+	// clock_t start = clock();
+	setIO();
 
-	re(N);
-
-	F0R(i, N) {
-		int x, y; re(x, y);
-		x += 1500, y += 1500;
-		rsum--;
-		ff(x, y);
-		pr(rsum, "\n");
-	}
-
-
-	cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
+    re(n);
+    F0R(i, n) re(A[i]);
+    ps(ternMin(0LL, MOD*1LL, f));
 }
 
 /* stuff you should look for
