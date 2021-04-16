@@ -1,5 +1,6 @@
 import os
 import shutil
+import re
 
 CONTENT = "C:/Users/wangg/OneDrive/Documents/GitHub/CP/templates/implementations/content"
 SNIPPETLOCATION = "C:/Users/wangg/OneDrive/Documents/GitHub/CP/scripts/output/"
@@ -13,25 +14,34 @@ print("SNIPPETS LOCATION:\n\n", SNIPPETLOCATION.replace(' ', '\\ '), '\n')
 snippet = ""
 temp = ""
 
+
 def getPath(short):
-    return SNIPPETLOCATION+"benq.code-snippets"
+    return SNIPPETLOCATION+"benqpreview.code-snippets"
 
 with open(getPath(""), 'w') as fout:
     fout.write('{\n')
 
+def jsonformat(description):
+    return description.replace('\\', '\\\\').replace('\n', ',').replace('\t', " ").replace('"', "\\\"")
+
 def createSnippet(name, prefix, body, description):
+    # print(body)
     body = body.replace('\\', '\\\\')
     body = body.replace('"', '\\\"')
     body = body.replace('\n', '","')
     body = body.replace('\t', '\\t')
-    snip = f'\t"{name}": {{\n\t\t"prefix":[ "{prefix}" ],\n\t\t"body": ["{body}"],\n\t"description":"{description}"}},\n'
+    snip = f'\t"{name}": {{\n\t\t"prefix":[ "{prefix}" ],\n\t\t"body": ["{body}"],\n\t"description":"{jsonformat(description)}"}},\n'
     return snip
 
+def getDescription(code):
+    desc = re.search("(?<=Description:)((.|\n)*)(?=Source:)", code)
+    if(not desc is None):
+        return desc.group(0).strip()
+    return "None"
 
 def output(short, code):  # write "code" to sublime snippet with trigger "short"
     with open(getPath(short), "a") as fout:
-        fout.write(createSnippet(short, short, code, short))
-
+        fout.write(createSnippet(short, short, code, getDescription(code)))
 def getNorm(pre): # format code
 	blank = False
 	res = ""
