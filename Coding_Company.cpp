@@ -275,53 +275,9 @@ inline namespace FileIO {
 
 const int mx = 2e5+1;
 
-int N, M, K;
-
-/**
- * Description: shortest path
- * Source: own
- * Verification: https://open.kattis.com/problems/shortestpath1
- */
-
-template<class C, bool directed> struct Dijkstra {
-    int SZ; V<C> dist; 
-    V<V<pair<int,C>>> adj;
-    void init(int _SZ) { SZ = _SZ; adj.clear(); adj.rsz(SZ); }
-    void ae(int u, int v, C cost) {
-        adj[u].pb({v,cost}); if (!directed) adj[v].pb({u,cost}); }
-    void gen(int st) {
-        dist.assign(SZ,numeric_limits<C>::max());
-        using T = pair<C,int>; pqg<T> pq; 
-        auto ad = [&](int a, C b) {
-            if (dist[a] <= b) return;
-            pq.push({dist[a] = b,a});
-        }; ad(st,0);
-        while (sz(pq)) {
-            T x = pq.top(); pq.pop(); if (dist[x.s] < x.f) continue;
-            each(y,adj[x.s]) ad(y.f,x.f+y.s);
-        }
-    }
-};
-
 int main() {
 	// clock_t start = clock();
 	setIO();
-
-    re(N, M, K);
-
-    Dijkstra<int, false> dks, dke;
-    F0R(i, M) {
-        ints(a, b, c);
-        dks.ae(a, b, c);
-        dke.ae(a, b, c);
-    }
-
-    dks.gen(1);
-    dke.gen(N);
-
-    FOR(i, 1, N) {
-        
-    }
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }
