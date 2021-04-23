@@ -275,9 +275,34 @@ inline namespace FileIO {
 
 const int mx = 2e5+1;
 
+int dp[mx];
+int c[mx];
+
 int main() {
 	// clock_t start = clock();
 	setIO();
+    ints(n, k);
+
+    F0R(i, n) cin >> c[i+1];
+    F0R(i, mx) dp[i] = MOD;
+
+    queue<int> bfs;
+    bfs.push(1);
+    dp[1] = 0;
+    while(sz(bfs)) {
+        int top = bfs.front();
+        bfs.pop();
+        // dbg(top);
+
+		FOR(i, 1, k+1) {
+			if(top + i <= n && dp[top] + abs(c[top+i] - c[top]) < dp[top+i]) {
+				bfs.push(top+i);
+				ckmin(dp[top+i], dp[top] + abs(c[top+i] - c[top]));
+			}
+		}
+    }
+
+    ps(dp[n]);
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }

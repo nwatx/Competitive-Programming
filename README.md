@@ -1,5 +1,6 @@
 # CP 
-#### (VSCode version of bqi343's USACO)
+
+### (VSCode version of bqi343's USACO)
 
 ## How to use
 
