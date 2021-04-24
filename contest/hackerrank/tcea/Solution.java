@@ -1,3 +1,4 @@
+package contest.hackerrank.tcea;
 import java.io.*;
 import java.util.*;
 
@@ -20,4 +21,4 @@ public class Solution {
 		public long nL(){return Long.parseLong(n());}
 		public String nl(){String str;try{str=r.readLine();tk=null;}catch(IOException e){throw new RuntimeException(e);}return str;}
 	}
-}
+}j

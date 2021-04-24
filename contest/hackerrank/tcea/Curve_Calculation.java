@@ -1,14 +1,42 @@
+package contest.hackerrank.tcea;
 import java.io.*;
 import java.util.*;
 
 import static java.lang.System.out;
 
-public class Solution {
+public class Curve_Calculation {
 	private static final In in = new In();
 	private static int N;
+
+	static void solve() {
+		String[] line = in.nl().split("\\s+");
+		int idx = in.ni();
+		int[] arr = new int[line.length];
+		for(int i = 0; i < line.length; i++) {
+			arr[i] = Integer.parseInt(line[i]);
+		}
+
+		int og = arr[idx-1];
+
+		Arrays.sort(arr);
+
+		for(int i = 10; i >= 1; i--) {
+			if(arr[i-1] == og) {
+				if(i > 9) out.println("A");
+				else if(i > 7) out.println("B");
+				else if(i > 3) out.println("C");
+				else if(i > 1) out.println("D");
+				else {
+					out.println("F");
+				}
+				break;
+			}
+		}
+	}
 	public static void main(String[] args) throws IOException {
 		N = in.ni();
-		
+
+		while(N-- > 0) solve();
 	}
 
 	private static class In {
