@@ -275,9 +275,22 @@ inline namespace FileIO {
 
 const int mx = 2e5+1;
 
+void solve() {
+    ll a, b; re(a, b);
+
+    if(b == 1) ps("NO");
+    else {
+        ps("YES");
+        ps(a, a*b, a * (b+1));
+    }
+}
+
 int main() {
 	// clock_t start = clock();
 	setIO();
+
+    ints(n);
+    while(n--) solve();
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }

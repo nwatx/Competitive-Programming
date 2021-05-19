@@ -260,8 +260,8 @@ inline namespace Output {
 }
 
 inline namespace FileIO {
-	void setIn(str s)  { (void)!freopen(s.c_str(),"r",stdin); }
-	void setOut(str s) { (void)!freopen(s.c_str(),"w",stdout); }
+	void setIn(str s)  { freopen(s.c_str(),"r",stdin); }
+	void setOut(str s) { freopen(s.c_str(),"w",stdout); }
 	void setIO(str s = "") {
 		cin.tie(0)->sync_with_stdio(0); // unsync C / C++ I/O streams
 		// cin.exceptions(cin.failbit);
@@ -275,9 +275,31 @@ inline namespace FileIO {
 
 const int mx = 2e5+1;
 
+bool dp[100001];
+
 int main() {
 	// clock_t start = clock();
 	setIO();
+
+    int n; re(n);
+    vi nums(n);
+    re(nums);
+
+    dp[0] = true;
+
+    each(num, nums) {
+        R0F(i, 100001) {
+            if(dp[i] && i + num <= 100000) dp[i + num] = true;
+        }
+    }
+
+    vi valid;
+    FOR(i, 1, 100001) if(dp[i]) valid.pb(i);
+
+    ps(sz(valid));
+    F0R(i, sz(valid)) {
+        pr(valid[i], " ");
+    }
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }
