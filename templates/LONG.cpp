@@ -211,7 +211,8 @@ inline namespace ToString {
 		return res;
 	}
 	tcT> typename enable_if<needs_output_v<T>,str>::type ts(T v) {
-		return "{"+ts_sep(v,", ")+"}"; }
+        return ts_sep(v, " "); }
+		// return "{"+ts_sep(v,", ")+"}"; }
 
 	// for nested DS
 	template<int, class T> typename enable_if<!needs_output_v<T>,vs>::type 
