@@ -21,7 +21,42 @@ void setIO(string name = "") {
 	}
 }
 
+/*
+5
+4
+7
+8
+6
+4
+*/
+
+int R[101]; // already read into
+int n;
+
+int evaluate() {
+	int sum = 0;
+
+	for(int i = 0; i < n; i++) {
+		sum += i * R[i];
+	}
+
+	return sum; // recacll that this is what we're trying to minimize
+}
+
 int main() {
-	setIO();
+	setIO("cbarn");
 	
+	cin >> n;
+	for(int i = 0; i < n; i++) cin >> R[i];
+
+	int ret = INT_MAX;
+
+	for(int i = 0; i < n; i++) { // rotate it by n times
+		rotate(R, R + 1, R + n); // rotates R by an offset of 1
+		ret = min(ret, evaluate());
+	}
+
+	cout << ret << "\n";
+
+	// cout << evaluate() << "\n";
 }
