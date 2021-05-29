@@ -21,7 +21,29 @@ void setIO(string name = "") {
 	}
 }
 
+int R[101];
+
 int main() {
-	setIO();
+	setIO("cbarn");
 	
+	int n; cin >> n;
+	for(int i = 0; i < n; i++) {
+		cin >> R[i];
+	}
+
+	int ret = INT_MAX;
+
+	for(int i = 0; i < n; i++) {
+		rotate(R, R + 1, R + n);
+
+		int sum = 0;
+
+		for(int j = 0; j < n; j++) {
+			sum += j * R[j];
+		}
+
+		ret = min(sum, ret);
+	}
+
+	cout << ret;
 }

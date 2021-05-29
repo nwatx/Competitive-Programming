@@ -276,9 +276,90 @@ inline namespace FileIO {
 
 const int mx = 2e5+1;
 
+ll dp[2001][2001];
+// i = ending at i
+// j = potions drunk
+// dp[i][j] = best value
+int drunk[2001][2001];
+
 int main() {
 	// clock_t start = clock();
 	setIO();
+
+    int n; re(n);
+    vi v(n); re(v);
+
+    FOR(i, 1, n+1) FOR(j, 1, n+1) dp[i][j] = -1;
+
+    F0R(i, n) F0R(j, i+1) {
+        if(dp[i][j] < 0) continue;
+        if(dp[i][j] + v[i] >= 0) {
+            dp[i + 1][j + 1] = dp[i][j] + v[i];
+            // ckmax(drunk[i+1][j+1], drunk[i][j] + 1);
+        }
+
+        if(i && j) ckmax(dp[i+1][j], dp[i][j]);
+
+        // ckmax(druhnk[i+1][j], drunk[i][j]);
+    }
+
+    // F0R(i, n+1) {
+    //     F0R(j, n+1) {
+    //         // pr(mp(dp[i][j], drunk[i][j]), " ");
+    //         pr(dp[i][j], " ");
+    //     }
+
+    //     ps();
+    // }
+
+    int ret = 0;
+
+    FOR(i, 1, n + 1) FOR(j, 1, n+1) if(dp[i][j] >= 0) ckmax(ret, j);
+    ps(ret);
+    // sort(rall(v));
+    
+    // dbg(v);
+
+    // int ret = 0;
+    // for(int i = 0; i < n; i++) {
+    //     ll sum = 0;
+    //     bool valid = true;
+    //     for(int j = 0; j <= i; j++) {
+    //         sum += v[j];
+    //         if(sum < 0) {
+    //             valid = false;
+    //             break;
+    //         }
+    //     }
+
+    //     if(valid) ckmax(ret, i + 1);
+    // }
+
+    // ps(ret);
+
+    // F0R(i, n) {
+    //     F0R(j, n) {
+    //         if(dp[i][j] + v[i] >= 0) {
+    //             // dbg(i, j, dp[i][j], v[i]);
+    //             dp[i+1][j+1] = dp[i][j] + v[i]; // if we drink the potion
+    //             drunk[i+1][j+1] = drunk[i][j] + 1;
+    //         }
+    //         ckmax(dp[i][j+1], dp[i][j]);
+    //     }
+    // }
+
+    // int ret = 0;
+
+    // F0R(i, n+1) F0R(j, n+1) {
+    //     if(dp[i][j]) ckmax(ret, j);
+    // }
+
+    // F0R(i, n+1) {
+    //     F0R(j, n+1) pr(mp(dp[i][j], drunk[i][j]), " ");
+    //     ps();
+    // }
+
+    // ps(ret);
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }

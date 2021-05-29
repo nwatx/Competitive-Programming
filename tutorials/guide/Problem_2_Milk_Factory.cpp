@@ -21,7 +21,29 @@ void setIO(string name = "") {
 	}
 }
 
+int out_degree[101]; // 1...100
+
 int main() {
-	setIO();
-	
+	setIO("factory");
+
+    int N; cin >> N;
+    for(int i = 0; i < N - 1; i++) {
+        int a, b; cin >> a >> b;
+        // a -> b
+        out_degree[a]++;
+    }
+
+    int answer = -1;
+
+    for(int i = 1; i <= N; i++) {
+        if(out_degree[i] == 0 && answer != -1) {
+            answer = - 1; break;
+        } // we have two sinks
+
+        if(out_degree[i] == 0) {
+            answer = i;
+        }
+    }
+
+    cout << answer << "\n";
 }

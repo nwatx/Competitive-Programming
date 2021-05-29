@@ -211,8 +211,7 @@ inline namespace ToString {
 		return res;
 	}
 	tcT> typename enable_if<needs_output_v<T>,str>::type ts(T v) {
-        return ts_sep(v, " "); }
-		// return "{"+ts_sep(v,", ")+"}"; }
+		return "{"+ts_sep(v,", ")+"}"; }
 
 	// for nested DS
 	template<int, class T> typename enable_if<!needs_output_v<T>,vs>::type 
@@ -276,10 +275,51 @@ inline namespace FileIO {
 
 const int mx = 2e5+1;
 
+/**
+ * Description: A set (not multiset!) with support for finding the $n$'th
+ * element, and finding the index of an element. Change \texttt{null\_type} for map.
+ * Time: O(\log N)
+ * Source: KACTL
+   * https://codeforces.com/blog/entry/11080
+ * Verification: many
+ */
+
+#include <ext/pb_ds/tree_policy.hpp>
+#include <ext/pb_ds/assoc_container.hpp>
+using namespace __gnu_pbds;
+template <class T> using Tree = tree<T, null_type, less<T>, 
+    rb_tree_tag, tree_order_statistics_node_update>; 
+#define ook order_of_key
+#define fbo find_by_order
+
 int main() {
 	// clock_t start = clock();
-	setIO();
+	setIO("bphoto");
 
+    Tree<int> left;
+    Tree<int> right;
+
+    int n; re(n);
+    vi v(n); re(v);
+    each(e, v) right.insert(e);
+
+    int ret = 0;
+
+    F0R(i, n) {
+        right.erase(v[i]);
+        int lGreater = i - left.ook(v[i]);
+        // dbg(right);
+        int rGreater = n - 1 - i - right.ook(v[i]);
+        // dbg(lGreater, rGreater);
+        if(min(lGreater, rGreater)*2 < max(lGreater, rGreater)) {
+            ret++;
+            // dbg(v[i]);
+        }
+        left.insert(v[i]);
+    }
+
+    ps(ret);
+    
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }
 

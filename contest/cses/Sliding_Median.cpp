@@ -211,8 +211,7 @@ inline namespace ToString {
 		return res;
 	}
 	tcT> typename enable_if<needs_output_v<T>,str>::type ts(T v) {
-        return ts_sep(v, " "); }
-		// return "{"+ts_sep(v,", ")+"}"; }
+		return "{"+ts_sep(v,", ")+"}"; }
 
 	// for nested DS
 	template<int, class T> typename enable_if<!needs_output_v<T>,vs>::type 
@@ -276,9 +275,46 @@ inline namespace FileIO {
 
 const int mx = 2e5+1;
 
+template<class T> int GetMedian(const multiset<T>& data) {
+    if (data.empty()) throw length_error("Cannot calculate median value for empty dataset");
+
+    const size_t n = data.size();
+    double median = 0;
+
+    auto iter = data.cbegin();
+    std::advance(iter, n / 2);
+
+    // Middle or average of two middle values
+    if (n % 2 == 0) {
+        const auto iter2 = iter--;
+        median = min(*iter, *iter2);
+    }
+    else
+    {
+        median = *iter;
+    }
+
+    return median;
+}
+
 int main() {
 	// clock_t start = clock();
 	setIO();
+
+    ints(n, k);
+    vi v(n);
+    re(v);
+
+    multiset<int> window;
+
+    F0R(i, n) {
+        window.insert(v[i]);
+        if(i >= k-1) {
+            pr(GetMedian(window), " ");
+            window.erase(v[i-k+1]);
+        }
+    }
+
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }

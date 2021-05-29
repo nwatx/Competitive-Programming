@@ -211,8 +211,7 @@ inline namespace ToString {
 		return res;
 	}
 	tcT> typename enable_if<needs_output_v<T>,str>::type ts(T v) {
-        return ts_sep(v, " "); }
-		// return "{"+ts_sep(v,", ")+"}"; }
+		return "{"+ts_sep(v,", ")+"}"; }
 
 	// for nested DS
 	template<int, class T> typename enable_if<!needs_output_v<T>,vs>::type 
@@ -276,10 +275,47 @@ inline namespace FileIO {
 
 const int mx = 2e5+1;
 
+vi adj[mx];
+set<int> sb[mx];
+int ret[mx];
+
+void dfs(int x, int p) {
+    each(e, adj[x]) {
+        if(e != p) {
+            dfs(e, x);
+            // force x as the larger set
+            if(sz(sb[x]) < sz(sb[e])) swap(sb[x], sb[e]);
+            each(item, sb[e]) sb[x].insert(item);
+        }
+    }
+
+    // dbg(x, sb[x]);
+    ret[x] = sz(sb[x]);
+}
+
 int main() {
 	// clock_t start = clock();
 	setIO();
 
+    int n; re(n);
+
+    FOR(i, 1, n+1) {
+        int a; re(a);
+        sb[i].insert(a);
+    }
+
+    FOR(i, 1, n) {
+        ints(a, b);
+        adj[a].pb(b);
+        adj[b].pb(a);
+    }
+
+    dfs(1, 0);
+
+    FOR(i, 1, n+1) {
+        pr(ret[i], " ");
+    }
+    
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }
 

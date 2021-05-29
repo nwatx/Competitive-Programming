@@ -63,7 +63,7 @@ const int MOD = 1e9+7; // 998244353;
 const ll INF = 1e18; // not too close to LLONG_MAX
 const db PI = acos((db)-1);
 const char nl = '\n';
-const int dx[4] = {1,0,-1,0}, dy[4] = {0,1,0,-1}; // for every grid problem!!
+const int dx[8] = {2, 2, -2, -2, 1, -1, 1, -1}, dy[8] = {1, -1, 1, -1, 2, 2, -2, -2}; // for every grid problem!!
 mt19937 rng((uint32_t)chrono::steady_clock::now().time_since_epoch().count()); 
 template<class T> using pqg = priority_queue<T,vector<T>,greater<T>>;
 
@@ -279,6 +279,33 @@ const int mx = 2e5+1;
 int main() {
 	// clock_t start = clock();
 	setIO();
+
+    int n; re(n);
+    for(ll i = 1; i <= n; i++) {
+        ps((i * i * (i * i - 1) / 2) - 4 * (i-1) * (i-2));
+    }
+
+    // int ret = 0;
+
+    // int st = 1;
+
+    // for(int i = 0; i < st && st < n; i++) {
+    //     for(int j = 0; j < st; j++) {
+    //         ret += st*st;
+    //         F0R(k, 8) {
+    //             int nx = i + dx[k];
+    //             int ny = j + dy[k];
+    //             if(nx < 0 || nx >= st || ny < 0 || ny >= st) continue;
+    //             // ps(nx, ny);
+    //             ret--;
+    //         }
+
+    //         if(i == st - 1 && j == st - 1) {
+    //             st++;
+    //             ps(ret);
+    //         }
+    //     }
+    // }
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }

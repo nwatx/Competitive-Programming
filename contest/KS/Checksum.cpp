@@ -211,8 +211,7 @@ inline namespace ToString {
 		return res;
 	}
 	tcT> typename enable_if<needs_output_v<T>,str>::type ts(T v) {
-        return ts_sep(v, " "); }
-		// return "{"+ts_sep(v,", ")+"}"; }
+		return "{"+ts_sep(v,", ")+"}"; }
 
 	// for nested DS
 	template<int, class T> typename enable_if<!needs_output_v<T>,vs>::type 
@@ -276,9 +275,67 @@ inline namespace FileIO {
 
 const int mx = 2e5+1;
 
+/**
+ * Description: Disjoint Set Union with path compression
+	 * and union by size. Add edges and test connectivity. 
+	 * Use for Kruskal's or Boruvka's minimum spanning tree.
+ * Time: O(\alpha(N))
+ * Source: CSAcademy, KACTL
+ * Verification: *
+ */
+
+struct DSU {
+	vi e; void init(int N) { e = vi(N,-1); }
+	int get(int x) { return e[x] < 0 ? x : e[x] = get(e[x]); } 
+	bool sameSet(int a, int b) { return get(a) == get(b); }
+	int size(int x) { return -e[get(x)]; }
+	bool unite(int x, int y) { // union by size
+		x = get(x), y = get(y); if (x == y) return 0;
+		if (e[x] > e[y]) swap(x,y);
+		e[x] += e[y]; e[y] = x; return 1;
+	}
+};
+
+template<class T> T kruskal(int N, vector<pair<T,pi>> ed) {
+	sort(rall(ed));
+	T ans = 0; DSU D; D.init(N); // edges that unite are in MST
+	each(a,ed) if (D.unite(a.s.f,a.s.s)) ans += a.f; 
+	return ans;
+}
+
+void solve(int tc) {
+    int n; re(n);
+
+	// input
+    V<vi> A(n, vi(n)), B(n, vi(n));
+    F0R(i,n) F0R(j,n) re(A[i][j]);
+    F0R(i,n) F0R(j,n) re(B[i][j]);
+
+	vi row(n), col(n);
+	re(row, col);
+
+	V<pair<int, pi>> edges;
+
+	int total = 0;
+
+	F0R(i, n) F0R(j, n) {
+		if(A[i][j] == -1)  {
+			// n + j is used to distinguish rows from cols
+			edges.pb({B[i][j], {i, n + j}}); 
+			edges.pb({B[i][j], {n + j, i}});
+			total += B[i][j];
+		}
+	}
+
+	pr("Case #", tc, ": ", total - kruskal(2*n, edges), nl);
+}
+
 int main() {
 	// clock_t start = clock();
 	setIO();
+
+    ints(n);
+    FOR(i, 1, n+1) solve(i);
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }

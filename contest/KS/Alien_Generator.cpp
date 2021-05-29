@@ -211,8 +211,7 @@ inline namespace ToString {
 		return res;
 	}
 	tcT> typename enable_if<needs_output_v<T>,str>::type ts(T v) {
-        return ts_sep(v, " "); }
-		// return "{"+ts_sep(v,", ")+"}"; }
+		return "{"+ts_sep(v,", ")+"}"; }
 
 	// for nested DS
 	template<int, class T> typename enable_if<!needs_output_v<T>,vs>::type 
@@ -276,9 +275,42 @@ inline namespace FileIO {
 
 const int mx = 2e5+1;
 
+void solve(int tc) {
+    ll G; re(G);
+
+    ll ret = 1;
+
+    // test up to sqrt(n) and then add 1 at the end
+
+    FOR(i, 1, sqrt(2*G) + 1) {
+        // dbg(i, G);
+        ll l = 0, r = MOD;
+        while(l <= r) {
+            ll mid = (l + r) / 2;
+            ll calc = mid * (i + i + mid - 1) / 2;
+            // if(i == 8 || i == 23) dbg(calc, mid);
+            if(calc == G) {
+                ret++;
+                // break;
+            }
+
+            if(calc < G) {
+                l = mid + 1;
+            } else {
+                r = mid - 1;
+            }
+        }
+    }
+
+    pr("Case #", tc, ": ", ret, nl);
+}
+
 int main() {
 	// clock_t start = clock();
 	setIO();
+
+    ints(n);
+    F0R(i, n) solve(i+1);
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }

@@ -211,8 +211,7 @@ inline namespace ToString {
 		return res;
 	}
 	tcT> typename enable_if<needs_output_v<T>,str>::type ts(T v) {
-        return ts_sep(v, " "); }
-		// return "{"+ts_sep(v,", ")+"}"; }
+		return "{"+ts_sep(v,", ")+"}"; }
 
 	// for nested DS
 	template<int, class T> typename enable_if<!needs_output_v<T>,vs>::type 
@@ -276,9 +275,34 @@ inline namespace FileIO {
 
 const int mx = 2e5+1;
 
+int n, k;
+
+set<str> res;
+
+void rec(string prev) {
+    if(res.count(prev));
+    else if(sz(prev) == n) {
+        res.insert(prev);
+    }
+    if(sz(prev) == n) return;
+    F0R(i, k + 1) {
+        rec(prev + (i + "a"));
+    }
+}
+
 int main() {
 	// clock_t start = clock();
 	setIO();
+
+    ints(n);
+
+    FOR(i, 1, n+1) {
+        re(n, k);
+        string a; re(a);
+        res = set<str>();
+        rec(a);
+        pr("Case #", i, ": ", sz(res), nl);
+    }
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }

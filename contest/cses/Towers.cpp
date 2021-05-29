@@ -211,8 +211,7 @@ inline namespace ToString {
 		return res;
 	}
 	tcT> typename enable_if<needs_output_v<T>,str>::type ts(T v) {
-        return ts_sep(v, " "); }
-		// return "{"+ts_sep(v,", ")+"}"; }
+		return "{"+ts_sep(v,", ")+"}"; }
 
 	// for nested DS
 	template<int, class T> typename enable_if<!needs_output_v<T>,vs>::type 
@@ -276,9 +275,27 @@ inline namespace FileIO {
 
 const int mx = 2e5+1;
 
+int N;
+
 int main() {
 	// clock_t start = clock();
 	setIO();
+
+	re(N);
+
+	vi A(N); re(A);
+	multiset<int> towers;
+
+	each(x, A) {
+		if(towers.upper_bound(x) == towers.end()) {
+			towers.insert(x);
+		} else {
+			towers.erase(towers.upper_bound(x));
+			towers.insert(x);
+		}
+	}
+
+	ps(sz(towers));
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }

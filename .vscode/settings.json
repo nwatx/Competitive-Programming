@@ -71,12 +71,12 @@
         "streambuf": "cpp",
         "thread": "cpp",
         "typeindex": "cpp",
-        "typeinfo": "cpp"
+        "typeinfo": "cpp",
+        "variant": "cpp"
     },
     "code-runner.executorMap": {
-        "cpp": "cd $dir && g++ -std=c++17 $fileName -O2 -Wall -Wextra -Wno-unknown-pragmas -DLOCAL && $dira"
+        "cpp": "cd $dir && g++ -std=c++17 $fileName -O2 -Wall -Wextra -Wno-unknown-pragmas -DLOCAL -o a && $dira"
     },
-    "explorer.autoReveal": false,
     "editor.minimap.side": "right",
     "editor.renderLineHighlight": "all",
     "workbench.panel.defaultLocation": "right",
@@ -85,5 +85,7 @@
         "editorLineNumber.activeForeground": "#ffe600",
         "editor.selectionBackground": "#6b6b6b"
     },
-    "explorer.sortOrder": "type"
+    "explorer.sortOrder": "type",
+    "cph.general.defaultLanguage": "cpp",
+    "explorer.autoReveal": false
 }

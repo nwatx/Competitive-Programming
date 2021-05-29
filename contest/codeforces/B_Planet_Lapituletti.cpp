@@ -211,8 +211,7 @@ inline namespace ToString {
 		return res;
 	}
 	tcT> typename enable_if<needs_output_v<T>,str>::type ts(T v) {
-        return ts_sep(v, " "); }
-		// return "{"+ts_sep(v,", ")+"}"; }
+		return "{"+ts_sep(v,", ")+"}"; }
 
 	// for nested DS
 	template<int, class T> typename enable_if<!needs_output_v<T>,vs>::type 
@@ -276,9 +275,58 @@ inline namespace FileIO {
 
 const int mx = 2e5+1;
 
+// 1 2 5 8
+// 
+vi conversion{0, 1, 5, -1, -1, 2, -1, -1, 8, -1};
+
+int H, M;
+
+bool valid(int h, int m) {
+    // dbg(h, m);
+    if(conversion[h/10] == -1 || conversion[m/10] == -1 || conversion[h % 10] == -1 || conversion[m % 10] == -1) return false;
+    // hrs:mins
+    int rightSide = conversion[h/10] + conversion[h % 10] * 10;
+    int leftSide = conversion[m/10] + conversion[m % 10] * 10;
+
+    // dbg(h, m, rightSide, leftSide);
+
+    return (0 <= leftSide && leftSide < H) && (0 <= rightSide && rightSide < M);
+}
+
+void solve() {
+    re(H, M);
+    string in; re(in);
+    int currH = stoi(in.substr(0, 2)), currM = stoi(in.substr(3, 2));
+    // dbg(currH, currM);
+    // dbg(valid(currH, currM));
+
+    while(!valid(currH, currM)) {
+        if(currM >= M - 1) {
+            currM = 0;
+            currH++;
+        } else {
+            currM++;
+        }
+        
+        currH %= H;
+        // dbg(currH, currM);
+    }
+
+    string lh = "" + ts(currH);
+    if(currH < 10) lh = "0" + lh;
+
+    string rh = "" + ts(currM);
+    if(currM < 10) rh = "0" + rh;
+
+    pr(lh, ":", rh, nl);
+}
+
 int main() {
 	// clock_t start = clock();
 	setIO();
+
+    ints(n);
+    while(n--) solve();
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }

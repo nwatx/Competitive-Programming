@@ -103,17 +103,17 @@ tcTU> T lstTrue(T lo, T hi, U f) {
 }
 
 tcTU> T ternMax(T l, T r, U f) { // unimodal functions
-    for(;r-l>0;) {
-        T m1 = l+(r-l)/3;T m2=r-(r-l)/3;T f1=f(m1);T f2=f(m2);
-        if(f1<f2)l=m1+1;else r=m2-1; }
-    return f(l);
+	for(;r-l>0;) {
+		T m1 = l+(r-l)/3;T m2=r-(r-l)/3;T f1=f(m1);T f2=f(m2);
+		if(f1<f2)l=m1+1;else r=m2-1; }
+	return f(l);
 }
 
 tcTU> T ternMin(T l, T r, U f) {
-    for(;r-l>0;) {
-        T m1 = l+(r-l)/3;T m2=r-(r-l)/3;T f1=f(m1);T f2=f(m2);
-        if(f1>f2)l=m1+1;else r=m2-1; }
-    return f(l);
+	for(;r-l>0;) {
+		T m1 = l+(r-l)/3;T m2=r-(r-l)/3;T f1=f(m1);T f2=f(m2);
+		if(f1>f2)l=m1+1;else r=m2-1; }
+	return f(l);
 }
 
 tcT> void remDup(vector<T>& v) { // sort and remove duplicates
@@ -130,28 +130,28 @@ inline namespace Helpers {
 	// this gets used only when we can call begin() and end() on that type
 	tcT, class = void> struct is_iterable : false_type {};
 	tcT> struct is_iterable<T, void_t<decltype(begin(declval<T>())),
-	                                  decltype(end(declval<T>()))
-	                                 >
-	                       > : true_type {};
+									  decltype(end(declval<T>()))
+									 >
+						   > : true_type {};
 	tcT> constexpr bool is_iterable_v = is_iterable<T>::value;
 
 	//////////// is_readable
 	tcT, class = void> struct is_readable : false_type {};
 	tcT> struct is_readable<T,
-	        typename std::enable_if_t<
-	            is_same_v<decltype(cin >> declval<T&>()), istream&>
-	        >
-	    > : true_type {};
+			typename std::enable_if_t<
+				is_same_v<decltype(cin >> declval<T&>()), istream&>
+			>
+		> : true_type {};
 	tcT> constexpr bool is_readable_v = is_readable<T>::value;
 
 	//////////// is_printable
 	// // https://nafe.es/posts/2020-02-29-is-printable/
 	tcT, class = void> struct is_printable : false_type {};
 	tcT> struct is_printable<T,
-	        typename std::enable_if_t<
-	            is_same_v<decltype(cout << declval<T>()), ostream&>
-	        >
-	    > : true_type {};
+			typename std::enable_if_t<
+				is_same_v<decltype(cout << declval<T>()), ostream&>
+			>
+		> : true_type {};
 	tcT> constexpr bool is_printable_v = is_printable<T>::value;
 }
 
@@ -211,8 +211,7 @@ inline namespace ToString {
 		return res;
 	}
 	tcT> typename enable_if<needs_output_v<T>,str>::type ts(T v) {
-        return ts_sep(v, " "); }
-		// return "{"+ts_sep(v,", ")+"}"; }
+		return "{"+ts_sep(v,", ")+"}"; }
 
 	// for nested DS
 	template<int, class T> typename enable_if<!needs_output_v<T>,vs>::type 
@@ -274,12 +273,117 @@ inline namespace FileIO {
 
 #pragma endregion
 
-const int mx = 2e5+1;
+const int mx = 1e5+1;
+
+map<int, int> freq[mx]; // frequency table
+int largest[mx]; // largestCount;
+int ret[mx];
+int id[mx];
+vi adj[mx];
+
+void dfs(int v, int p) {
+	each(e, adj[v]) {
+		if(e != p) {
+			dfs(e, v);
+
+			// we have two maps, want to merge;
+			// * entry.f is the id
+			// * entry.s is the frequency
+
+			ckmax(largest[e], largest[v]);
+			
+			if(sz(freq[v]) < sz(freq[e])) {
+				swap(freq[v], freq[e]);
+				// swap(ret[v], ret[e]);
+				// ckmax(ret[v], ret[e]);
+				// ret[v] = ret[e];
+			}
+
+			// dbg(v, e, freq[v], freq[e]);
+			each(entry, freq[e]) {
+				int val = entry.f, amount = entry.s;
+				freq[v][entry.f] += entry.s;
+
+				// dbg(entry);
+
+				// * if this is the largest
+				// * entry.f describes the number
+				int freqMerged = freq[v][entry.f];
+
+				// dbg(largest[v], freqMerged, v);
+
+				if(largest[v] == freqMerged) ret[v] += entry.f;
+				
+				if (largest[v] > freqMerged) {
+					largest[v] = freqMerged;
+					ret[v] = entry.f;
+				}
+
+				// * update frequencies
+				ckmax(largest[v], freq[e][entry.f]);
+
+				// dbg('h');
+			}
+
+			freq[e].clear();
+
+
+
+
+			// each(entry, m[e]) {
+			// 	// * merging action
+			// 	// * note that m[v][x] stores frequencies
+			// 	m[v][entry.f] += entry.s;
+			// 	ckmax(largest[v], m[v][entry.f]);
+			// 	// TODO: entry.f should be equivalent to largest, fix this later for frequencies
+			// 	if(m[v][entry.f] == largest[v]) ret[v] += entry.f * entry.s;
+			// 	else ckmax(ret[v], m[v][entry.s]);
+			// }
+		}
+	}
+}
 
 int main() {
 	// clock_t start = clock();
 	setIO();
 
+	int n; re(n);
+	FOR(i, 1, n+1) {
+		int a; re(a);
+		freq[i][a]++;
+		largest[i] = 1; // largest frequency
+		ret[i] = a;
+	}
+
+	F0R(i, n-1) {
+		ints(a, b);
+		adj[a].pb(b); adj[b].pb(a);
+	}
+
+	dfs(1, 0);
+
+	// dbg(freq[1]);
+
+	int largestFrequency = 0; ll sum = 0;
+	each(e, freq[1]) {
+		if(e.s > largestFrequency) {
+			largestFrequency = e.s;
+			sum = e.f;
+		} else if(e.s == largestFrequency) {
+			sum += e.f;
+		}
+	}
+
+	ret[1] = sum;
+
+	FOR(i, 1, n+1) {
+		pr(ret[i], " ");
+		// dbg(i, m[i]);
+		// dbg(largest[i]);
+		// each(e, m[i]) {
+		// 	dbg(e);
+		// }
+	}
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }
 

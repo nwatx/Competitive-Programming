@@ -276,9 +276,46 @@ inline namespace FileIO {
 
 const int mx = 2e5+1;
 
+void solve() {
+    int n; re(n);
+	vi v(2*n); re(v);
+	sor(v);
+
+	F0R(i, 2*n-1) {
+		if(v[i] % 2 == v[(i + 2) % sz(v)] % 2) {
+			swap(v[i], v[(i+1) % sz(v)]);
+			i++;
+		}
+	}
+
+	ps(v);
+	// vi res;
+
+	// while(sz(v)) {
+	// 	if(sz(res) > 2) {
+	// 		F0R(i, sz(v)) {
+	// 			if(res[sz(res) - 2] + v[i] != 2*res[sz(res)-1])  {
+	// 				res.pb(v[i]);
+	// 				v.erase(bg(v) + i);
+	// 				break;
+	// 			}
+	// 		}
+	// 	} else {
+	// 		res.pb(v.front()); v.erase(bg(v));
+	// 	}
+
+	// 	dbg(v, res);
+	// }
+
+	// ps(res);
+}
+
 int main() {
 	// clock_t start = clock();
 	setIO();
+
+    ints(n);
+    while(n--) solve();
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }

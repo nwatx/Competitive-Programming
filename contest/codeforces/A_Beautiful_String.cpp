@@ -211,8 +211,7 @@ inline namespace ToString {
 		return res;
 	}
 	tcT> typename enable_if<needs_output_v<T>,str>::type ts(T v) {
-        return ts_sep(v, " "); }
-		// return "{"+ts_sep(v,", ")+"}"; }
+		return "{"+ts_sep(v,", ")+"}"; }
 
 	// for nested DS
 	template<int, class T> typename enable_if<!needs_output_v<T>,vs>::type 
@@ -276,9 +275,41 @@ inline namespace FileIO {
 
 const int mx = 2e5+1;
 
+void solve() {
+    string st; re(st);
+    F0R(i, sz(st)-1) if(st[i] == st[i+1] && st[i] != '?') {
+        ps(-1); return;
+    }
+
+    string res = "";
+    F0R(i, sz(st)) {
+        if(st[i] != '?') res += st[i];
+        else {
+            bool a = true, b = true, c = true;
+            if(i && res[i-1] == 'a') a = false;
+            if(i && res[i-1] == 'b') b = false;
+            if(i && res[i-1] == 'c') c = false;
+            if(i != sz(st) - 1) {
+                if(st[i+1] == 'a') a = false;
+                if(st[i+1] == 'b') b = false;
+                if(st[i+1] == 'c') c = false;
+            }
+
+            if(a) res += 'a';
+            else if(b) res += 'b';
+            else if(c) res += 'c';
+        }
+    }
+
+    ps(res);
+}
+
 int main() {
 	// clock_t start = clock();
 	setIO();
+
+    ints(n);
+    while(n--) solve();
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }

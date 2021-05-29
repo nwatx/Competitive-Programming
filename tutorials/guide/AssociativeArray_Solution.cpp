@@ -21,7 +21,21 @@ void setIO(string name = "") {
 	}
 }
 
+map<ll, ll> a;
+
 int main() {
 	setIO();
 	
+	int Q; cin >> Q;
+
+	for(int i = 0; i < Q; i++) { // loop 1...Q
+		int t; cin >> t; // type
+		if(t == 0) { // type 0
+			ll k, v; cin >> k >> v;
+			a[k] = v;
+		} else { // type 1
+			ll k; cin >> k;
+			cout << a[k] << "\n";
+		}
+	}
 }
