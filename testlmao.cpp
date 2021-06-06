@@ -245,6 +245,7 @@ inline namespace Output {
 	void ps() { cout << "\n"; }
 	template<class ...T> void ps(const T&... t) { pr_sep(cout," ",t...); ps(); } 
 	// debug to cerr
+	template<class T> void pv(const T &t, const int &n) { F0R(i, n-1) pr(t[i], " "); ps(t[n-1]); }
 	template<class ...T> void dbg_out(const T&... t) {
 		pr_sep(cerr," | ",t...); cerr << endl; }
 	void loc_info(int line, str names) {
@@ -276,70 +277,13 @@ inline namespace FileIO {
 
 const int mx = 2e5+1;
 
-AR<int, mx> A, ret, maxFreq;
-map<int, int> freq[mx];
-vi adj[mx];
-
-int n;
-
-// * freq[node]<color, frequency>
-
-void merge(int v, int e) {
-	// gurantees freq[v] is larger
-	if(sz(freq[e]) > sz(freq[v])) {
-		swap(freq[e], freq[v]);
-		ret[v] = ret[e];
-		ckmax(maxFreq[v], maxFreq[e]);
-	}
-	each(color, freq[e]) { // merging operation
-		freq[v][color.f] += color.s;
-
-		int colorFreq = freq[v][color.f];
-		if(colorFreq > maxFreq[v]) {
-			maxFreq[v] = colorFreq;
-			ret[v] = color.f;
-		} else if(colorFreq == maxFreq[v]) {
-			ret[v] += color.f;
-		}
-	}
-}
-
-void dfs(int v, int p) {
-    each(e, adj[v]) {
-        if(e != p) {
-			dfs(e, v);
-			// dbg(v, e, ret[v], ret[e]);
-			// if(v==1) dbg(freq[e], freq[v]);
-			merge(v, e);
-			// dbg(v, e, ret[v], ret[e]);
-		}
-    }
-}
 
 int main() {
 	// clock_t start = clock();
 	setIO();
 
-    re(n);
-    F0R(i, n) {
-		re(A[i+1]);
-		freq[i+1][A[i+1]] = 1;
-		maxFreq[i+1] = 1;
-		ret[i+1] = A[i+1];
-	}
-    F0R(i, n - 1) {
-        ints(a, b);
-        adj[a].pb(b);
-        adj[b].pb(a);
-    }
-
-    dfs(1, 0);
-
-    F0R(i, n) {
-        pr(ret[i+1], " ");
-		// dbg(i+1, freq[i+1]);
-    }
-
+	vi v{1,3,2,3,3,4};
+	pv(v, 3);
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }
 

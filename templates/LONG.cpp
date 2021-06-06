@@ -244,6 +244,8 @@ inline namespace Output {
 	// print w/ spaces, end with newline
 	void ps() { cout << "\n"; }
 	template<class ...T> void ps(const T&... t) { pr_sep(cout," ",t...); ps(); } 
+	// print n elements
+	template<class T> void pv(const T &t, const int &n) { F0R(i, n-1) pr(t[i], " "); ps(t[n-1]); }
 	// debug to cerr
 	template<class ...T> void dbg_out(const T&... t) {
 		pr_sep(cerr," | ",t...); cerr << endl; }
