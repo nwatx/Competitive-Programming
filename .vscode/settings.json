@@ -13,6 +13,6 @@
     "explorer.sortOrder": "type",
     "cph.general.defaultLanguage": "cpp",
     "explorer.autoReveal": false,
-    "editor.tabSize": 3,
+    "editor.tabSize": 4,
     "vim.vimrc.enable": true,
 }
