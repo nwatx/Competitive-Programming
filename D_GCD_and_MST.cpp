@@ -1,7 +1,3 @@
-// Codeforces
-// #pragma GCC optimize ("Ofast")
-// #pragma GCC target ("avx2")
-
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -30,6 +26,39 @@ tcT> using V = vector<T>;
 tcT, size_t SZ> using AR = array<T,SZ>; 
 tcT> using PR = pair<T,T>;
 
+/**
+ * Description: 1D range increment and sum query.
+ * Source: USACO Counting Haybales
+ * Verification: SPOJ Horrible
+ */
+
+template<class T, int SZ> struct LazySeg { 
+	static_assert(pct(SZ) == 1); // SZ must be power of 2
+	const T ID = 0; T comb(T a, T b) { return a+b; }
+	T seg[2*SZ], lazy[2*SZ]; 
+	LazySeg() { F0R(i,2*SZ) seg[i] = lazy[i] = ID; }
+	void push(int ind, int L, int R) { /// modify values for current node
+		seg[ind] += (R-L+1)*lazy[ind]; // dependent on operation
+		if (L != R) F0R(i,2) lazy[2*ind+i] += lazy[ind]; /// prop to children
+		lazy[ind] = 0; 
+	} // recalc values for current node
+	void pull(int ind) { seg[ind] = comb(seg[2*ind],seg[2*ind+1]); }
+	void build() { ROF(i,1,SZ) pull(i); }
+	void upd(int lo,int hi,T inc,int ind=1,int L=0, int R=SZ-1) {
+		push(ind,L,R); if (hi < L || R < lo) return;
+		if (lo <= L && R <= hi) { 
+			lazy[ind] = inc; push(ind,L,R); return; }
+		int M = (L+R)/2; upd(lo,hi,inc,2*ind,L,M); 
+		upd(lo,hi,inc,2*ind+1,M+1,R); pull(ind);
+	}
+	T query(int lo, int hi, int ind=1, int L=0, int R=SZ-1) {
+		push(ind,L,R); if (lo > R || L > hi) return ID;
+		if (lo <= L && R <= hi) return seg[ind];
+		int M = (L+R)/2; 
+		return comb(query(lo,hi,2*ind,L,M),query(lo,hi,2*ind+1,M+1,R));
+	}
+};
+
 // pairs
 #define mp make_pair
 #define f first
@@ -49,6 +78,7 @@ tcT> using PR = pair<T,T>;
 #define pb push_back
 #define eb emplace_back 
 #define pf push_front
+#define rtn return
 
 #define lb lower_bound
 #define ub upper_bound 
@@ -280,12 +310,172 @@ inline namespace FileIO {
 #pragma endregion
 
 const int mx = 2e5+1;
+// /**
+//  * Description: 1D point update, range query where \texttt{comb} is
+//      * any associative operation. If $N=2^p$ then \texttt{seg[1]==query(0,N-1)}.
+//  * Time: O(\log N)
+//  * Source: 
+//     * http://codeforces.com/blog/entry/18051
+//     * KACTL
+//  * Verification: SPOJ Fenwick
+//  */
 
-int N, M;
+// template<class T> struct SegMin { // comb(ID,b) = b
+//     const T ID = MOD; T comb(T a, T b) { return min(a, b); } 
+//     int n; vector<T> seg;
+//     void init(int _n) { n = _n; seg.assign(2*n,ID); }
+//     void pull(int p) { seg[p] = comb(seg[2*p],seg[2*p+1]); }
+//     void upd(int p, T val) { // set val at position p
+//         seg[p += n] = val; for (p /= 2; p; p /= 2) pull(p); }
+//     T query(int l, int r) {	// sum on interval [l, r]
+//         T ra = ID, rb = ID; 
+//         for (l += n, r += n+1; l < r; l /= 2, r /= 2) {
+//             if (l&1) ra = comb(ra,seg[l++]);
+//             if (r&1) rb = comb(seg[--r],rb);
+//         }
+//         return comb(ra,rb);
+//     }
+// };
 
-signed main() {
+// /**
+//  * Description: Disjoint Set Union with path compression
+//      * and union by size. Add edges and test connectivity. 
+//      * Use for Kruskal's or Boruvka's minimum spanning tree.
+//  * Time: O(\alpha(N))
+//  * Source: CSAcademy, KACTL
+//  * Verification: *
+//  */
+
+// struct DSU {
+//     vi e; void init(int N) { e = vi(N,-1); }
+//     int get(int x) { return e[x] < 0 ? x : e[x] = get(e[x]); } 
+//     bool sameSet(int a, int b) { return get(a) == get(b); }
+//     int size(int x) { return -e[get(x)]; }
+//     bool unite(int x, int y) { // union by size
+//         x = get(x), y = get(y); if (x == y) return 0;
+//         if (e[x] > e[y]) swap(x,y);
+//         e[x] += e[y]; e[y] = x; return 1;
+//     }
+// };
+
+// template<class T> T kruskal(int N, vector<pair<T,pi>> ed) {
+//     sort(all(ed));
+//     T ans = 0; DSU D; D.init(N); // edges that unite are in MST
+//     each(a,ed) if (D.unite(a.s.f,a.s.s)) ans += a.f; 
+//     return ans;
+// }
+
+// void solve() {
+//     ints(n, p);
+//     Seg<int> seg;
+//     SegMin<int> mq;
+//     seg.init(n);
+//     mq.init(n);
+
+//     F0R(i, n) {
+//         int a; cin >> a;
+//         seg.upd(i, a);
+//         mq.upd(i, a);
+//     }
+
+//     vector<pair<ll, pi>> ed;
+
+//     F0R(i, n-1) ed.pb({p, {i, i+1}});
+//     F0R(i, n) FOR(j, i + 1, n) {
+//         // dbg(i, j, seg.query(i, j), rmq.query(i, j));
+//         if(seg.query(i, j) == mq.query(i, j)) ed.pb({mq.query(i, j), {i, j}});
+//     }
+
+//     // dbg(n, ed);
+
+//     ps(kruskal(n, ed));
+// }
+
+/**
+ * Description: 1D point update, range query where \texttt{comb} is
+     * any associative operation. If $N=2^p$ then \texttt{seg[1]==query(0,N-1)}.
+ * Time: O(\log N)
+ * Source: 
+    * http://codeforces.com/blog/entry/18051
+    * KACTL
+ * Verification: SPOJ Fenwick
+ */
+
+template<class T> struct Seg { // comb(ID,b) = b
+    const T ID = 0; T comb(T a, T b) { return gcd(a, b); } 
+    int n; vector<T> seg;
+    void init(int _n) { n = _n; seg.assign(2*n,ID); }
+    void pull(int p) { seg[p] = comb(seg[2*p],seg[2*p+1]); }
+    void upd(int p, T val) { // set val at position p
+        seg[p += n] = val; for (p /= 2; p; p /= 2) pull(p); }
+    T query(int l, int r) {	// sum on interval [l, r]
+        T ra = ID, rb = ID; 
+        for (l += n, r += n+1; l < r; l /= 2, r /= 2) {
+            if (l&1) ra = comb(ra,seg[l++]);
+            if (r&1) rb = comb(seg[--r],rb);
+        }
+        return comb(ra,rb);
+    }
+};
+
+/**
+ * Description: Disjoint Set Union with path compression
+     * and union by size. Add edges and test connectivity. 
+     * Use for Kruskal's or Boruvka's minimum spanning tree.
+ * Time: O(\alpha(N))
+ * Source: CSAcademy, KACTL
+ * Verification: *
+ */
+
+struct DSU {
+    vi e; void init(int N) { e = vi(N,-1); }
+    int get(int x) { return e[x] < 0 ? x : e[x] = get(e[x]); } 
+    bool sameSet(int a, int b) { return get(a) == get(b); }
+    int size(int x) { return -e[get(x)]; }
+    bool unite(int x, int y) { // union by size
+        x = get(x), y = get(y); if (x == y) return 0;
+        if (e[x] > e[y]) swap(x,y);
+        e[x] += e[y]; e[y] = x; return 1;
+    }
+};
+
+AR<int, mx> A;
+Seg<int> grq;
+
+void solve() {
+    int n, p; re(n, p);
+    F0R(i, n) re(A[i]);
+    
+    grq.init(n);
+    F0R(i, n) grq.upd(i, A[i]);
+
+    V<pair<int, pi>> ed;
+    ll ans = 0; DSU D; D.init(n); // edges that unite are in MST
+
+    F0R(i, n - 1) {
+        int cmin = A[i];
+        int conn = i + 1;
+        int connCost = p;
+        FOR(j, i + 1, n) {
+            ckmin(cmin, A[j]);
+            int rangeMin = grq.query(i, j);
+            if(cmin == rangeMin && rangeMin < connCost) {
+                conn = j;
+                ckmin(connCost, rangeMin);
+            }
+        }
+
+        if(D.unite(i, conn)) ans += connCost;
+    }
+
+    ps(ans);
+}
+
+int main() {
 	// clock_t start = clock();
 	setIO();
+
+    int n; re(n); while(n--) solve();
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }

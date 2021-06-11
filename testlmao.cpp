@@ -1,7 +1,3 @@
-// Codeforces
-// #pragma GCC optimize ("Ofast")
-// #pragma GCC target ("avx2")
-
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -49,6 +45,7 @@ tcT> using PR = pair<T,T>;
 #define pb push_back
 #define eb emplace_back 
 #define pf push_front
+#define rtn return
 
 #define lb lower_bound
 #define ub upper_bound 
@@ -247,9 +244,8 @@ inline namespace Output {
 	// print w/ spaces, end with newline
 	void ps() { cout << "\n"; }
 	template<class ...T> void ps(const T&... t) { pr_sep(cout," ",t...); ps(); } 
-	// print n elements
-	template<class T> void pv(const T &t, const int &n) { F0R(i, n-1) pr(t[i], " "); ps(t[n-1]); }
 	// debug to cerr
+	template<class T> void pv(const T &t, const int &n) { F0R(i, n-1) pr(t[i], " "); ps(t[n-1]); }
 	template<class ...T> void dbg_out(const T&... t) {
 		pr_sep(cerr," | ",t...); cerr << endl; }
 	void loc_info(int line, str names) {
@@ -281,12 +277,13 @@ inline namespace FileIO {
 
 const int mx = 2e5+1;
 
-int N, M;
 
-signed main() {
+int main() {
 	// clock_t start = clock();
 	setIO();
 
+	vi v{1,3,2,3,3,4};
+	pv(v, 3);
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }
 

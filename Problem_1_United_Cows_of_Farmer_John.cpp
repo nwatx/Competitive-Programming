@@ -1,7 +1,3 @@
-// Codeforces
-// #pragma GCC optimize ("Ofast")
-// #pragma GCC target ("avx2")
-
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -49,6 +45,7 @@ tcT> using PR = pair<T,T>;
 #define pb push_back
 #define eb emplace_back 
 #define pf push_front
+#define rtn return
 
 #define lb lower_bound
 #define ub upper_bound 
@@ -281,11 +278,41 @@ inline namespace FileIO {
 
 const int mx = 2e5+1;
 
-int N, M;
+/**
+ * Description: A set (not multiset!) with support for finding the $n$'th
+ * element, and finding the index of an element. Change \texttt{null\_type} for map.
+ * Time: O(\log N)
+ * Source: KACTL
+   * https://codeforces.com/blog/entry/11080
+ * Verification: many
+ */
 
-signed main() {
+#include <ext/pb_ds/tree_policy.hpp>
+#include <ext/pb_ds/assoc_container.hpp>
+using namespace __gnu_pbds;
+template <class T> using Tree = tree<T, null_type, less<T>, 
+    rb_tree_tag, tree_order_statistics_node_update>; 
+#define ook order_of_key
+#define fbo find_by_order
+
+/**
+int atMost(Tree<pi>& T, int r) { 
+    return T.ook({r,MOD}); }
+int getSum(Tree<pi>& T, int l, int r) { 
+    return atMost(T,r)-atMost(T,l-1); }
+*/
+
+int main() {
 	// clock_t start = clock();
 	setIO();
+
+    Tree<int> tree;
+
+    int n; re(n);
+
+    F0R(i, n) {
+        
+    }
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }

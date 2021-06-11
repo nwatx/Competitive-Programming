@@ -1,7 +1,3 @@
-// Codeforces
-// #pragma GCC optimize ("Ofast")
-// #pragma GCC target ("avx2")
-
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -49,6 +45,7 @@ tcT> using PR = pair<T,T>;
 #define pb push_back
 #define eb emplace_back 
 #define pf push_front
+#define rtn return
 
 #define lb lower_bound
 #define ub upper_bound 
@@ -247,8 +244,6 @@ inline namespace Output {
 	// print w/ spaces, end with newline
 	void ps() { cout << "\n"; }
 	template<class ...T> void ps(const T&... t) { pr_sep(cout," ",t...); ps(); } 
-	// print n elements
-	template<class T> void pv(const T &t, const int &n) { F0R(i, n-1) pr(t[i], " "); ps(t[n-1]); }
 	// debug to cerr
 	template<class ...T> void dbg_out(const T&... t) {
 		pr_sep(cerr," | ",t...); cerr << endl; }
@@ -281,11 +276,69 @@ inline namespace FileIO {
 
 const int mx = 2e5+1;
 
-int N, M;
+AR<int, mx> A, ret, maxFreq;
+map<int, int> freq[mx];
+vi adj[mx];
 
-signed main() {
+int n;
+
+// * freq[node]<color, frequency>
+
+void merge(int v, int e) {
+	// gurantees freq[v] is larger
+	if(sz(freq[e]) > sz(freq[v])) {
+		swap(freq[e], freq[v]);
+		ret[v] = ret[e];
+		ckmax(maxFreq[v], maxFreq[e]);
+	}
+	each(color, freq[e]) { // merging operation
+		freq[v][color.f] += color.s;
+
+		int colorFreq = freq[v][color.f];
+		if(colorFreq > maxFreq[v]) {
+			maxFreq[v] = colorFreq;
+			ret[v] = color.f;
+		} else if(colorFreq == maxFreq[v]) {
+			ret[v] += color.f;
+		}
+	}
+}
+
+void dfs(int v, int p) {
+    each(e, adj[v]) {
+        if(e != p) {
+			dfs(e, v);
+			// dbg(v, e, ret[v], ret[e]);
+			// if(v==1) dbg(freq[e], freq[v]);
+			merge(v, e);
+			// dbg(v, e, ret[v], ret[e]);
+		}
+    }
+}
+
+int main() {
 	// clock_t start = clock();
 	setIO();
+
+    re(n);
+    F0R(i, n) {
+		re(A[i+1]);
+		freq[i+1][A[i+1]] = 1;
+		maxFreq[i+1] = 1;
+		ret[i+1] = A[i+1];
+	}
+    F0R(i, n - 1) {
+        ints(a, b);
+        adj[a].pb(b);
+        adj[b].pb(a);
+    }
+
+    dfs(1, 0);
+
+    F0R(i, n) {
+        pr(ret[i+1], " ");
+		// dbg(i+1, freq[i+1]);
+    }
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }

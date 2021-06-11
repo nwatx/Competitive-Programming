@@ -1,7 +1,3 @@
-// Codeforces
-// #pragma GCC optimize ("Ofast")
-// #pragma GCC target ("avx2")
-
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -49,6 +45,7 @@ tcT> using PR = pair<T,T>;
 #define pb push_back
 #define eb emplace_back 
 #define pf push_front
+#define rtn return
 
 #define lb lower_bound
 #define ub upper_bound 
@@ -62,7 +59,7 @@ tcT> int lwb(V<T>& a, const T& b) { return int(lb(all(a),b)-bg(a)); }
 #define rep(a) F0R(_,a)
 #define each(a,x) for (auto& a: x)
 
-const int MOD = 1e9+7; // 998244353;
+const ll MOD = 1e9+7; // 998244353;
 const ll INF = 1e18; // not too close to LLONG_MAX
 const db PI = acos((db)-1);
 const char nl = '\n';
@@ -279,13 +276,78 @@ inline namespace FileIO {
 
 #pragma endregion
 
-const int mx = 2e5+1;
+const int mx = 1e5+1;
 
-int N, M;
+AR<ll, mx> p, e;
 
-signed main() {
+ll binpow(ll base, ll pow) {
+	ll ans = 1;
+	while (pow) {
+		if (pow & 1) ans = ans * base % MOD;
+		base = base * base % MOD;
+		pow >>= 1;
+	}
+	return ans;
+}
+
+// ll binpow(ll a, ll b) {
+// 	ll res = 1;
+// 	while(b) {
+// 		if(b % 2) {
+// 			res = res * a % MOD;
+// 		}
+// 		a = a * a % MOD;
+// 		b /= 2;
+// 	}
+// 	return res;
+// }
+
+// ll binpow(ll base, ll pow) {
+
+// 	ll ans = 1;
+
+// 	while (pow) {
+
+// 		if (pow & 1) ans = ans * base % MOD;
+
+// 		base = base * base % MOD;
+
+// 		pow >>= 1;
+
+// 	}
+
+// 	return ans;
+
+// }
+
+ll modinv(ll a, ll MOD = MOD) {
+	return binpow(a, MOD - 2);
+}
+
+int main() {
 	// clock_t start = clock();
 	setIO();
+
+	ints(n);
+	F0R(i, n) {
+		re(p[i], e[i]);
+	}
+
+	ll numDiv = 1;
+	ll sumDiv = 1;
+	ll prodDiv = 1, div2 = 1;
+	F0R(i, n) {
+		numDiv *= e[i] + 1; numDiv %= MOD;
+		sumDiv *= (binpow(p[i], e[i] + 1) - 1) * modinv(p[i] - 1) % MOD;
+		sumDiv %= MOD;
+		// prodDiv = binpow(prodDiv, e[i] + 1) * binpow(binpow(p[i], (e[i]*(e[i]+1) / 2)), div2) % MOD;
+		prodDiv = binpow(prodDiv, e[i] + 1) * binpow(binpow(p[i], (e[i] * (e[i] + 1) / 2)), div2) % MOD;
+		div2 = div2 * (e[i] + 1) % (MOD - 1);
+		// div2 = div2 * (e[i] + 1) % (MOD - 1);
+	}
+
+	ps(numDiv, sumDiv, prodDiv);
+
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }

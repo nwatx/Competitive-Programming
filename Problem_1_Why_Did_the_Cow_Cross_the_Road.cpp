@@ -1,7 +1,3 @@
-// Codeforces
-// #pragma GCC optimize ("Ofast")
-// #pragma GCC target ("avx2")
-
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -49,6 +45,7 @@ tcT> using PR = pair<T,T>;
 #define pb push_back
 #define eb emplace_back 
 #define pf push_front
+#define rtn return
 
 #define lb lower_bound
 #define ub upper_bound 
@@ -281,9 +278,7 @@ inline namespace FileIO {
 
 const int mx = 2e5+1;
 
-int N, M;
-
-signed main() {
+int main() {
 	// clock_t start = clock();
 	setIO();
 

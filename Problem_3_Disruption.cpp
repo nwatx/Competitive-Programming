@@ -1,7 +1,3 @@
-// Codeforces
-// #pragma GCC optimize ("Ofast")
-// #pragma GCC target ("avx2")
-
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -49,6 +45,7 @@ tcT> using PR = pair<T,T>;
 #define pb push_back
 #define eb emplace_back 
 #define pf push_front
+#define rtn return
 
 #define lb lower_bound
 #define ub upper_bound 
@@ -279,13 +276,74 @@ inline namespace FileIO {
 
 #pragma endregion
 
-const int mx = 2e5+1;
+const int mx = 1e5+1;
 
 int N, M;
 
-signed main() {
+/**
+ * Description: Disjoint Set Union with Rollback
+ * Source: see DSU
+ * Verification: *
+ */
+
+struct DSUrb {
+	vi e; void init(int n) { e = vi(n,-1); }
+	int get(int x) { return e[x] < 0 ? x : get(e[x]); } 
+	bool sameSet(int a, int b) { return get(a) == get(b); }
+	int size(int x) { return -e[get(x)]; }
+	vector<array<int,4>> mod;
+	bool unite(int x, int y) { // union-by-rank
+		x = get(x), y = get(y); 
+		if (x == y) { mod.pb({-1,-1,-1,-1}); return 0; }
+		if (e[x] > e[y]) swap(x,y);
+		mod.pb({x,y,e[x],e[y]});
+		e[x] += e[y]; e[y] = x; return 1;
+	}
+	void rollback() {
+		auto a = mod.bk; mod.pop_back();
+		if (a[0] != -1) e[a[0]] = a[2], e[a[1]] = a[3];
+	}
+};
+
+using ed = pair<int, pi>;
+
+vi adj[mx];
+set<int> dep[mx]; // dependents
+
+void merge(int a, int b) { // merges b into a
+	if(sz(dep[a]) < sz(dep[b])) swap(dep[a], dep[b]);
+	each(x, dep[b]) dep[a].insert(x);
+}
+
+void dfs(int v, int p = 0) {
+	each(e, adj[v]) {
+		if(e != p) dfs(e, v);
+		merge(e, v);
+	}
+}
+
+int main() {
 	// clock_t start = clock();
 	setIO();
+	re(N, M);
+
+	FOR(i, 1, N + 1) dep[i].insert(i);
+
+	rep(N - 1) {
+		ints(a, b); adj[a].pb(b); adj[b].pb(a);
+	}
+
+	V<ed> opt;
+
+	sor(opt);
+
+	rep(M) {
+		ints(a, b, c); opt.pb({c, {a, b}});
+	}
+
+	dfs(1);
+
+	FOR(i, 1, N+1) dbg(i, dep[i]);
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }
