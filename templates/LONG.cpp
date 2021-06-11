@@ -283,7 +283,7 @@ const int mx = 2e5+1;
 
 int N, M;
 
-int main() {
+signed main() {
 	// clock_t start = clock();
 	setIO();
 
