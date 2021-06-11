@@ -1,3 +1,4 @@
+// Codeforces
 // #pragma GCC optimize ("Ofast")
 // #pragma GCC target ("avx2")
 
@@ -48,7 +49,6 @@ tcT> using PR = pair<T,T>;
 #define pb push_back
 #define eb emplace_back 
 #define pf push_front
-#define rtn return
 
 #define lb lower_bound
 #define ub upper_bound 
