@@ -14,5 +14,5 @@
     "cph.general.defaultLanguage": "cpp",
     "explorer.autoReveal": false,
     "editor.tabSize": 3,
-    "vim.vimrc.enable": true
+    "vim.vimrc.enable": true,
 }
