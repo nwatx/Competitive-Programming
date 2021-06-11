@@ -1,0 +1,14 @@
+vi adj[mx], adj_t[mx], S;
+bool vis[mx];
+int id[mx];
+ 
+void dfs(int x, int pass, int num = 0) {
+	vis[x] = true;
+	vi &ad = (pass == 1) ? adj[x] : adj_t[x];
+	for(const int &e : ad) {
+		if(!vis[e]) dfs(e, pass, num);
+	}
+
+	S.pb(x);
+	if(pass == 2) id[x] = num;
+}
