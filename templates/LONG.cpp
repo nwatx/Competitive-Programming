@@ -1,3 +1,6 @@
+// #pragma GCC optimize ("Ofast")
+// #pragma GCC target ("avx2")
+
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -277,6 +280,8 @@ inline namespace FileIO {
 #pragma endregion
 
 const int mx = 2e5+1;
+
+int N, M;
 
 int main() {
 	// clock_t start = clock();
