@@ -280,9 +280,95 @@ const int mx = 2e5+1;
 
 int N, M;
 
+/**
+ * Description: sorts vertices such that if there exists an edge x->y, then x goes before y
+ * Source: KACTL
+ * Verification: https://open.kattis.com/problems/quantumsuperposition
+ */
+
+struct TopoSort {
+	int N; vi in, res;
+	V<vi> adj, radj;
+	void init(int _N) { N = _N; in.rsz(N); adj.rsz(N); radj.rsz(N); }
+	void ae(int x, int y) { adj[x].pb(y), radj[y].pb(x), in[y] ++; }
+	bool sort() {
+		queue<int> todo; 
+		F0R(i,N) if (!in[i]) todo.push(i);
+		while (sz(todo)) {
+			int x = todo.ft; todo.pop(); res.pb(x);
+			each(i,adj[x]) if (!(--in[i])) todo.push(i);
+		}
+		return sz(res) == N;
+	}
+};
+
+/**
+ * Description: Disjoint Set Union with path compression
+	 * and union by size. Add edges and test connectivity. 
+	 * Use for Kruskal's or Boruvka's minimum spanning tree.
+ * Time: O(\alpha(N))
+ * Source: CSAcademy, KACTL
+ * Verification: *
+ */
+
+struct DSU {
+	vi e; void init(int N) { e = vi(N,-1); }
+	int get(int x) { return e[x] < 0 ? x : e[x] = get(e[x]); } 
+	bool sameSet(int a, int b) { return get(a) == get(b); }
+	int size(int x) { return -e[get(x)]; }
+	bool unite(int x, int y) { // union by size
+		x = get(x), y = get(y); if (x == y) return 0;
+		if (e[x] > e[y]) swap(x,y);
+		e[x] += e[y]; e[y] = x; return 1;
+	}
+};
+
 signed main() {
 	// clock_t start = clock();
 	setIO();
+
+	ints(n, m);
+
+	vi out_deg(n), in_deg(n);
+
+	TopoSort ts; ts.init(n);
+	DSU dsu; dsu.init(n);
+	set<pi> ed;
+	F0R(i, m) {
+		int1(a, b);
+		ed.insert({a, b});
+	}
+
+	for(auto[a, b] : ed) {
+		ts.ae(a, b); out_deg[a]++; in_deg[b]++;
+	}
+
+	dbg(out_deg);
+	ts.sort();
+	reverse(all(ts.res));
+	dbg(ts.res);
+
+	// vi oc(n), ret(n);
+	vi ret(n, 1);
+
+	// F0R(i, n) oc[i] = max(0, out_deg[i] - 1);
+	// F0R(i, n) ret[i] = (in_deg[i] != 0 || (in_deg[i] == 0 && out_deg[i] == 0));
+
+	// dbg(oc);
+
+	each(p, ts.res) {
+		// dbg(p, ret[p], oc[p]);
+		each(v, ts.radj[p]) {
+			// oc[v] += oc[p];
+			ret[v] += ret[p];
+			if(!dsu.unite(p, v)) ret[v] -= 2;
+		}
+	}
+	
+	F0R(i, n) {
+		pr(ret[i], " ");
+	}
+	
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }

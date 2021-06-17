@@ -1,3 +1,7 @@
+// Codeforces
+// #pragma GCC optimize ("Ofast")
+// #pragma GCC target ("avx2")
+
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -45,7 +49,6 @@ tcT> using PR = pair<T,T>;
 #define pb push_back
 #define eb emplace_back 
 #define pf push_front
-#define rtn return
 
 #define lb lower_bound
 #define ub upper_bound 
@@ -63,7 +66,7 @@ const int MOD = 1e9+7; // 998244353;
 const ll INF = 1e18; // not too close to LLONG_MAX
 const db PI = acos((db)-1);
 const char nl = '\n';
-const int dx[4] = {1,0,-1,0}, dy[4] = {0,1,0,-1}; // for every grid problem!!
+const int dx[4] = {0, 0, 1, -1}, dy[4] = {-1,1,0, 0}; // for every grid problem!!
 mt19937 rng((uint32_t)chrono::steady_clock::now().time_since_epoch().count()); 
 template<class T> using pqg = priority_queue<T,vector<T>,greater<T>>;
 
@@ -211,8 +214,7 @@ inline namespace ToString {
 		return res;
 	}
 	tcT> typename enable_if<needs_output_v<T>,str>::type ts(T v) {
-        return ts_sep(v, " "); }
-		// return "{"+ts_sep(v,", ")+"}"; }
+		return "{"+ts_sep(v,", ")+"}"; }
 
 	// for nested DS
 	template<int, class T> typename enable_if<!needs_output_v<T>,vs>::type 
@@ -244,8 +246,6 @@ inline namespace Output {
 	// print w/ spaces, end with newline
 	void ps() { cout << "\n"; }
 	template<class ...T> void ps(const T&... t) { pr_sep(cout," ",t...); ps(); } 
-	// print n elements
-	template<class T> void pv(const T &t, const int &n) { F0R(i, n-1) pr(t[i], " "); ps(t[n-1]); }
 	// debug to cerr
 	template<class ...T> void dbg_out(const T&... t) {
 		pr_sep(cerr," | ",t...); cerr << endl; }
@@ -278,9 +278,62 @@ inline namespace FileIO {
 
 const int mx = 2e5+1;
 
-int main() {
+int N, M;
+V<V<char>> grid;
+V<V<bool>> vis;
+vi A;
+
+void ff(int x, int y) {
+	if(vis[x][y]) return;
+	vis[x][y] = true;
+
+	if(grid[x][y] == '#') A[y]--;
+
+	F0R(i, 4) {
+		int nx = x + dx[i], ny = y + dy[i];
+		if(nx < 0 || ny < 0 || nx >= sz(grid) || ny >= sz(grid[0])) continue;
+		if(grid[x][y] == '.' && (grid[nx][ny] == '.') && i != 2) continue;
+		if(!vis[nx][ny] && (i == 2 || grid[nx][ny] == '#')) ff(nx, ny);
+	}
+}
+
+signed main() {
 	// clock_t start = clock();
 	setIO();
+
+	re(N, M);
+	A = vi(N);
+	grid = V<V<char>>(N, V<char>(M));
+	vis = V<vb>(N, vb(M));
+	re(grid);
+	re(A);
+
+	dbg(grid);
+
+	int ret = 0;
+
+	F0R(i, N) F0R(j, M) {
+		if(!vis[i][j] && (grid[i][j] == '#') && A[j] > 0) {
+			ret++;
+			ff(i, j);
+			ps("---");
+
+			F0R(i, N) {
+				F0R(j, M) pr(vis[i][j], " ");
+				ps();
+			}
+
+			dbg(A);
+
+		}
+	}
+
+	// F0R(i, N) {
+	// 	F0R(j, M) pr(vis[i][j], " ");
+	// 	ps();
+	// }
+
+	ps(ret);
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }

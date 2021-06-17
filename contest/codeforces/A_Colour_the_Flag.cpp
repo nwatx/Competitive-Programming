@@ -280,9 +280,61 @@ const int mx = 2e5+1;
 
 int N, M;
 
+bool vis[51][51];
+
+void fill(V<V<char>> &grid, V<V<char>> &fil, int x, int y, int n, int m, char color) {
+	fil[x][y] = color;
+	if(vis[x][y]) return;
+	vis[x][y] = true;
+	F0R(i, 4) {
+		int nx = x + dx[i];
+		int ny = y + dy[i];
+
+		if(nx < 0 || ny < 0 || nx >= n || ny >= m) continue;
+		if(!vis[nx][ny]) {
+			fill(grid, fil, nx, ny, n, m, (color == 'W') ? 'R' : 'W');
+		}
+	}
+}
+
+void solve() {
+	memset(vis, false, sizeof vis);
+	ints(n, m);
+	V<V<char>> grid(n, V<char>(m));
+	re(grid);
+	auto ng = grid;
+	bool flag = false;
+	F0R(i, n) F0R(j, m) {
+		if(flag) break;
+		if(grid[i][j] == 'R' || grid[i][j] == 'W') {
+			fill(grid, ng, i, j, n, m, grid[i][j]);
+			flag = true;
+		}
+	}
+
+	if(!flag) fill(grid, ng, n-1,m-1, n, m,'R');
+
+
+	F0R(i, n) F0R(j, m) {
+		if((grid[i][j] != '.') && grid[i][j] != ng[i][j]) {
+			ps("NO"); return;
+		}
+	}
+
+	ps("YES");
+	F0R(i, n) {
+		F0R(j, m) pr(ng[i][j]);
+		ps();
+	}
+	// ps(ng);
+}
+
 signed main() {
 	// clock_t start = clock();
 	setIO();
+
+	int n; re(n);
+	while(n--) solve();
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }

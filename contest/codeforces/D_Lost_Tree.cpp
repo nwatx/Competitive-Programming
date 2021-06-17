@@ -276,13 +276,55 @@ inline namespace FileIO {
 
 #pragma endregion
 
-const int mx = 2e5+1;
+const int mx = 2e3+1;
 
 int N, M;
+
+bool vis[mx];
+set<int> adj[mx];
 
 signed main() {
 	// clock_t start = clock();
 	setIO();
+
+	int n; re(n);
+	int cnt = 0;
+	FOR(i, 1, n + 1) {
+		// pr("? ", i, endl);
+		if(cnt >= cdiv(n, 2)) break;
+		if(!vis[i]) {
+			cout << "? " << i << endl;
+			cnt++;
+			vi v(n);
+			re(v);
+			F0R(j, n) {
+				if(v[j] == 1) {
+					adj[i].insert(j+1);
+					adj[j+1].insert(i);
+					vis[j+1] = true;
+				}
+			}
+		}
+	}
+
+	F0R(i, 5) {
+		dbg(adj[i], i);
+	}
+
+	set<pi> ed;
+	FOR(i, 1, n + 1) {
+		each(e, adj[i]) {
+			if(ed.count(mp(e, i)) || ed.count(mp(i, e))) continue;
+			ed.insert({e, i});
+		}
+	}
+
+	dbg(ed);
+
+	ps("!");
+	each(e, ed) {
+		ps(e.f, e.s);
+	}
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }

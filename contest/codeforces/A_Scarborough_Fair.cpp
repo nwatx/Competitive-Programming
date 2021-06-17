@@ -284,6 +284,16 @@ signed main() {
 	// clock_t start = clock();
 	setIO();
 
+	re(N, M);
+
+	string s; re(s);
+	while(M--) {
+		ints(l, r); char c1, c2; re(c1, c2);
+		FOR(i, l - 1, r) if(s[i] == c1) s[i] = c2;
+	}
+
+	ps(s);
+
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }
 

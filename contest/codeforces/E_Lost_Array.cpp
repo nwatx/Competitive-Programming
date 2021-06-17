@@ -284,6 +284,49 @@ signed main() {
 	// clock_t start = clock();
 	setIO();
 
+	ints(n, k);
+	if(n-k == 1) {
+		ps(-1);
+		return 0;
+	}
+
+	int ret = 0;
+
+	F0R(i, (n/k)*k) {
+		string r = "? ";
+		FOR(j, i, i + k) {
+			r += ts(j+1) + " ";
+		}
+		i += k;
+		r.erase(r.begin() + sz(r) - 1);
+		cout << r << endl;
+		int ans; re(ans);
+		dbg(ret, ans);
+		ret ^= ans;
+	}
+
+	string lst = "? ";
+	// for(int i = (n/k)*k - 1; i >= (n/k)*k - k; i--)
+	if((n - k) % 2) {
+		FOR(i, (n/k)*k-k + 1, (n/k)*k) {
+			lst += ts(i) + " ";
+		}
+
+		FOR(i, (n/k)*k, n) {
+			cout << lst << i + 1 << endl;
+			int ans; re(ans);
+			dbg(ret, ans);
+			ret ^= ans;
+		}
+	} else {
+		
+	}
+
+	dbg(lst);
+
+	ps("!", ret);
+
+
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }
 

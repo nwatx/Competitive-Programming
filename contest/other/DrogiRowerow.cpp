@@ -278,13 +278,85 @@ inline namespace FileIO {
 
 const int mx = 2e5+1;
 
+/**
+ * Description: Kosaraju's Algorithm, DFS twice to generate 
+	 * strongly connected components in topological order. $a,b$
+	 * in same component if both $a\to b$ and $b\to a$ exist.
+ * Time: O(N+M)
+ * Source: Wikipedia
+ * Verification: POI 8 peaceful commission
+ */
+
+struct SCC {
+	int N; vector<vi> adj, radj;
+	vi todo, comp, comps; vector<bool> vis;
+	void init(int _N) { N = _N; 
+		adj.rsz(N), radj.rsz(N), comp = vi(N,-1), vis.rsz(N); }
+	void ae(int x, int y) { adj[x].pb(y), radj[y].pb(x); }
+	void dfs(int x) {
+		vis[x] = 1; each(y,adj[x]) if (!vis[y]) dfs(y);
+		todo.pb(x); }
+	void dfs2(int x, int v) {
+		comp[x] = v; 
+		each(y,radj[x]) if (comp[y] == -1) dfs2(y,v); }
+	void gen() { // fills allComp
+		F0R(i,N) if (!vis[i]) dfs(i);
+		reverse(all(todo)); 
+		each(x,todo) if (comp[x] == -1) dfs2(x,x), comps.pb(x);
+	}
+};
+
 int N, M;
 
+int dp[100001], oc[100001], in_deg[100001];
+
 signed main() {
-	// clock_t start = clock();
 	setIO();
 
-	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
+	re(N, M);
+	SCC scc; scc.init(N);
+	F0R(i, M) {
+		int1(a, b);
+		scc.ae(a, b);
+	}
+
+	scc.gen();
+
+	F0R(i, N) { dp[scc.comp[i]]++; } // component size
+	reverse(all(scc.todo));
+
+	F0R(i, N) each(e, scc.adj[i]) {
+		if(scc.comp[e] != scc.comp[i]) {
+			in_deg[scc.comp[i]]++;
+		}
+	}
+
+	F0R(i, N) oc[scc.comp[i]] = max(in_deg[scc.comp[i]] - 1, 0);
+	each(c, scc.todo) {
+		each(e, scc.radj[c]) {
+			if(scc.comp[c] != scc.comp[e]) {
+				oc[scc.comp[e]] += oc[scc.comp[c]];
+			}
+		}
+	}
+
+	F0R(i, N) dbg(scc.comp[i], oc[scc.comp[i]]);
+
+
+	each(c, scc.todo) {
+		dp[scc.comp[c]] -= oc[scc.comp[c]];
+		each(e, scc.radj[c]) {
+			if(scc.comp[c] != scc.comp[e]) {
+				dp[scc.comp[e]] += dp[scc.comp[c]];
+				// oc[scc.comp[e]] += oc[scc.comp[c]];
+				// dp[scc.comp[e]] -= 1;
+			}
+		}
+	}
+
+	F0R(i, N) {
+		pr(dp[scc.comp[i]], " ");
+	}
 }
 
 /* stuff you should look for

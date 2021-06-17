@@ -284,6 +284,21 @@ signed main() {
 	// clock_t start = clock();
 	setIO();
 
+	ints(n, m);
+	vi v(n); re(v);
+	int res = 1;
+	int p = 0;
+
+	each(e, v) {
+		if(p + e <= m) p += e;
+		else {
+			res++;
+			p = e;
+		}
+	}
+
+	ps(res);
+
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }
 

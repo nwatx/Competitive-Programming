@@ -214,7 +214,8 @@ inline namespace ToString {
 		return res;
 	}
 	tcT> typename enable_if<needs_output_v<T>,str>::type ts(T v) {
-		return "{"+ts_sep(v,", ")+"}"; }
+        return ts_sep(v, " "); }
+		// return "{"+ts_sep(v,", ")+"}"; }
 
 	// for nested DS
 	template<int, class T> typename enable_if<!needs_output_v<T>,vs>::type 
@@ -246,6 +247,8 @@ inline namespace Output {
 	// print w/ spaces, end with newline
 	void ps() { cout << "\n"; }
 	template<class ...T> void ps(const T&... t) { pr_sep(cout," ",t...); ps(); } 
+	// print n elements
+	template<class T> void pv(const T &t, const int &n) { F0R(i, n-1) pr(t[i], " "); ps(t[n-1]); }
 	// debug to cerr
 	template<class ...T> void dbg_out(const T&... t) {
 		pr_sep(cerr," | ",t...); cerr << endl; }
@@ -279,10 +282,110 @@ inline namespace FileIO {
 const int mx = 2e5+1;
 
 int N, M;
+AR<ll, mx> A, comp;
+AR<ll, mx> csum;
+vi adj[mx], adj_t[mx], S;
+set<int> n_adj[mx];
+bool vis[mx];
+
+void dfs(int x, int pass, int num = 0) {
+	vis[x] = true;
+	vi &p = (pass == 1) ? adj[x] : adj_t[x];
+	each(e, p) {
+		if(!vis[e]) {
+			dfs(e, pass, num);
+		}
+	}
+
+	if(pass == 1) S.pb(x);
+	if(pass == 2) {
+		comp[x] = num;
+		csum[comp[x]] += A[x];
+	}
+}
+
 
 signed main() {
 	// clock_t start = clock();
 	setIO();
+
+	re(N, M);
+	F0R(i, N) re(A[i]);
+
+	vpi ed;
+
+	rep(M) {
+		int1(a, b);
+		adj[a].pb(b);
+		adj_t[b].pb(a);
+		ed.pb({a, b});
+	}
+
+	F0R(i, N) {
+		if(!vis[i]) dfs(i, 1);
+	}
+
+	memset(vis, false, sizeof vis);
+
+	int id = 0;
+
+	R0F(i, N) {
+		if(!vis[S[i]]) {
+			dfs(S[i], 2, id);
+			id++;
+		}
+	}
+
+	memset(vis, false, sizeof vis);
+
+	each(e, ed) {
+		int l = comp[e.f], r = comp[e.s];
+		if(l != r) {
+			n_adj[l].insert(r);
+		}
+	}
+
+	// we have now compressed our graph to a DAG
+	// now we can perform dp on trees
+
+	memset(vis, false, sizeof vis);
+	// F0R(i, sz(S)) dbg(S[i], comp[S[i]]);
+
+	queue<int> q;
+
+	F0R(i, N) {
+		int currComp = comp[S[i]];
+		if(!vis[currComp]) {
+			// dfs essentially
+			q.push(currComp);	
+			dbg(currComp);
+			vis[currComp] = 1;
+		}
+	}
+
+	F0R(i, 6) dbg(i, csum[i], n_adj[i]);
+
+	memset(vis, false, sizeof vis);
+
+	while(sz(q)) {
+		// top is a component
+		int top = q.front(); q.pop();
+		// dbg(top);
+		vis[top] = true;
+		ll add = csum[top];
+		each(e, n_adj[top]) { // for all components connected to each other
+			if(!vis[e]) {
+				q.push(e); 
+			} ckmax(add, csum[e] + csum[top]);
+		}
+		ckmax(csum[top], add);
+	}
+
+	// dbg(dp);
+
+	// F0R(i, N) dbg(i, comp[i], csum[comp[i]]);
+
+	ps(*max_element(csum.begin(), csum.begin() + N + 1));
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }

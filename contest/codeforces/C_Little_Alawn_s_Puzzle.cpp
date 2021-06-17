@@ -276,13 +276,68 @@ inline namespace FileIO {
 
 #pragma endregion
 
-const int mx = 2e5+1;
+const int mx = 4e5+1;
 
 int N, M;
+
+map<int, pi> m;
+int A[mx], B[mx];
+bool vis[mx];
+
+void dfs(int x) { // x is an index
+	if(x < 0) return;
+	// dbg(x);
+	vis[x] = true;
+	if(!vis[m[A[x]].f]) dfs(m[A[x]].f);
+	if(!vis[m[A[x]].s]) dfs(m[A[x]].s);
+	if(!vis[m[B[x]].f]) dfs(m[B[x]].f);
+	if(!vis[m[B[x]].s]) dfs(m[B[x]].s);
+}
+
+ll modpow(ll b, ll e) {
+	ll ans = 1;
+	for (; e; b = b * b % MOD, e /= 2)
+		if (e & 1) ans = ans * b % MOD;
+	return ans;
+}
+
+void solve() {
+	m.clear();
+	ints(n);
+	// vis.clear();
+	fill(vis, vis  + n + 1, false);
+	F0R(i, n) {
+		ints(a);
+		m[a] = {i, -1};
+		A[i] = a;
+	}
+
+	F0R(i, n) {
+		ints(a);
+		m[a].s = i;
+		B[i] = a;
+	}
+
+	ll ret = 0;
+
+	F0R(i, n) {
+		if(!vis[i]) {
+			// dbg("start:", i);
+			dfs(i);
+			ret++;
+		}
+	}
+
+	ps(modpow(2LL, ret));
+
+	// dbg(m);
+}
 
 signed main() {
 	// clock_t start = clock();
 	setIO();
+
+	int n; re(n); while(n--) solve();
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }

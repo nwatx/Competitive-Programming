@@ -280,9 +280,30 @@ const int mx = 2e5+1;
 
 int N, M;
 
+void solve() {
+	ll ret = 0;
+	ints(n);
+	vi v(n); re(v);
+	ret += v.front() + v.back();
+	FOR(i, 1, n) ret += abs(v[i] - v[i-1]);
+	F0R(i, n) {
+		if(i && v[i] <= v[i-1]) continue;
+		if(i + 1 < n && v[i] <= v[i+1]) continue;
+		// dbg(i);
+		ll m = 0;
+		if(i) ckmax(m, 1LL*v[i-1]);
+		if(i + 1 < n) ckmax(m, 1LL*v[i+1]);
+		// dbg(v[i] - m);
+		ret -= v[i] - m;
+	}
+
+	ps(ret);
+}
+
 signed main() {
 	// clock_t start = clock();
 	setIO();
+	int n; re(n); while(n--) solve();
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }
