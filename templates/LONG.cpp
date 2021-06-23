@@ -278,9 +278,8 @@ inline namespace FileIO {
 
 /* #endregion */
 
-int N, M;
+ll N, M;
 const int mx = 2e5+1;
-
 
 signed main() {
 	// clock_t start = clock();
