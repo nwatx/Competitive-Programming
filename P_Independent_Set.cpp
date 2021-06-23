@@ -5,7 +5,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-/* #region template */
+#pragma region
+ 
 using ll = long long;
 using db = long double; // or double, if TL is tight
 using str = string; // yay python!
@@ -252,6 +253,7 @@ inline namespace Output {
 		cerr << "Line(" << line << ") -> [" << names << "]: "; }
 	template<int lev, class T> void dbgl_out(const T& t) {
 		cerr << "\n\n" << ts_sep(ts_lev<lev>(t),"\n") << "\n" << endl; }
+	#define dbgv(A, l, r) FOR(i, l, r+1) dbg(i, A[i]);
 	#ifdef LOCAL
 		#define dbg(...) loc_info(__LINE__,#__VA_ARGS__), dbg_out(__VA_ARGS__)
 		#define dbgl(lev,x) loc_info(__LINE__,#x), dbgl_out<lev>(x)
@@ -272,19 +274,47 @@ inline namespace FileIO {
 		if (sz(s)) setIn(s+".in"), setOut(s+".out"); // for old USACO
 	}
 };
-/* #endregion */
 
-/* #region snippets */
+#pragma endregion
 
-/* #endregion */
-
-int N, M;
 const int mx = 2e5+1;
 
+int N, M;
+
+ll dp[mx][2]; // dp 0 is white painting dp 1 is black
+vi adj[mx];
+
+void dfs(int v, int p) {
+	each(e, adj[v]) {
+		if(e != p) {
+			dfs(e, v);
+			dp[v][0] *= dp[e][1] + dp[e][0];
+			dp[v][0] %= MOD;
+			dp[v][1] *= dp[e][0];
+			dp[v][1] %= MOD;
+		}
+	}
+}
 
 signed main() {
 	// clock_t start = clock();
 	setIO();
+
+	re(N);
+
+	rep(N-1) {
+		ints(a, b);
+		adj[a].pb(b);
+		adj[b].pb(a);
+	}
+
+	FOR(i, 1, N + 1) dp[i][0] = 1, dp[i][1] = 1;
+
+	dfs(1, 0);
+
+	ps((dp[1][0] + dp[1][1]) % MOD);
+
+	// FOR(i, 1, N + 1) dbg(mp(dp[i][0], dp[i][1]));
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }

@@ -5,7 +5,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-/* #region template */
+#pragma region
+ 
 using ll = long long;
 using db = long double; // or double, if TL is tight
 using str = string; // yay python!
@@ -272,19 +273,41 @@ inline namespace FileIO {
 		if (sz(s)) setIn(s+".in"), setOut(s+".out"); // for old USACO
 	}
 };
-/* #endregion */
 
-/* #region snippets */
+#pragma endregion
 
-/* #endregion */
+const int mx = 2e4+1;
 
 int N, M;
-const int mx = 2e5+1;
-
+// define dp[i] as the best value for weight i
+ll dp[mx];
 
 signed main() {
 	// clock_t start = clock();
 	setIO();
+	re(N);
+
+	V<pair<long, pl>> v(N); // {w, s, v}
+
+	F0R(i, N) {
+		ints(a, b, c);
+		v[i] = {a, {b, c}};
+	}
+
+	sort(all(v), [](pair<long, pl> &a, pair<long, pl>&b) -> bool {
+		return a.s.f + a.f < b.s.f + b.f;
+	});
+
+	dbg(v);
+
+	each(x, v) {
+		R0F(j, x.s.f + 1) { // solidness
+			ckmax(dp[j + x.f], dp[j] + x.s.s);
+		}
+	}
+
+
+	ps(*max_element(dp, dp + mx));
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }
