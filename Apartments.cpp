@@ -23,9 +23,6 @@ using vpi = vector<pi>;
 using vpl = vector<pl>; 
 using vpd = vector<pd>;
 
-using Mii = map<int, int>;
-using Mll = map<ll, ll>;
-
 #define tcT template<class T
 #define tcTU tcT, class U
 tcT> using V = vector<T>; 
@@ -281,12 +278,39 @@ inline namespace FileIO {
 
 /* #endregion */
 
-ll N, M;
+ll N, M, K;
 const int mx = 2e5+1;
 
 signed main() {
 	// clock_t start = clock();
 	setIO();
+
+	re(N, M, K);
+
+	vi A(N), B(M);
+	re(A); re(B);
+
+	sor(A); sor(B);
+
+	// dbg(A);
+	// dbg(B);
+
+	int ret = 0, r = 0, lr = -1;
+
+	F0R(i, N) {
+		// dbg(lr);
+		while(r < M && B[r] - A[i] < -K) r++;
+		while(r <= lr) r++;
+		while(r > 0 && r < M && r > lr + 1 && B[r] - A[i] > K) r--;
+		if(abs(B[r] - A[i]) <= K) {
+			ret++;
+			lr = r;
+			// dbg(r, i);
+		}
+	}
+
+	ps(ret);
+
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }

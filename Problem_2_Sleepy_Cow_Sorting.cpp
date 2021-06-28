@@ -23,9 +23,6 @@ using vpi = vector<pi>;
 using vpl = vector<pl>; 
 using vpd = vector<pd>;
 
-using Mii = map<int, int>;
-using Mll = map<ll, ll>;
-
 #define tcT template<class T
 #define tcTU tcT, class U
 tcT> using V = vector<T>; 
@@ -278,15 +275,56 @@ inline namespace FileIO {
 /* #endregion */
 
 /* #region snippets */
+/**
+ * Description: A set (not multiset!) with support for finding the $n$'th
+ * element, and finding the index of an element. Change \texttt{null\_type} for map.
+ * Time: O(\log N)
+ * Source: KACTL
+   * https://codeforces.com/blog/entry/11080
+ * Verification: many
+ */
 
+#include <ext/pb_ds/tree_policy.hpp>
+#include <ext/pb_ds/assoc_container.hpp>
+using namespace __gnu_pbds;
+template <class T> using Tree = tree<T, null_type, less<T>, 
+	rb_tree_tag, tree_order_statistics_node_update>; 
+#define ook order_of_key
+#define fbo find_by_order
 /* #endregion */
 
 ll N, M;
 const int mx = 2e5+1;
 
+AR<int, mx> A;
+
 signed main() {
 	// clock_t start = clock();
 	setIO();
+	setIO("sleepy");
+	re(N);
+
+	Tree<int> r;
+
+	F0R(i, N) re(A[i]);
+
+	int steps = N - 1;
+	R0F(i, N) {
+		if(i && A[i] < A[i-1]) {
+			steps = i;
+			break;
+		}
+	}
+
+	ROF(i, steps, N) r.insert(A[i]);
+
+	ps(steps);
+
+	F0R(i, steps) {
+		pr(steps - i - 1 + r.ook(A[i]));
+		r.insert(A[i]);
+		if(i != steps - 1) pr(" ");
+	}
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }

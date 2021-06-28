@@ -23,9 +23,6 @@ using vpi = vector<pi>;
 using vpl = vector<pl>; 
 using vpd = vector<pd>;
 
-using Mii = map<int, int>;
-using Mll = map<ll, ll>;
-
 #define tcT template<class T
 #define tcTU tcT, class U
 tcT> using V = vector<T>; 
@@ -284,9 +281,35 @@ inline namespace FileIO {
 ll N, M;
 const int mx = 2e5+1;
 
+void solve() {
+	ints(n);
+	vpl v(n);
+	F0R(i, n) {
+		int a; re(a);
+		v[i] = {a, i};
+	}
+
+	sor(v);
+
+	int ret = 0;
+	
+	for(int i = 0; i < n; i++) {
+		if(v[i].f > 2*n) break;
+		for(int j = i + 1; j < n; j++) {
+			if(v[i].f * v[j].f > 2*n) break;
+			// if(v[i].f * v[j].f == i + j + 2) ret++;
+			ret += (v[i].f * v[j].f == v[i].s + v[j].s + 2);
+		}
+	}
+	
+	ps(ret);
+}
+
 signed main() {
 	// clock_t start = clock();
 	setIO();
+	re(N);
+	rep(N) solve();
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }

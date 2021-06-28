@@ -23,9 +23,6 @@ using vpi = vector<pi>;
 using vpl = vector<pl>; 
 using vpd = vector<pd>;
 
-using Mii = map<int, int>;
-using Mll = map<ll, ll>;
-
 #define tcT template<class T
 #define tcTU tcT, class U
 tcT> using V = vector<T>; 
@@ -64,7 +61,7 @@ tcT> int lwb(V<T>& a, const T& b) { return int(lb(all(a),b)-bg(a)); }
 #define rep(a) F0R(_,a)
 #define each(a,x) for (auto& a: x)
 
-const int MOD = 1e9+7; // 998244353;
+const int MOD = 1e9+9; // 998244353;
 const ll INF = 1e18; // not too close to LLONG_MAX
 const db PI = acos((db)-1);
 const char nl = '\n';
@@ -287,6 +284,22 @@ const int mx = 2e5+1;
 signed main() {
 	// clock_t start = clock();
 	setIO();
+
+	re(N, M);
+
+	vi v(N); re(v);
+	sor(v);
+	// reverse(all(v));
+
+	ll r = 0;
+	ll ret = 1;
+	F0R(l, N) {
+		while (r < N - 1 && v[r + 1] - v[l] <= M) r++;
+		ret *= r - l + 1;
+		ret %= MOD;
+	}
+
+	ps(ret);
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }
