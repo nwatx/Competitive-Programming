@@ -44,6 +44,7 @@ tcT> using PR = pair<T,T>;
 #define all(x) bg(x), end(x)
 #define rall(x) x.rbegin(), x.rend() 
 #define sor(x) sort(all(x)) 
+#define sorr(x) sort(rall(x))
 #define rsz resize
 #define ins insert 
 #define ft front()
