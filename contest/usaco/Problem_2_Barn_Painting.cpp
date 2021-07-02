@@ -342,7 +342,6 @@ void genComb(int SZ) {
 }
 
 const int mx = 2e5+1;
-
 int N, M;
 
 vi adj[mx];
