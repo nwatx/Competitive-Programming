@@ -105,11 +105,15 @@ cexp auto min(h0 &&hf, h1 &&hs, Tl &&... tl) {
 	else return min(min(hf, hs), tl...);
 }
 
-// tcTUU> void re(T& t, U&... u) { re(t); re(u...); } // read multiple
-
+// variadic min / max
+tcT> bool ckmin(T& a, const T& b) {
+	return b < a ? a = b, 1 : 0; } // set a = min(a,b)
 tcTUU> bool ckmin(T &a, U... b) {
 	T mn = min(b...);
-	return mn < a ? a = mn, 1 : 0; } // set a = min(a,b)
+	return mn < a ? a = mn, 1 : 0; } // set a = max(a,b)
+
+tcT> bool ckmax(T& a, const T& b) {
+	return a < b ? a = b, 1 : 0; }
 tcTUU> bool ckmax(T &a, U... b) {
 	T mx = max(b...);
 	return mx > a ? a = mx, 1 : 0; } // set a = min(a,b)

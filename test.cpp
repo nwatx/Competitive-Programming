@@ -105,11 +105,15 @@ cexp auto min(h0 &&hf, h1 &&hs, Tl &&... tl) {
 	else return min(min(hf, hs), tl...);
 }
 
-// tcTUU> void re(T& t, U&... u) { re(t); re(u...); } // read multiple
-
+// variadic min / max
+tcT> bool ckmin(T& a, const T& b) {
+	return b < a ? a = b, 1 : 0; } // set a = min(a,b)
 tcTUU> bool ckmin(T &a, U... b) {
 	T mn = min(b...);
-	return mn < a ? a = mn, 1 : 0; } // set a = min(a,b)
+	return mn < a ? a = mn, 1 : 0; } // set a = max(a,b)
+
+tcT> bool ckmax(T& a, const T& b) {
+	return a < b ? a = b, 1 : 0; }
 tcTUU> bool ckmax(T &a, U... b) {
 	T mx = max(b...);
 	return mx > a ? a = mx, 1 : 0; } // set a = min(a,b)
@@ -312,14 +316,18 @@ signed main() {
 	// clock_t start = clock();
 	setIO();
 
-	ps(max(1, 2, 3 ,4, 5));
-	ps(min(1, 2, 3 ,4, 5));
+	assert(max(1, 2, 3 ,4, 5) == 5);
+	assert(min(1, 2, 3 ,4, 5) == 1);
 
 	int a = -1;
-	ps(ckmax(a, -4, 5, 6));
-	ps(a);
-	ps(ckmin(a, -5, -6, -10, 5));
-	ps(a);
+	assert(ckmax(a, -4, 5, 6) == 1);
+	assert(ckmax(a, -5) == 0);
+	assert(ckmax(a, -5, -7) == 0);
+	// ps(min(1,2));
+	assert(a == 6);
+	assert(ckmin(a, -5, -6, -10, 5) == 1);
+	assert(a == -10);
+	assert(ckmax(a, 5));
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }
