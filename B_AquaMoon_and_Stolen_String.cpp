@@ -23,16 +23,11 @@ using vpi = vector<pi>;
 using vpl = vector<pl>; 
 using vpd = vector<pd>;
 
-using MII = map<int, int>;
-using MLL = map<ll, ll>;
+using Mii = map<int, int>;
+using Mll = map<ll, ll>;
 
 #define tcT template<class T
 #define tcTU tcT, class U
-#define tcTUU tcT, class ...U
-
-#define tN typename
-#define cexp constexpr
-
 tcT> using V = vector<T>; 
 tcT, size_t SZ> using AR = array<T,SZ>; 
 tcT> using PR = pair<T,T>;
@@ -89,30 +84,10 @@ constexpr int msk2(int x) { return p2(x)-1; }
 ll cdiv(ll a, ll b) { return a/b+((a^b)>0&&a%b); } // divide a by b rounded up
 ll fdiv(ll a, ll b) { return a/b-((a^b)<0&&a%b); } // divide a by b rounded down
 
-// variadic max
-template<tN h0, tN h1, tN...Tl>
-cexp auto max(h0 &&hf, h1 &&hs, Tl &&... tl) {
-    if cexp (sizeof...(tl) == 0)
-		return hf > hs ? hf : hs;
-	else return max(max(hf, hs), tl...);
-}
-
-// vardiadic min
-template<tN h0, tN h1, tN...Tl>
-cexp auto min(h0 &&hf, h1 &&hs, Tl &&... tl) {
-    if cexp (sizeof...(tl) == 0)
-		return hf < hs ? hf : hs;
-	else return min(min(hf, hs), tl...);
-}
-
-// tcTUU> void re(T& t, U&... u) { re(t); re(u...); } // read multiple
-
-tcTUU> bool ckmin(T &a, U... b) {
-	T mn = min(b...);
-	return mn < a ? a = mn, 1 : 0; } // set a = min(a,b)
-tcTUU> bool ckmax(T &a, U... b) {
-	T mx = max(b...);
-	return mx > a ? a = mx, 1 : 0; } // set a = min(a,b)
+tcT> bool ckmin(T& a, const T& b) {
+	return b < a ? a = b, 1 : 0; } // set a = min(a,b)
+tcT> bool ckmax(T& a, const T& b) {
+	return a < b ? a = b, 1 : 0; }
 
 // searching
 tcTU> T fstTrue(T lo, T hi, U f) {
@@ -152,6 +127,8 @@ tcT> void remDup(vector<T>& v) { // sort and remove duplicates
 tcTU> void erase(T& t, const U& u) { // don't erase
 	auto it = t.find(u); assert(it != end(t));
 	t.erase(it); } // element that doesn't exist from (multi)set
+
+#define tcTUU tcT, class ...U
 
 inline namespace Helpers {
 	//////////// is_iterable
@@ -308,9 +285,39 @@ inline namespace FileIO {
 ll N, M;
 const int mx = 2e5+1;
 
+void solve() {
+	// dbg("#");
+	ints(n, m);
+	vs A(n); re(A);
+	vs B(n - 1); re(B);
+
+
+	F0R(i, m) { // column
+		map<char, int> a, b;
+		F0R(j, n) a[A[j][i]]++;
+		F0R(j, n - 1) b[B[j][i]]++;
+		each(c, a) if(b[c.f] - c.s == -1) {
+			pr(c.f);
+		};
+	}
+
+	cout << endl;
+}
+
+// void solve() {
+// 	ints(n, m);
+// 	vs A(n); re(A);
+// 	vs B(n - 1); re(B);
+// 	F0R(i, M) {
+// 		F0R(j, n - 1)
+// 	}
+// }
+
 signed main() {
 	// clock_t start = clock();
 	setIO();
+
+	re(N); while(N--) solve();
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }

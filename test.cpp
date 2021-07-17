@@ -312,6 +312,15 @@ signed main() {
 	// clock_t start = clock();
 	setIO();
 
+	ps(max(1, 2, 3 ,4, 5));
+	ps(min(1, 2, 3 ,4, 5));
+
+	int a = -1;
+	ps(ckmax(a, -4, 5, 6));
+	ps(a);
+	ps(ckmin(a, -5, -6, -10, 5));
+	ps(a);
+
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }
 
