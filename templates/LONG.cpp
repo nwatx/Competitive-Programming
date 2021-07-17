@@ -23,9 +23,6 @@ using vpi = vector<pi>;
 using vpl = vector<pl>; 
 using vpd = vector<pd>;
 
-using MII = map<int, int>;
-using MLL = map<ll, ll>;
-
 #define tcT template<class T
 #define tcTU tcT, class U
 #define tcTUU tcT, class ...U
