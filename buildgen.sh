@@ -1,0 +1,1 @@
+g++ -std=c++17 ./_GEN.cpp -O2 -Wall -Wextra -Wno-unknown-pragmas -DLOCAL -o gen
