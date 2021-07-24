@@ -27,23 +27,29 @@ int main() {
 	setIO("cbarn");
 	
 	int n; cin >> n;
+
+	// reads in # of cows in each room
 	for(int i = 0; i < n; i++) {
 		cin >> R[i];
 	}
 
+	// initialize to infinity
 	int ret = INT_MAX;
 
 	for(int i = 0; i < n; i++) {
+		// rotate it by 1
 		rotate(R, R + 1, R + n);
 
-		int sum = 0;
+		int sum = 0; // total sum
 
 		for(int j = 0; j < n; j++) {
 			sum += j * R[j];
 		}
 
+		// check if we have a better answer
 		ret = min(sum, ret);
 	}
 
+	// print out our answer
 	cout << ret;
 }

@@ -23,13 +23,11 @@ using vpi = vector<pi>;
 using vpl = vector<pl>; 
 using vpd = vector<pd>;
 
+using Mii = map<int, int>;
+using Mll = map<ll, ll>;
+
 #define tcT template<class T
 #define tcTU tcT, class U
-#define tcTUU tcT, class ...U
-
-#define tN typename
-#define cexp constexpr
-
 tcT> using V = vector<T>; 
 tcT, size_t SZ> using AR = array<T,SZ>; 
 tcT> using PR = pair<T,T>;
@@ -86,34 +84,10 @@ constexpr int msk2(int x) { return p2(x)-1; }
 ll cdiv(ll a, ll b) { return a/b+((a^b)>0&&a%b); } // divide a by b rounded up
 ll fdiv(ll a, ll b) { return a/b-((a^b)<0&&a%b); } // divide a by b rounded down
 
-// variadic max
-template<tN h0, tN h1, tN...Tl>
-cexp auto max(h0 &&hf, h1 &&hs, Tl &&... tl) {
-	if cexp (sizeof...(tl) == 0)
-		return hf > hs ? hf : hs;
-	else return max(max(hf, hs), tl...);
-}
-
-// vardiadic min
-template<tN h0, tN h1, tN...Tl>
-cexp auto min(h0 &&hf, h1 &&hs, Tl &&... tl) {
-	if cexp (sizeof...(tl) == 0)
-		return hf < hs ? hf : hs;
-	else return min(min(hf, hs), tl...);
-}
-
-// variadic min / max
 tcT> bool ckmin(T& a, const T& b) {
 	return b < a ? a = b, 1 : 0; } // set a = min(a,b)
-tcTUU> bool ckmin(T &a, U... b) {
-	T mn = min(b...);
-	return mn < a ? a = mn, 1 : 0; } // set a = max(a,b)
-
 tcT> bool ckmax(T& a, const T& b) {
 	return a < b ? a = b, 1 : 0; }
-tcTUU> bool ckmax(T &a, U... b) {
-	T mx = max(b...);
-	return mx > a ? a = mx, 1 : 0; } // set a = min(a,b)
 
 // searching
 tcTU> T fstTrue(T lo, T hi, U f) {
@@ -134,11 +108,27 @@ tcTU> T lstTrue(T lo, T hi, U f) {
 	return lo;
 }
 
+tcTU> T ternMax(T l, T r, U f) { // unimodal functions
+    for(;r-l>0;) {
+        T m1 = l+(r-l)/3;T m2=r-(r-l)/3;T f1=f(m1);T f2=f(m2);
+        if(f1<f2)l=m1+1;else r=m2-1; }
+    return f(l);
+}
+
+tcTU> T ternMin(T l, T r, U f) {
+    for(;r-l>0;) {
+        T m1 = l+(r-l)/3;T m2=r-(r-l)/3;T f1=f(m1);T f2=f(m2);
+        if(f1>f2)l=m1+1;else r=m2-1; }
+    return f(l);
+}
+
 tcT> void remDup(vector<T>& v) { // sort and remove duplicates
 	sort(all(v)); v.erase(unique(all(v)),end(v)); }
 tcTU> void erase(T& t, const U& u) { // don't erase
 	auto it = t.find(u); assert(it != end(t));
 	t.erase(it); } // element that doesn't exist from (multi)set
+
+#define tcTUU tcT, class ...U
 
 inline namespace Helpers {
 	//////////// is_iterable
@@ -146,28 +136,28 @@ inline namespace Helpers {
 	// this gets used only when we can call begin() and end() on that type
 	tcT, class = void> struct is_iterable : false_type {};
 	tcT> struct is_iterable<T, void_t<decltype(begin(declval<T>())),
-									  decltype(end(declval<T>()))
-									 >
-						   > : true_type {};
+	                                  decltype(end(declval<T>()))
+	                                 >
+	                       > : true_type {};
 	tcT> constexpr bool is_iterable_v = is_iterable<T>::value;
 
 	//////////// is_readable
 	tcT, class = void> struct is_readable : false_type {};
 	tcT> struct is_readable<T,
-			typename std::enable_if_t<
-				is_same_v<decltype(cin >> declval<T&>()), istream&>
-			>
-		> : true_type {};
+	        typename std::enable_if_t<
+	            is_same_v<decltype(cin >> declval<T&>()), istream&>
+	        >
+	    > : true_type {};
 	tcT> constexpr bool is_readable_v = is_readable<T>::value;
 
 	//////////// is_printable
 	// // https://nafe.es/posts/2020-02-29-is-printable/
 	tcT, class = void> struct is_printable : false_type {};
 	tcT> struct is_printable<T,
-			typename std::enable_if_t<
-				is_same_v<decltype(cout << declval<T>()), ostream&>
-			>
-		> : true_type {};
+	        typename std::enable_if_t<
+	            is_same_v<decltype(cout << declval<T>()), ostream&>
+	        >
+	    > : true_type {};
 	tcT> constexpr bool is_printable_v = is_printable<T>::value;
 }
 
@@ -251,7 +241,7 @@ inline namespace ToString {
 }
 
 inline namespace Output {
-	tcT> void pr_sep(ostream& os, str, const T& t) { os << ts(t); }
+	template<class T> void pr_sep(ostream& os, str, const T& t) { os << ts(t); }
 	template<class T, class... U> void pr_sep(ostream& os, str sep, const T& t, const U&... u) {
 		pr_sep(os,sep,t); os << sep; pr_sep(os,sep,u...); }
 	// print w/ no spaces
@@ -292,19 +282,195 @@ inline namespace FileIO {
 
 /* #endregion */
 
+ll N, M;
 const int mx = 2e5+1;
 
-void solve() {
+// void solve() {
+// 	int n; re(n);
+// 	vi a(n), b(n); re(a, b);
 
+// 	vpi ret;
+
+// 	F0R(i, n - 1) {
+// 		while(true) {
+// 			if(a[i] == b[i]) break;
+// 			if(a[i] > b[i] && a[i] > 0) {
+// 				rep(a[i] - b[i]) {
+// 					ret.pb({i, i + 1});
+// 					a[i]--; a[i + 1]++;
+// 				}
+// 			} else if(a[i + 1] > 0) {
+// 				rep(b[i] - a[i]) {
+// 					ret.pb({i + 1, i});
+// 					a[i]++; a[i + 1]--;
+// 				}
+// 			} else if(a[i] != b[i]) {
+// 				ps(-1);
+// 				return;
+// 			} else {
+// 				break;
+// 			}
+// 		}
+// 	}
+
+// 	dbg(ret);
+
+// 	if(a.back() != b.back()) ps(-1);
+// 	else {
+// 		assert(sz(ret) <= 100);
+// 		ps(sz(ret));
+// 		each(p, ret) {
+// 			ps(p.f + 1, p.s + 1);
+// 		}
+// 	}
+// }
+
+// void solve() {
+// 	int n; re(n);
+// 	vi a(n), b(n); re(a, b);
+// 	vi A(n); F0R(i, n) A[i] = a[i] - b[i];
+// 	int sum = 0;
+// 	F0R(i, n) sum += A[i];
+// 	if(sum != 0) {
+// 		ps(-1); return;
+// 	}
+// 	queue<pi> pos, neg;
+// 	F0R(i, n) {
+// 		if(A[i] > 0) pos.push({A[i], i});
+// 		if(A[i] < 0) neg.push({A[i], i});
+// 	}
+
+// 	vpi ret;
+
+// 	rep(100) {
+// 		if(sz(pos) == 0 && sz(neg) == 0) {
+// 			break;
+// 		}
+
+// 		if(sz(pos) && pos.front().f == 0) {
+// 			pos.pop(); continue;
+// 		}
+
+// 		if(sz(neg) && neg.front().f == 0) {
+// 			neg.pop(); continue;
+// 		}
+
+// 		if(sz(pos) && !sz(neg)) break;
+// 		if(sz(neg) && !sz(pos)) break;
+
+// 		pi tp = pos.front(); pos.pop();
+// 		pi tn = neg.front(); neg.pop();
+// 		dbg(tp, tn);
+
+// 		ret.push_back({tp.s, tn.s});
+// 		pos.push(mp(tp.f - 1, tp.s));
+// 		neg.push(mp(tn.f + 1, tn.s));
+// 	}
+
+// 	// dbg(ret);
+
+// 	if(sz(pos) || sz(neg)) {
+// 		ps(-1);
+// 	} else {
+// 		ps(sz(ret));
+// 		each(x, ret) {
+// 			ps(x.f + 1, x.s + 1);
+// 		}
+// 	}
+// }
+
+// void solve() {
+// 	int n; re(n);
+// 	vpi A(n), B(n);
+// 	F0R(i, n) {
+// 		int a; re(a); A[i] = {a, i};
+// 	}
+// 	F0R(i, n) {
+// 		int a; re(a); B[i] = {a, i};
+// 	}
+
+// 	sor(A); sor(B);
+
+// 	vpi ret;
+
+// 	F0R(i, n - 1) {
+// 		dbg(i);
+// 		while(true) {
+// 			if(A[i].f == B[i].f) break;
+// 			if(A[i].f > B[i].f && A[i].f > 0) {
+// 				rep(A[i].f - B[i].f) {
+// 					ret.pb({A[i].s, A[i + 1].s});
+// 					A[i].f--; A[i + 1].f++;
+// 				}
+// 			} else if(A[i + 1].f > 0) {
+// 				rep(B[i].f - A[i].f) {
+// 					ret.pb({A[i + 1].s, A[i].s});
+// 					A[i].f++; A[i + 1].f--;
+// 				}
+// 			} else if(A[i].f != B[i].f) {
+// 				ps(-1);
+// 				return;
+// 			} else {
+// 				break;
+// 			}
+// 		}
+// 	}
+
+// 	dbg(ret);
+
+// 	if(A.back().f != B.back().f) ps(-1);
+// 	else {
+// 		assert(sz(ret) <= 100);
+// 		ps(sz(ret));
+// 		each(p, ret) {
+// 			ps(p.f + 1, p.s + 1);
+// 		}
+// 	}
+// 	dbg(A, B);
+// }
+
+void solve() {
+	int n; re(n);
+	vi a(n), b(n); re(a, b);
+	vpi c(n); F0R(i, n) c[i] = {a[i] - b[i], i};
+	int sum = 0; each(x, c) sum += x.f;
+	if(sum != 0) {
+		ps(-1); return;
+	}
+
+	vpi pos, neg, ret;
+	each(x, c) {
+		if(x.f < 0) neg.pb(x);
+		if(x.f > 0) pos.pb(x);
+	}
+
+	sor(pos); sor(neg);
+
+	int l = 0, r = 0;
+
+	while(l < sz(pos) && r < sz(neg)) {
+		if(pos[l].f == 0) l++;
+		else if(neg[r].f == 0) r++;
+		else {
+			ret.pb(mp(pos[l].s, neg[r].s));
+			pos[l].f--; neg[r].f++;
+		}
+	}
+
+	// dbg(ret);
+
+	ps(sz(ret));
+
+	each(x, ret) {
+		ps(x.f + 1, x.s + 1);
+	}
 }
 
 signed main() {
 	// clock_t start = clock();
 	setIO();
 
-	int n = 1;
-	// re(n);
-	rep(n) solve();
+	re(N); rep(N) solve();
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }
@@ -315,5 +481,4 @@ signed main() {
 	* do smth instead of nothing and stay organized
 	* WRITE STUFF DOWN
 	* DON'T GET STUCK ON ONE APPROACH
-	* geo and benq orz
 */

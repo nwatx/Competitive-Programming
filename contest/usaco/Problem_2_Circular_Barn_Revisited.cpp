@@ -5,8 +5,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#pragma region
- 
+/* #region template */
 using ll = long long;
 using db = long double; // or double, if TL is tight
 using str = string; // yay python!
@@ -26,6 +25,11 @@ using vpd = vector<pd>;
 
 #define tcT template<class T
 #define tcTU tcT, class U
+#define tcTUU tcT, class ...U
+
+#define tN typename
+#define cexp constexpr
+
 tcT> using V = vector<T>; 
 tcT, size_t SZ> using AR = array<T,SZ>; 
 tcT> using PR = pair<T,T>;
@@ -42,6 +46,7 @@ tcT> using PR = pair<T,T>;
 #define all(x) bg(x), end(x)
 #define rall(x) x.rbegin(), x.rend() 
 #define sor(x) sort(all(x)) 
+#define sorr(x) sort(rall(x))
 #define rsz resize
 #define ins insert 
 #define ft front()
@@ -81,10 +86,34 @@ constexpr int msk2(int x) { return p2(x)-1; }
 ll cdiv(ll a, ll b) { return a/b+((a^b)>0&&a%b); } // divide a by b rounded up
 ll fdiv(ll a, ll b) { return a/b-((a^b)<0&&a%b); } // divide a by b rounded down
 
+// variadic max
+template<tN h0, tN h1, tN...Tl>
+cexp auto max(h0 &&hf, h1 &&hs, Tl &&... tl) {
+    if cexp (sizeof...(tl) == 0)
+		return hf > hs ? hf : hs;
+	else return max(max(hf, hs), tl...);
+}
+
+// vardiadic min
+template<tN h0, tN h1, tN...Tl>
+cexp auto min(h0 &&hf, h1 &&hs, Tl &&... tl) {
+    if cexp (sizeof...(tl) == 0)
+		return hf < hs ? hf : hs;
+	else return min(min(hf, hs), tl...);
+}
+
+// variadic min / max
 tcT> bool ckmin(T& a, const T& b) {
 	return b < a ? a = b, 1 : 0; } // set a = min(a,b)
+tcTUU> bool ckmin(T &a, U... b) {
+	T mn = min(b...);
+	return mn < a ? a = mn, 1 : 0; } // set a = max(a,b)
+
 tcT> bool ckmax(T& a, const T& b) {
 	return a < b ? a = b, 1 : 0; }
+tcTUU> bool ckmax(T &a, U... b) {
+	T mx = max(b...);
+	return mx > a ? a = mx, 1 : 0; } // set a = min(a,b)
 
 // searching
 tcTU> T fstTrue(T lo, T hi, U f) {
@@ -124,8 +153,6 @@ tcT> void remDup(vector<T>& v) { // sort and remove duplicates
 tcTU> void erase(T& t, const U& u) { // don't erase
 	auto it = t.find(u); assert(it != end(t));
 	t.erase(it); } // element that doesn't exist from (multi)set
-
-#define tcTUU tcT, class ...U
 
 inline namespace Helpers {
 	//////////// is_iterable
@@ -273,122 +300,77 @@ inline namespace FileIO {
 		if (sz(s)) setIn(s+".in"), setOut(s+".out"); // for old USACO
 	}
 };
+/* #endregion */
 
-#pragma endregion
+/* #region snippets */
 
-/**
- * Description: modular arithmetic operations 
- * Source: 
-	* KACTL
-	* https://codeforces.com/blog/entry/63903
-	* https://codeforces.com/contest/1261/submission/65632855 (tourist)
-	* https://codeforces.com/contest/1264/submission/66344993 (ksun)
-	* also see https://github.com/ecnerwala/cp-book/blob/master/src/modnum.hpp (ecnerwal)
- * Verification: 
-	* https://open.kattis.com/problems/modulararithmetic
- */
+/* #endregion */
 
-template<int MOD, int RT> struct mint {
-	static const int mod = MOD;
-	static constexpr mint rt() { return RT; } // primitive root for FFT
-	int v; explicit operator int() const { return v; } // explicit -> don't silently convert to int
-	mint() { v = 0; }
-	mint(ll _v) { v = int((-MOD < _v && _v < MOD) ? _v : _v % MOD);
-		if (v < 0) v += MOD; }
-	friend bool operator==(const mint& a, const mint& b) { 
-		return a.v == b.v; }
-	friend bool operator!=(const mint& a, const mint& b) { 
-		return !(a == b); }
-	friend bool operator<(const mint& a, const mint& b) { 
-		return a.v < b.v; }
-	friend void re(mint& a) { ll x; re(x); a = mint(x); }
-	friend str ts(mint a) { return ts(a.v); }
-   
-	mint& operator+=(const mint& m) { 
-		if ((v += m.v) >= MOD) v -= MOD; 
-		return *this; }
-	mint& operator-=(const mint& m) { 
-		if ((v -= m.v) < 0) v += MOD; 
-		return *this; }
-	mint& operator*=(const mint& m) { 
-		v = int((ll)v*m.v%MOD); return *this; }
-	mint& operator/=(const mint& m) { return (*this) *= inv(m); }
-	friend mint pow(mint a, ll p) {
-		mint ans = 1; assert(p >= 0);
-		for (; p; p /= 2, a *= a) if (p&1) ans *= a;
-		return ans; }
-	friend mint inv(const mint& a) { assert(a.v != 0); 
-		return pow(a,MOD-2); }
-		
-	mint operator-() const { return mint(-v); }
-	mint& operator++() { return *this += 1; }
-	mint& operator--() { return *this -= 1; }
-	friend mint operator+(mint a, const mint& b) { return a += b; }
-	friend mint operator-(mint a, const mint& b) { return a -= b; }
-	friend mint operator*(mint a, const mint& b) { return a *= b; }
-	friend mint operator/(mint a, const mint& b) { return a /= b; }
-};
-
-typedef mint<MOD,5> mi; // 5 is primitive root for both common mods
-typedef vector<mi> vmi;
-typedef pair<mi,mi> pmi;
-typedef vector<pmi> vpmi;
-
-vector<vmi> scmb; // small combinations
-void genComb(int SZ) {
-	scmb.assign(SZ,vmi(SZ)); scmb[0][0] = 1;
-	FOR(i,1,SZ) F0R(j,i+1) 
-		scmb[i][j] = scmb[i-1][j]+(j?scmb[i-1][j-1]:0);
-}
-
+ll N, M;
 const int mx = 2e5+1;
 
-int N, M;
+ll dp[101][7]; // i -> door # j -> unlocks
+// dp[i][j + 1] = dp[i][j] + pfx[end] - pfx[i]; <- use door
+// ckmax dp[i + 1][j] = dp[i][j]
+// rotate???
 
-vi adj[mx];
-mi dp[mx][3];
+// we can calculate w/ prefix sums
 
-void dfs(int v, int p = 0) {
-	each(e, adj[v]) {
-		if(e != p) {
-			dfs(e, v);
-			dp[v][0] *= dp[e][1] + dp[e][2];
-			dp[v][1] *= dp[e][0] + dp[e][2];
-			dp[v][2] *= dp[e][0] + dp[e][1];
-		}
-	}
-}
+ll A[mx];
 
 signed main() {
 	// clock_t start = clock();
-	setIO("barnpainting");
+	setIO("cbarn2");
 
 	re(N, M);
 
-	rep(N - 1) {
-		ints(a, b);
-		adj[a].pb(b); adj[b].pb(a);
-	}
+	F0R(i, N) re(A[i]);
 
-	FOR(i, 1, N + 1) {
-		dp[i][0] = 1;
-		dp[i][1] = 1;
-		dp[i][2] = 1;
-	}
+	ll ret = INF;
 
 	rep(N) {
-		ints(b, c);
-		dp[b][0] = 0;
-		dp[b][1] = 0;
-		dp[b][2] = 0;
-		dp[b][c - 1] = 1;
+		FOR(i, 1, N) F0R(j, M) dp[i][j] = MOD;
+
+		dp[0][0] = 0;
+
+		{
+			ll cs = 0;
+			F0R(i, N) {
+				cs += A[i - 1] * i;
+				dp[i][0] = cs;
+			}
+		}
+
+		// dp[i][j]
+		// i-th cow
+		// j switches
+		F0R(j, M + 1) { // <= M switches
+			F0R(i, N) {
+				ll cs = 0;
+				FOR(k, i, N) {
+					cs += A[k - 1] * (k - i);
+					// ckmin(dp[k][j], dp[k - 1][j]);
+					if(j) ckmin(dp[k][j], dp[i - 1][j - 1] + cs);
+					// ckmin(dp[k + 1][j], dp[k - 1][j] + diff * A[k - 1]);
+				}
+			}
+		}
+
+		// ps("=====");
+
+		// F0R(i, N) {
+		// 	F0R(j, M + 1) {
+		// 		pr(dp[i][j], " ");
+		// 	}
+		// 	ps();
+		// }
+
+		ckmin(ret, dp[N - 1][M - 1]);
+
+		rotate(A, A + 1, A + N);
 	}
 
-	dfs(1);
-
-	// FOR(i, 1, N + 1) dbg(dp[i][0], dp[i][1], dp[i][2]);
-
-	ps(dp[1][0] + dp[1][1] + dp[1][2]);
+	ps(ret);
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }

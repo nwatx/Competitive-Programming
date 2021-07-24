@@ -89,7 +89,7 @@ ll fdiv(ll a, ll b) { return a/b-((a^b)<0&&a%b); } // divide a by b rounded down
 // variadic max
 template<tN h0, tN h1, tN...Tl>
 cexp auto max(h0 &&hf, h1 &&hs, Tl &&... tl) {
-	if cexp (sizeof...(tl) == 0)
+    if cexp (sizeof...(tl) == 0)
 		return hf > hs ? hf : hs;
 	else return max(max(hf, hs), tl...);
 }
@@ -97,7 +97,7 @@ cexp auto max(h0 &&hf, h1 &&hs, Tl &&... tl) {
 // vardiadic min
 template<tN h0, tN h1, tN...Tl>
 cexp auto min(h0 &&hf, h1 &&hs, Tl &&... tl) {
-	if cexp (sizeof...(tl) == 0)
+    if cexp (sizeof...(tl) == 0)
 		return hf < hs ? hf : hs;
 	else return min(min(hf, hs), tl...);
 }
@@ -134,6 +134,20 @@ tcTU> T lstTrue(T lo, T hi, U f) {
 	return lo;
 }
 
+tcTU> T ternMax(T l, T r, U f) { // unimodal functions
+    for(;r-l>0;) {
+        T m1 = l+(r-l)/3;T m2=r-(r-l)/3;T f1=f(m1);T f2=f(m2);
+        if(f1<f2)l=m1+1;else r=m2-1; }
+    return f(l);
+}
+
+tcTU> T ternMin(T l, T r, U f) {
+    for(;r-l>0;) {
+        T m1 = l+(r-l)/3;T m2=r-(r-l)/3;T f1=f(m1);T f2=f(m2);
+        if(f1>f2)l=m1+1;else r=m2-1; }
+    return f(l);
+}
+
 tcT> void remDup(vector<T>& v) { // sort and remove duplicates
 	sort(all(v)); v.erase(unique(all(v)),end(v)); }
 tcTU> void erase(T& t, const U& u) { // don't erase
@@ -146,28 +160,28 @@ inline namespace Helpers {
 	// this gets used only when we can call begin() and end() on that type
 	tcT, class = void> struct is_iterable : false_type {};
 	tcT> struct is_iterable<T, void_t<decltype(begin(declval<T>())),
-									  decltype(end(declval<T>()))
-									 >
-						   > : true_type {};
+	                                  decltype(end(declval<T>()))
+	                                 >
+	                       > : true_type {};
 	tcT> constexpr bool is_iterable_v = is_iterable<T>::value;
 
 	//////////// is_readable
 	tcT, class = void> struct is_readable : false_type {};
 	tcT> struct is_readable<T,
-			typename std::enable_if_t<
-				is_same_v<decltype(cin >> declval<T&>()), istream&>
-			>
-		> : true_type {};
+	        typename std::enable_if_t<
+	            is_same_v<decltype(cin >> declval<T&>()), istream&>
+	        >
+	    > : true_type {};
 	tcT> constexpr bool is_readable_v = is_readable<T>::value;
 
 	//////////// is_printable
 	// // https://nafe.es/posts/2020-02-29-is-printable/
 	tcT, class = void> struct is_printable : false_type {};
 	tcT> struct is_printable<T,
-			typename std::enable_if_t<
-				is_same_v<decltype(cout << declval<T>()), ostream&>
-			>
-		> : true_type {};
+	        typename std::enable_if_t<
+	            is_same_v<decltype(cout << declval<T>()), ostream&>
+	        >
+	    > : true_type {};
 	tcT> constexpr bool is_printable_v = is_printable<T>::value;
 }
 
@@ -251,7 +265,7 @@ inline namespace ToString {
 }
 
 inline namespace Output {
-	tcT> void pr_sep(ostream& os, str, const T& t) { os << ts(t); }
+	template<class T> void pr_sep(ostream& os, str, const T& t) { os << ts(t); }
 	template<class T, class... U> void pr_sep(ostream& os, str sep, const T& t, const U&... u) {
 		pr_sep(os,sep,t); os << sep; pr_sep(os,sep,u...); }
 	// print w/ no spaces
@@ -289,22 +303,100 @@ inline namespace FileIO {
 /* #endregion */
 
 /* #region snippets */
+/**
+ * Description: Disjoint Set Union with path compression
+	 * and union by size. Add edges and test connectivity. 
+	 * Use for Kruskal's or Boruvka's minimum spanning tree.
+ * Time: O(\alpha(N))
+ * Source: CSAcademy, KACTL
+ * Verification: *
+ */
 
+struct DSU {
+	vi e; void init(int N) { e = vi(N,-1); }
+	int get(int x) { return e[x] < 0 ? x : e[x] = get(e[x]); } 
+	bool sameSet(int a, int b) { return get(a) == get(b); }
+	int size(int x) { return -e[get(x)]; }
+	bool unite(int x, int y) { // union by size
+		x = get(x), y = get(y); if (x == y) return 0;
+		if (e[x] > e[y]) swap(x,y);
+		e[x] += e[y]; e[y] = x; return 1;
+	}
+};
 /* #endregion */
 
 const int mx = 2e5+1;
 
-void solve() {
-
-}
+int ans[mx];
 
 signed main() {
 	// clock_t start = clock();
 	setIO();
 
-	int n = 1;
-	// re(n);
-	rep(n) solve();
+	ints(n, m, q);
+
+	V<pair<pi, int>> ed(m), qr(q);
+
+	F0R(i, m) {
+		int a, b; re(a, b);
+		if(a > b) swap(a, b);
+		ed[i] = {{a, b}, i};
+	}
+
+	F0R(i, q) {
+		int a, b; re(a, b);
+		if(a > b) swap(a, b);
+		qr[i] = {{a, b}, i};
+	}
+
+	sort(all(ed), [](pair<pi, int> &a, pair<pi, int> &b) {
+		if(a.f.f == b.f.s) return a.s < b.s;
+		return a.f.s < b.f.s;
+	});
+
+	sort(all(qr), [](pair<pi, int> &a, pair<pi, int> &b) {
+		if(a.f.f == b.f.s) return a.s < b.s;
+		return a.f.s < b.f.s;
+	});
+
+	dbg(ed);
+	dbg(qr);
+
+	DSU dsu; dsu.init(n + 1);
+	fill(ans, ans + q, MOD);
+
+	int l = 0, r = 0;
+
+	while(l < m && r < q) {
+		while(ed[l].f.s <= qr[r].f.s) {
+			dsu.unite(ed[l].f.f, ed[l].f.s);
+			if(dsu.sameSet(qr[r].f.f, qr[r].f.s)) {
+				dbg(l, r, qr[r].s, ed[l].s);
+				ckmin(ans[qr[r].s], ed[l].s + 1);
+			}
+			if(l == m - 1) break;
+			l++;
+		}
+		r++;
+	}
+
+	// while(l < m || r < q) {
+	// 	dbg(l, r);
+	// 	while(l < m && ed[l].f.s <= qr[r].f.s) {
+	// 		dbg(l, r);
+	// 		dsu.unite(ed[l].f.f, ed[l].f.s);
+	// 		if(dsu.sameSet(qr[r].f.f, qr[r].f.s)) {
+	// 			dbg(l, r, qr[r].s, ed[l].s);
+	// 			ckmin(ans[qr[r].s], ed[l].s + 1);
+	// 		}
+	// 		l++;
+	// 	}
+	// 	r++;
+	// }
+
+	F0R(i, q) {
+		ps(ans[i] == MOD ? -1 : ans[i]);
+	}
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }
@@ -315,5 +407,4 @@ signed main() {
 	* do smth instead of nothing and stay organized
 	* WRITE STUFF DOWN
 	* DON'T GET STUCK ON ONE APPROACH
-	* geo and benq orz
 */

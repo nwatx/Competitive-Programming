@@ -25,11 +25,6 @@ using vpd = vector<pd>;
 
 #define tcT template<class T
 #define tcTU tcT, class U
-#define tcTUU tcT, class ...U
-
-#define tN typename
-#define cexp constexpr
-
 tcT> using V = vector<T>; 
 tcT, size_t SZ> using AR = array<T,SZ>; 
 tcT> using PR = pair<T,T>;
@@ -46,7 +41,6 @@ tcT> using PR = pair<T,T>;
 #define all(x) bg(x), end(x)
 #define rall(x) x.rbegin(), x.rend() 
 #define sor(x) sort(all(x)) 
-#define sorr(x) sort(rall(x))
 #define rsz resize
 #define ins insert 
 #define ft front()
@@ -86,34 +80,10 @@ constexpr int msk2(int x) { return p2(x)-1; }
 ll cdiv(ll a, ll b) { return a/b+((a^b)>0&&a%b); } // divide a by b rounded up
 ll fdiv(ll a, ll b) { return a/b-((a^b)<0&&a%b); } // divide a by b rounded down
 
-// variadic max
-template<tN h0, tN h1, tN...Tl>
-cexp auto max(h0 &&hf, h1 &&hs, Tl &&... tl) {
-	if cexp (sizeof...(tl) == 0)
-		return hf > hs ? hf : hs;
-	else return max(max(hf, hs), tl...);
-}
-
-// vardiadic min
-template<tN h0, tN h1, tN...Tl>
-cexp auto min(h0 &&hf, h1 &&hs, Tl &&... tl) {
-	if cexp (sizeof...(tl) == 0)
-		return hf < hs ? hf : hs;
-	else return min(min(hf, hs), tl...);
-}
-
-// variadic min / max
 tcT> bool ckmin(T& a, const T& b) {
 	return b < a ? a = b, 1 : 0; } // set a = min(a,b)
-tcTUU> bool ckmin(T &a, U... b) {
-	T mn = min(b...);
-	return mn < a ? a = mn, 1 : 0; } // set a = max(a,b)
-
 tcT> bool ckmax(T& a, const T& b) {
 	return a < b ? a = b, 1 : 0; }
-tcTUU> bool ckmax(T &a, U... b) {
-	T mx = max(b...);
-	return mx > a ? a = mx, 1 : 0; } // set a = min(a,b)
 
 // searching
 tcTU> T fstTrue(T lo, T hi, U f) {
@@ -134,11 +104,27 @@ tcTU> T lstTrue(T lo, T hi, U f) {
 	return lo;
 }
 
+tcTU> T ternMax(T l, T r, U f) { // unimodal functions
+    for(;r-l>0;) {
+        T m1 = l+(r-l)/3;T m2=r-(r-l)/3;T f1=f(m1);T f2=f(m2);
+        if(f1<f2)l=m1+1;else r=m2-1; }
+    return f(l);
+}
+
+tcTU> T ternMin(T l, T r, U f) {
+    for(;r-l>0;) {
+        T m1 = l+(r-l)/3;T m2=r-(r-l)/3;T f1=f(m1);T f2=f(m2);
+        if(f1>f2)l=m1+1;else r=m2-1; }
+    return f(l);
+}
+
 tcT> void remDup(vector<T>& v) { // sort and remove duplicates
 	sort(all(v)); v.erase(unique(all(v)),end(v)); }
 tcTU> void erase(T& t, const U& u) { // don't erase
 	auto it = t.find(u); assert(it != end(t));
 	t.erase(it); } // element that doesn't exist from (multi)set
+
+#define tcTUU tcT, class ...U
 
 inline namespace Helpers {
 	//////////// is_iterable
@@ -146,28 +132,28 @@ inline namespace Helpers {
 	// this gets used only when we can call begin() and end() on that type
 	tcT, class = void> struct is_iterable : false_type {};
 	tcT> struct is_iterable<T, void_t<decltype(begin(declval<T>())),
-									  decltype(end(declval<T>()))
-									 >
-						   > : true_type {};
+	                                  decltype(end(declval<T>()))
+	                                 >
+	                       > : true_type {};
 	tcT> constexpr bool is_iterable_v = is_iterable<T>::value;
 
 	//////////// is_readable
 	tcT, class = void> struct is_readable : false_type {};
 	tcT> struct is_readable<T,
-			typename std::enable_if_t<
-				is_same_v<decltype(cin >> declval<T&>()), istream&>
-			>
-		> : true_type {};
+	        typename std::enable_if_t<
+	            is_same_v<decltype(cin >> declval<T&>()), istream&>
+	        >
+	    > : true_type {};
 	tcT> constexpr bool is_readable_v = is_readable<T>::value;
 
 	//////////// is_printable
 	// // https://nafe.es/posts/2020-02-29-is-printable/
 	tcT, class = void> struct is_printable : false_type {};
 	tcT> struct is_printable<T,
-			typename std::enable_if_t<
-				is_same_v<decltype(cout << declval<T>()), ostream&>
-			>
-		> : true_type {};
+	        typename std::enable_if_t<
+	            is_same_v<decltype(cout << declval<T>()), ostream&>
+	        >
+	    > : true_type {};
 	tcT> constexpr bool is_printable_v = is_printable<T>::value;
 }
 
@@ -251,7 +237,7 @@ inline namespace ToString {
 }
 
 inline namespace Output {
-	tcT> void pr_sep(ostream& os, str, const T& t) { os << ts(t); }
+	template<class T> void pr_sep(ostream& os, str, const T& t) { os << ts(t); }
 	template<class T, class... U> void pr_sep(ostream& os, str sep, const T& t, const U&... u) {
 		pr_sep(os,sep,t); os << sep; pr_sep(os,sep,u...); }
 	// print w/ no spaces
@@ -289,22 +275,70 @@ inline namespace FileIO {
 /* #endregion */
 
 /* #region snippets */
+/**
+ * Description: Factors integers.
+ * Time: O(\sqrt N)
+ * Source: Own
+ * Verification: https://csacademy.com/contest/ceoi-2018-day-2/task/toys-big/
+ */
 
+namespace factorBasic {
+	template<class T> vector<pair<T,int>> factor(T x) { 
+		vector<pair<T,int>> pri;
+		for (T i = 2; i*i <= x; ++i) if (x % i == 0) {
+			int t = 0;
+			while (x % i == 0) x /= i, t ++;
+			pri.pb({i,t});
+		}
+		if (x > 1) pri.pb({x,1});
+		return pri;
+	}
+	/* Note:
+	 * number of operations needed s.t.
+	 *				  phi(phi(...phi(n)...))=1
+	 * is O(log n).
+	 * Euler's theorem: a^{\phi(p)}\equiv 1 (mod p), gcd(a,p)=1
+	 */
+	ll phi(ll x) {
+		each(a,factor(x)) x -= x/a.f;
+		return x;
+	}
+	template<class T> void tour(vector<pair<T,int>>& v, 
+		vector<T>& V, int ind, T cur) {
+			if (ind == sz(v)) V.pb(cur);
+			else {
+				T mul = 1;
+				F0R(i,v[ind].s+1) {
+					tour(v,V,ind+1,cur*mul);
+					mul *= v[ind].f;
+				}
+			}
+		}
+	template<class T> vector<T> getDivi(T x) {
+		auto v = factor(x);
+		vector<T> V; tour(v,V,0,(T)1); sort(all(V));
+		return V;
+	}
+}
+
+using namespace factorBasic;
 /* #endregion */
 
+int N, M;
 const int mx = 2e5+1;
 
-void solve() {
-
-}
 
 signed main() {
 	// clock_t start = clock();
 	setIO();
 
-	int n = 1;
-	// re(n);
-	rep(n) solve();
+	int n; re(n);
+	int ret = 0;
+	for(int i = 5; n / i >= 1; i *= 5) {
+		ret += n / i;
+	}
+
+	ps(ret);
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }
@@ -315,5 +349,4 @@ signed main() {
 	* do smth instead of nothing and stay organized
 	* WRITE STUFF DOWN
 	* DON'T GET STUCK ON ONE APPROACH
-	* geo and benq orz
 */
