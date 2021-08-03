@@ -89,7 +89,7 @@ ll fdiv(ll a, ll b) { return a/b-((a^b)<0&&a%b); } // divide a by b rounded down
 // variadic max
 template<tN h0, tN h1, tN...Tl>
 cexp auto max(h0 &&hf, h1 &&hs, Tl &&... tl) {
-    if cexp (sizeof...(tl) == 0)
+	if cexp (sizeof...(tl) == 0)
 		return hf > hs ? hf : hs;
 	else return max(max(hf, hs), tl...);
 }
@@ -97,7 +97,7 @@ cexp auto max(h0 &&hf, h1 &&hs, Tl &&... tl) {
 // vardiadic min
 template<tN h0, tN h1, tN...Tl>
 cexp auto min(h0 &&hf, h1 &&hs, Tl &&... tl) {
-    if cexp (sizeof...(tl) == 0)
+	if cexp (sizeof...(tl) == 0)
 		return hf < hs ? hf : hs;
 	else return min(min(hf, hs), tl...);
 }
@@ -134,20 +134,6 @@ tcTU> T lstTrue(T lo, T hi, U f) {
 	return lo;
 }
 
-tcTU> T ternMax(T l, T r, U f) { // unimodal functions
-    for(;r-l>0;) {
-        T m1 = l+(r-l)/3;T m2=r-(r-l)/3;T f1=f(m1);T f2=f(m2);
-        if(f1<f2)l=m1+1;else r=m2-1; }
-    return f(l);
-}
-
-tcTU> T ternMin(T l, T r, U f) {
-    for(;r-l>0;) {
-        T m1 = l+(r-l)/3;T m2=r-(r-l)/3;T f1=f(m1);T f2=f(m2);
-        if(f1>f2)l=m1+1;else r=m2-1; }
-    return f(l);
-}
-
 tcT> void remDup(vector<T>& v) { // sort and remove duplicates
 	sort(all(v)); v.erase(unique(all(v)),end(v)); }
 tcTU> void erase(T& t, const U& u) { // don't erase
@@ -160,28 +146,28 @@ inline namespace Helpers {
 	// this gets used only when we can call begin() and end() on that type
 	tcT, class = void> struct is_iterable : false_type {};
 	tcT> struct is_iterable<T, void_t<decltype(begin(declval<T>())),
-	                                  decltype(end(declval<T>()))
-	                                 >
-	                       > : true_type {};
+									  decltype(end(declval<T>()))
+									 >
+						   > : true_type {};
 	tcT> constexpr bool is_iterable_v = is_iterable<T>::value;
 
 	//////////// is_readable
 	tcT, class = void> struct is_readable : false_type {};
 	tcT> struct is_readable<T,
-	        typename std::enable_if_t<
-	            is_same_v<decltype(cin >> declval<T&>()), istream&>
-	        >
-	    > : true_type {};
+			typename std::enable_if_t<
+				is_same_v<decltype(cin >> declval<T&>()), istream&>
+			>
+		> : true_type {};
 	tcT> constexpr bool is_readable_v = is_readable<T>::value;
 
 	//////////// is_printable
 	// // https://nafe.es/posts/2020-02-29-is-printable/
 	tcT, class = void> struct is_printable : false_type {};
 	tcT> struct is_printable<T,
-	        typename std::enable_if_t<
-	            is_same_v<decltype(cout << declval<T>()), ostream&>
-	        >
-	    > : true_type {};
+			typename std::enable_if_t<
+				is_same_v<decltype(cout << declval<T>()), ostream&>
+			>
+		> : true_type {};
 	tcT> constexpr bool is_printable_v = is_printable<T>::value;
 }
 
@@ -265,7 +251,7 @@ inline namespace ToString {
 }
 
 inline namespace Output {
-	template<class T> void pr_sep(ostream& os, str, const T& t) { os << ts(t); }
+	tcT> void pr_sep(ostream& os, str, const T& t) { os << ts(t); }
 	template<class T, class... U> void pr_sep(ostream& os, str sep, const T& t, const U&... u) {
 		pr_sep(os,sep,t); os << sep; pr_sep(os,sep,u...); }
 	// print w/ no spaces
@@ -306,57 +292,59 @@ inline namespace FileIO {
 
 /* #endregion */
 
-ll N, M;
 const int mx = 2e5+1;
 
-ll dp[mx][(1 << 7) + 1], s[mx][7];
-int a[mx], ind[mx];
+/**
+ * Description: 1D range increment and sum query.
+ * Source: USACO Counting Haybales
+ * Verification: SPOJ Horrible
+ */
+
+template<class T, int SZ> struct LazySeg { 
+	static_assert(pct(SZ) == 1); // SZ must be power of 2
+	const T ID = 0; T comb(T a, T b) { return a+b; }
+	T seg[2*SZ], lazy[2*SZ]; 
+	LazySeg() { F0R(i,2*SZ) seg[i] = lazy[i] = ID; }
+	void push(int ind, int L, int R) { /// modify values for current node
+		seg[ind] += (R-L+1)*lazy[ind]; // dependent on operation
+		if (L != R) F0R(i,2) lazy[2*ind+i] += lazy[ind]; /// prop to children
+		lazy[ind] = 0; 
+	} // recalc values for current node
+	void pull(int ind) { seg[ind] = comb(seg[2*ind],seg[2*ind+1]); }
+	void build() { ROF(i,1,SZ) pull(i); }
+	void upd(int lo,int hi,T inc,int ind=1,int L=0, int R=SZ-1) {
+		push(ind,L,R); if (hi < L || R < lo) return;
+		if (lo <= L && R <= hi) { 
+			lazy[ind] = inc; push(ind,L,R); return; }
+		int M = (L+R)/2; upd(lo,hi,inc,2*ind,L,M); 
+		upd(lo,hi,inc,2*ind+1,M+1,R); pull(ind);
+	}
+	T query(int lo, int hi, int ind=1, int L=0, int R=SZ-1) {
+		push(ind,L,R); if (lo > R || L > hi) return ID;
+		if (lo <= L && R <= hi) return seg[ind];
+		int M = (L+R)/2; 
+		return comb(query(lo,hi,2*ind,L,M),query(lo,hi,2*ind+1,M+1,R));
+	}
+};
+
+int lst[mx];
+
+void solve() {
+	int n; re(n);
+	LazySeg<int, mx> lz;
+	F0R(i, 2*n) {
+		int a; re(a);
+		lst[a] = i;
+	}
+}
 
 signed main() {
 	// clock_t start = clock();
-	setIO();
+	// setIO("circlecross");
 
-	ints(n, p, k);
-	memset(dp, -1, sizeof dp);
-
-	FOR(i, 1, n + 1) re(a[i]);
-	FOR(i, 1, n + 1) {
-		F0R(j, p) re(s[i][j]);
-	}
-
-	FOR(i,1,n+1) ind[i]=i;
-
-	sort(ind + 1, ind + n + 1, [](int i, int j) {
-		return a[i] > a[j];
-	});
-
-	dp[0][0] = 0;
-
-	FOR(i, 1, n + 1) {
-		int x = ind[i];
-		F0R(m, 1 << p) {
-			ll ct = pct(m); // check # of bits set in m
-			ll z = (i - 1) - ct;
-
-			if(z < k) {
-				if(dp[i - 1][m] >= 0) {
-					dp[i][m] = dp[i - 1][m] + a[x];
-				}
-			} else {
-				if(dp[i - 1][m] != -1) {
-					dp[i][m] = dp[i - 1][m];
-				}
-			}
-
-			F0R(j, p) {
-				if(m & (1 << j) && dp[i - 1][m ^ (1 << j)] != -1) {
-					ckmax(dp[i][m], dp[i-1][m^(1<<j)]+s[x][j]);
-				}
-			}
-		}
-	}
-
-	ps(dp[n][(1<<p)-1]);
+	int n = 1;
+	// re(n);
+	rep(n) solve();
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }
@@ -367,4 +355,5 @@ signed main() {
 	* do smth instead of nothing and stay organized
 	* WRITE STUFF DOWN
 	* DON'T GET STUCK ON ONE APPROACH
+	* geo and benq orz
 */
