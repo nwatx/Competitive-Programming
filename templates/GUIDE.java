@@ -37,5 +37,7 @@ public class GUIDE {
 	}
 	public static void main(String[] args) {
 		Kattio io = new Kattio();
+
+		io.close();
 	}
 }
