@@ -294,8 +294,84 @@ inline namespace FileIO {
 
 const int mx = 2e5+1;
 
-void solve() {
+/**
+ * Description: Disjoint Set Union with path compression
+	 * and union by size. Add edges and test connectivity. 
+	 * Use for Kruskal's or Boruvka's minimum spanning tree.
+ * Time: O(\alpha(N))
+ * Source: CSAcademy, KACTL
+ * Verification: *
+ */
 
+struct DSU {
+	vi e; void init(int N) { e = vi(N,-1); }
+	int get(int x) { return e[x] < 0 ? x : e[x] = get(e[x]); } 
+	bool sameSet(int a, int b) { return get(a) == get(b); }
+	int size(int x) { return -e[get(x)]; }
+	bool unite(int x, int y) { // union by size
+		x = get(x), y = get(y); if (x == y) return 0;
+		if (e[x] > e[y]) swap(x,y);
+		e[x] += e[y]; e[y] = x; return 1;
+	}
+};
+
+/**template<class T> T kruskal(int N, vector<pair<T,pi>> ed) {
+	sort(all(ed));
+	T ans = 0; DSU D; D.init(N); // edges that unite are in MST
+	each(a,ed) if (D.unite(a.s.f,a.s.s)) ans += a.f; 
+	return ans;
+}*/
+
+// void solve() {
+// 	int n; re(n);
+// 	vi v(n); re(v);
+
+// 	int ret = 0;
+
+// 	FOR(i,1,n) {
+// 		int mn = min(v[i-1],v[i]);
+// 		int mm = max(v[i-1],v[i]);
+
+// 		while(mn*2 < mm) {
+// 			mn *= 2;
+// 			ret++;
+// 		}
+// 	}
+
+// 	ps(ret);
+// }
+
+/*
+Polycarp calls an array dense if the greater of any two adjacent elements is not more than twice bigger than the smaller. More formally, for any i (1≤i≤n−1), this condition must be satisfied:
+max(a[i],a[i+1])min(a[i],a[i+1])≤2
+
+For example, the arrays [1,2,3,4,3]
+, [1,1,1] and [5,10] are dense. And the arrays [5,11], [1,4,2], [6,6,1]
+
+are not dense.
+
+You are given an array a
+of n
+
+integers. What is the minimum number of numbers you need to add to an array to make it dense? You can insert numbers anywhere in the array. If the array is already dense, no numbers need to be added.
+
+For example, if a=[4,2,10,1]
+, then the answer is 5, and the array itself after inserting elements into it may look like this: a=[4,2,3––,5––,10,6––,4––,2––,1] (there are other ways to build such a).
+*/
+
+void solve() {
+	int n; re(n);
+	vi v(n); re(v);
+	int ret = 0;
+	FOR(i,1,n) {
+		int mn = min(v[i-1],v[i]);
+		int mm = max(v[i-1],v[i]);
+		while(mn*2 < mm) {
+			mn *= 2;
+			ret++;
+		}
+	}
+	ps(ret);
 }
 
 signed main() {
@@ -303,7 +379,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) solve();
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
@@ -315,4 +391,5 @@ signed main() {
 	* do smth instead of nothing and stay organized
 	* WRITE STUFF DOWN
 	* DON'T GET STUCK ON ONE APPROACH
+	* geo and benq orz
 */
