@@ -288,16 +288,14 @@ inline namespace FileIO {
 };
 /* #endregion */
 
-/* #region snippets */
-
-/* #endregion */
-
 const int mx = 1e5+1;
 
 void solve() {
 	int n; re(n);
 	stack<int> S;
 	vi v(n); re(v);
+	v.insert(v.begin(), 0);
+	v.push_back(0);
 	vi l(n, MOD), r(n, -1);
 
 	int ret = 0;
@@ -307,7 +305,7 @@ void solve() {
 		ckmax(r[v[i]], i);
 	}
 
-	F0R(i, n) {
+	F0R(i, n + 2) {
 		int c = v[i];
 		if(i == l[c]) S.push(c);
 		ckmax(ret, sz(S));
