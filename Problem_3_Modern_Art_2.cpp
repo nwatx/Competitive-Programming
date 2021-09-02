@@ -294,8 +294,6 @@ void solve() {
 	int n; re(n);
 	stack<int> S;
 	vi v(n); re(v);
-	v.insert(v.begin(), 0);
-	v.push_back(0);
 	vi l(n, MOD), r(n, -1);
 
 	int ret = 0;
