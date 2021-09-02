@@ -296,6 +296,8 @@ const int mx = 1e5+1;
 
 AR<int, mx> lst;
 
+
+
 void solve() {
 	int n; re(n);
 	stack<int> S;
