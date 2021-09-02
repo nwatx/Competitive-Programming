@@ -294,10 +294,6 @@ inline namespace FileIO {
 
 const int mx = 1e5+1;
 
-AR<int, mx> lst;
-
-
-
 void solve() {
 	int n; re(n);
 	stack<int> S;
@@ -315,7 +311,10 @@ void solve() {
 		int c = v[i];
 		if(i == l[c]) S.push(c);
 		ckmax(ret, sz(S));
-		if(i == r[c]) S.pop();
+		if(sz(S) && S.top() != c) {
+			ps(-1); return;
+		}
+		if(i == r[c] && sz(S)) S.pop();
 	}
 
 	ps(ret);
