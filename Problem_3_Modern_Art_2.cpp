@@ -302,17 +302,28 @@ void solve() {
 	int n; re(n);
 	stack<int> S;
 	vi v(n); re(v);
+	vi l(n, MOD), r(n, -1);
+
+	int ret = 0;
 
 	F0R(i, n) {
-		if(sz(S) && S.top() == v[i]) S.pop();
-		S.push(v[i]);
-		// lst[v[i]] = i;
+		ckmin(l[v[i]], i);
+		ckmax(r[v[i]], i);
 	}
+
+	F0R(i, n) {
+		int c = v[i];
+		if(i == l[c]) S.push(c);
+		ckmax(ret, sz(S));
+		if(i == r[c]) S.pop();
+	}
+
+	ps(ret);
 }
 
 signed main() {
 	// clock_t start = clock();
-	setIO();
+	setIO("art2");
 
 	int n = 1;
 	// re(n);
