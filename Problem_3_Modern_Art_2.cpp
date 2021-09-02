@@ -303,6 +303,8 @@ void solve() {
 
 	F0R(i, n) {
 		
+
+		lst[v[i]] = i;
 	}
 }
 
