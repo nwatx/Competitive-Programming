@@ -279,69 +279,59 @@ inline namespace FileIO {
 /* #endregion */
 
 /* #region snippets */
-/**
- * Description: Hash map with the same API as unordered\_map, but \tilde 3x faster.
-	 * Initial capacity must be a power of 2 if provided.
- * Source: KACTL
- * Usage: ht<int,int> h({},{},{},{},{1<<16});
- */
 
-#include <ext/pb_ds/assoc_container.hpp>
-using namespace __gnu_pbds;
-struct chash { /// use most bits rather than just the lowest ones
-	const uint64_t C = ll(2e18*PI)+71; // large odd number
-	const int RANDOM = rng();
-	ll operator()(ll x) const { /// https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html
-		return __builtin_bswap64((x^RANDOM)*C); }
-};
-template<class K,class V> using um = unordered_map<K,V,chash>;
-template<class K,class V> using ht = gp_hash_table<K,V,chash>;
-template<class K,class V> V get(ht<K,V>& u, K x) {
-	auto it = u.find(x); return it == end(u) ? 0 : it->s; }
 /* #endregion */
 
 int N, M;
-const int mx = 2e5+1;	
+const int mx = 1e5+1;
 
-ll pfx[5001][5001]; // [i, j]
+bool conn(pi a, pi b) {
+	return a.f <= b.f && a.s <= b.s;
+}
 
-signed main() {
+using sb = pair<pi, pi>;
+
+int dp[mx]; // let dp[i] be the shortest distance to springboard i
+
+int main() {
 	// clock_t start = clock();
-	setIO("threesum");
+	setIO("boards");
 
 	re(N, M);
-	vi v(N); re(v);
-
-	F0R(i, N) {
-		gp_hash_table<int,int> m({},{},{},{},{1<<13});
-		FOR(j, i + 1, N) {
-			// a + b + c = 0
-			// c = - (b + a)
-
-			int des = -(v[i] + v[j]);
-			auto it = m.find(des);
-			if(it != end(m))
-				pfx[i][j] = m[des];
-			m[v[j]]++;
-		}
-	}
-
-	R0F(i, N) {
-		FOR(j, i + 1, N) {
-			pfx[i][j] += pfx[i+1][j]+pfx[i][j-1]-pfx[i+1][j-1];
-		}
-	}
+	V<sb> v(M);
 
 	rep(M) {
-		int1(a, b);
-		cout << pfx[a][b] << "\n";
+		ints(a, b, c, d);
+		v[_] = {{a, b}, {c, d}};
 	}
 
-	// dbg(m);
+	sor(v);
+	// dbg(v);
 
-	// F0R(i, 7) FOR(j, i, 7) {
-	// 	dbg(i, j, pfx[i][j]);
-	// }
+	fill(dp, dp + M + 1, 2 * N);
+
+	int j = 0;
+
+	F0R(i, M) {
+		ckmin(dp[i], v[i].f.f + v[i].f.s);
+		for(int j = i + 1; j <  M; j++) {
+			if(!conn(v[i].s, v[j].f)) continue;
+		// while(j <= i) j++;
+		// while(j < M && conn(v[i].s, v[j].f)) {
+			//					y                     x
+			ckmin(dp[j], dp[i] + (v[j].f.s - v[i].s.s) + (v[j].f.f - v[i].s.f));
+			j++;
+		}
+	}
+
+	int ret = 2*N;
+
+	F0R(i, M) {
+		// dbg(dp[i]);
+		ckmin(ret, dp[i] + (N - v[i].s.s) + (N - v[i].s.f));
+	}
+
+	ps(ret);
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }

@@ -23,11 +23,13 @@ using vpi = vector<pi>;
 using vpl = vector<pl>; 
 using vpd = vector<pd>;
 
-using Mii = map<int, int>;
-using Mll = map<ll, ll>;
-
 #define tcT template<class T
 #define tcTU tcT, class U
+#define tcTUU tcT, class ...U
+
+#define tN typename
+#define cexp constexpr
+
 tcT> using V = vector<T>; 
 tcT, size_t SZ> using AR = array<T,SZ>; 
 tcT> using PR = pair<T,T>;
@@ -84,10 +86,34 @@ constexpr int msk2(int x) { return p2(x)-1; }
 ll cdiv(ll a, ll b) { return a/b+((a^b)>0&&a%b); } // divide a by b rounded up
 ll fdiv(ll a, ll b) { return a/b-((a^b)<0&&a%b); } // divide a by b rounded down
 
+// variadic max
+template<tN h0, tN h1, tN...Tl>
+cexp auto max(h0 &&hf, h1 &&hs, Tl &&... tl) {
+	if cexp (sizeof...(tl) == 0)
+		return hf > hs ? hf : hs;
+	else return max(max(hf, hs), tl...);
+}
+
+// vardiadic min
+template<tN h0, tN h1, tN...Tl>
+cexp auto min(h0 &&hf, h1 &&hs, Tl &&... tl) {
+	if cexp (sizeof...(tl) == 0)
+		return hf < hs ? hf : hs;
+	else return min(min(hf, hs), tl...);
+}
+
+// variadic min / max
 tcT> bool ckmin(T& a, const T& b) {
 	return b < a ? a = b, 1 : 0; } // set a = min(a,b)
+tcTUU> bool ckmin(T &a, U... b) {
+	T mn = min(b...);
+	return mn < a ? a = mn, 1 : 0; } // set a = max(a,b)
+
 tcT> bool ckmax(T& a, const T& b) {
 	return a < b ? a = b, 1 : 0; }
+tcTUU> bool ckmax(T &a, U... b) {
+	T mx = max(b...);
+	return mx > a ? a = mx, 1 : 0; } // set a = min(a,b)
 
 // searching
 tcTU> T fstTrue(T lo, T hi, U f) {
@@ -108,27 +134,11 @@ tcTU> T lstTrue(T lo, T hi, U f) {
 	return lo;
 }
 
-tcTU> T ternMax(T l, T r, U f) { // unimodal functions
-    for(;r-l>0;) {
-        T m1 = l+(r-l)/3;T m2=r-(r-l)/3;T f1=f(m1);T f2=f(m2);
-        if(f1<f2)l=m1+1;else r=m2-1; }
-    return f(l);
-}
-
-tcTU> T ternMin(T l, T r, U f) {
-    for(;r-l>0;) {
-        T m1 = l+(r-l)/3;T m2=r-(r-l)/3;T f1=f(m1);T f2=f(m2);
-        if(f1>f2)l=m1+1;else r=m2-1; }
-    return f(l);
-}
-
 tcT> void remDup(vector<T>& v) { // sort and remove duplicates
 	sort(all(v)); v.erase(unique(all(v)),end(v)); }
 tcTU> void erase(T& t, const U& u) { // don't erase
 	auto it = t.find(u); assert(it != end(t));
 	t.erase(it); } // element that doesn't exist from (multi)set
-
-#define tcTUU tcT, class ...U
 
 inline namespace Helpers {
 	//////////// is_iterable
@@ -136,28 +146,28 @@ inline namespace Helpers {
 	// this gets used only when we can call begin() and end() on that type
 	tcT, class = void> struct is_iterable : false_type {};
 	tcT> struct is_iterable<T, void_t<decltype(begin(declval<T>())),
-	                                  decltype(end(declval<T>()))
-	                                 >
-	                       > : true_type {};
+									  decltype(end(declval<T>()))
+									 >
+						   > : true_type {};
 	tcT> constexpr bool is_iterable_v = is_iterable<T>::value;
 
 	//////////// is_readable
 	tcT, class = void> struct is_readable : false_type {};
 	tcT> struct is_readable<T,
-	        typename std::enable_if_t<
-	            is_same_v<decltype(cin >> declval<T&>()), istream&>
-	        >
-	    > : true_type {};
+			typename std::enable_if_t<
+				is_same_v<decltype(cin >> declval<T&>()), istream&>
+			>
+		> : true_type {};
 	tcT> constexpr bool is_readable_v = is_readable<T>::value;
 
 	//////////// is_printable
 	// // https://nafe.es/posts/2020-02-29-is-printable/
 	tcT, class = void> struct is_printable : false_type {};
 	tcT> struct is_printable<T,
-	        typename std::enable_if_t<
-	            is_same_v<decltype(cout << declval<T>()), ostream&>
-	        >
-	    > : true_type {};
+			typename std::enable_if_t<
+				is_same_v<decltype(cout << declval<T>()), ostream&>
+			>
+		> : true_type {};
 	tcT> constexpr bool is_printable_v = is_printable<T>::value;
 }
 
@@ -241,7 +251,7 @@ inline namespace ToString {
 }
 
 inline namespace Output {
-	template<class T> void pr_sep(ostream& os, str, const T& t) { os << ts(t); }
+	tcT> void pr_sep(ostream& os, str, const T& t) { os << ts(t); }
 	template<class T, class... U> void pr_sep(ostream& os, str sep, const T& t, const U&... u) {
 		pr_sep(os,sep,t); os << sep; pr_sep(os,sep,u...); }
 	// print w/ no spaces
@@ -279,69 +289,93 @@ inline namespace FileIO {
 /* #endregion */
 
 /* #region snippets */
-/**
- * Description: Hash map with the same API as unordered\_map, but \tilde 3x faster.
-	 * Initial capacity must be a power of 2 if provided.
- * Source: KACTL
- * Usage: ht<int,int> h({},{},{},{},{1<<16});
- */
 
-#include <ext/pb_ds/assoc_container.hpp>
-using namespace __gnu_pbds;
-struct chash { /// use most bits rather than just the lowest ones
-	const uint64_t C = ll(2e18*PI)+71; // large odd number
-	const int RANDOM = rng();
-	ll operator()(ll x) const { /// https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html
-		return __builtin_bswap64((x^RANDOM)*C); }
-};
-template<class K,class V> using um = unordered_map<K,V,chash>;
-template<class K,class V> using ht = gp_hash_table<K,V,chash>;
-template<class K,class V> V get(ht<K,V>& u, K x) {
-	auto it = u.find(x); return it == end(u) ? 0 : it->s; }
 /* #endregion */
 
-int N, M;
-const int mx = 2e5+1;	
+const int mx = 2e5+1;
 
-ll pfx[5001][5001]; // [i, j]
+vi adj[mx];
+// int dp[mx][2]; // longest 2 paths
+int dp[mx]; // longest path to leaf
+int ret;
+
+void dfs(int v,int p=0) {
+	deque<int> d;
+	each(e,adj[v]) {
+		if(e != p) {
+			dfs(e, v);
+			ckmax(dp[v], dp[e] + 1);
+			if(sz(d) < 2) {
+				d.pb(dp[e]);
+			}
+			// else if(dp[e] > d.back()) {
+			// 	if(sz(d) == 2) d.pop_back();
+			// 	d.pb(dp[e]);
+			// } else if(dp[e] > d.front()) {
+			// 	if(sz(d) == 2) d.pop_front();
+			// 	d.pb(dp[e]);
+			// }
+
+			else if(dp[e] > d.ft) {
+				d.pop_front();
+				d.pf(dp[e]);
+			}
+
+			if(d.bk < d.ft) swap(d.bk, d.ft);
+		}
+	}
+
+	int sum = 0;
+	// dbg(v, d);
+	each(e, d) {
+		sum += e;
+	}
+
+	ckmax(ret, sum + sz(d));
+}
+
+// void dfs(int v,int p=0) {
+// 	int m1=1,mi=0,m2=1;
+// 	each(e, adj[v]) {
+// 		if(e != p) {
+// 			dfs(e, v);
+// 			if(dp[e][0]>m1) m1=dp[e][0],mi=e;
+// 			else if(dp[e][0]>m2) m2=dp[e][0];
+// 			ckmax(m2, dp[e][1]);
+// 		}
+// 	}
+// 	dp[v][0]=m1;
+// 	dp[v][1]=m2;
+// }
+
+void solve() {
+	int n; re(n);
+	rep(n-1) {
+		ints(a, b);
+		adj[a].pb(b);
+		adj[b].pb(a);
+	}
+
+	// fill(dp, dp+n+1, 1);
+	// FOR(i,1,n) dp[i][0] = 1;
+	dfs(1);
+	// FOR(i, 1, n + 1) dbg(i,dp[i][0],dp[i][1]);
+	// FOR(i,1,n+1)dbg(i,dp[i]);
+
+	// ps(ret + 2);
+	ps(ret);
+
+
+	// ps(dp[1][0]+dp[1][1]);
+}
 
 signed main() {
 	// clock_t start = clock();
-	setIO("threesum");
+	// setIO("a");
 
-	re(N, M);
-	vi v(N); re(v);
-
-	F0R(i, N) {
-		gp_hash_table<int,int> m({},{},{},{},{1<<13});
-		FOR(j, i + 1, N) {
-			// a + b + c = 0
-			// c = - (b + a)
-
-			int des = -(v[i] + v[j]);
-			auto it = m.find(des);
-			if(it != end(m))
-				pfx[i][j] = m[des];
-			m[v[j]]++;
-		}
-	}
-
-	R0F(i, N) {
-		FOR(j, i + 1, N) {
-			pfx[i][j] += pfx[i+1][j]+pfx[i][j-1]-pfx[i+1][j-1];
-		}
-	}
-
-	rep(M) {
-		int1(a, b);
-		cout << pfx[a][b] << "\n";
-	}
-
-	// dbg(m);
-
-	// F0R(i, 7) FOR(j, i, 7) {
-	// 	dbg(i, j, pfx[i][j]);
-	// }
+	int n = 1;
+	// re(n);
+	rep(n) solve();
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }
@@ -352,4 +386,5 @@ signed main() {
 	* do smth instead of nothing and stay organized
 	* WRITE STUFF DOWN
 	* DON'T GET STUCK ON ONE APPROACH
+	* geo and benq orz
 */

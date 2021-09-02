@@ -309,26 +309,54 @@ inline namespace FileIO {
 ll N, M;
 const int mx = 2e5+1;
 
-// dp[s] is the best representation with set S
-int dpT[1 << 7];
-bitset<7> inset;
+ll dp[mx][(1 << 7) + 1], s[mx][7];
+int a[mx], ind[mx];
 
 signed main() {
 	// clock_t start = clock();
 	setIO();
 
 	ints(n, p, k);
-	vi a(n), b(n); re(a, b);
+	memset(dp, -1, sizeof dp);
 
-	F0R(i, n) {
-		F0R(s, 1 << p) {
+	FOR(i, 1, n + 1) re(a[i]);
+	FOR(i, 1, n + 1) {
+		F0R(j, p) re(s[i][j]);
+	}
+
+	FOR(i,1,n+1) ind[i]=i;
+
+	sort(ind + 1, ind + n + 1, [](int i, int j) {
+		return a[i] > a[j];
+	});
+
+	dp[0][0] = 0;
+
+	FOR(i, 1, n + 1) {
+		int x = ind[i];
+		F0R(m, 1 << p) {
+			ll ct = pct(m); // check # of bits set in m
+			ll z = (i - 1) - ct;
+
+			if(z < k) {
+				if(dp[i - 1][m] >= 0) {
+					dp[i][m] = dp[i - 1][m] + a[x];
+				}
+			} else {
+				if(dp[i - 1][m] != -1) {
+					dp[i][m] = dp[i - 1][m];
+				}
+			}
+
 			F0R(j, p) {
-				if(!(s & j)) {
-					if(dpT[s | j] < dp[s][j])
+				if(m & (1 << j) && dp[i - 1][m ^ (1 << j)] != -1) {
+					ckmax(dp[i][m], dp[i-1][m^(1<<j)]+s[x][j]);
 				}
 			}
 		}
 	}
+
+	ps(dp[n][(1<<p)-1]);
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }

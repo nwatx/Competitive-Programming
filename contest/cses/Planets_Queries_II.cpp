@@ -280,68 +280,53 @@ inline namespace FileIO {
 
 /* #region snippets */
 /**
- * Description: Hash map with the same API as unordered\_map, but \tilde 3x faster.
-	 * Initial capacity must be a power of 2 if provided.
- * Source: KACTL
- * Usage: ht<int,int> h({},{},{},{},{1<<16});
+ * Description: Calculates least common ancestor in tree with verts 
+	 * $0\ldots N-1$ and root $R$ using binary jumping. 
+ * Time: O(N\log N) build, O(\log N) query
+ * Memory: O(N\log N)
+ * Source: USACO Camp, KACTL
+ * Verification: *
  */
 
-#include <ext/pb_ds/assoc_container.hpp>
-using namespace __gnu_pbds;
-struct chash { /// use most bits rather than just the lowest ones
-	const uint64_t C = ll(2e18*PI)+71; // large odd number
-	const int RANDOM = rng();
-	ll operator()(ll x) const { /// https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html
-		return __builtin_bswap64((x^RANDOM)*C); }
+struct LCA {
+	int N; vector<vi> par, adj; vi depth;
+	void init(int _N) {  N = _N;
+		int d = 1; while ((1<<d) < N) d ++;
+		par.assign(d,vi(N)); adj.rsz(N); depth.rsz(N);
+	}
+	void ae(int x, int y) { adj[x].pb(y), adj[y].pb(x); }
+	void gen(int R = 0) { par[0][R] = R; dfs(R); }
+	void dfs(int x = 0) {
+		FOR(i,1,sz(par)) par[i][x] = par[i-1][par[i-1][x]];
+		each(y,adj[x]) if (y != par[0][x]) 
+			depth[y] = depth[par[0][y]=x]+1, dfs(y);
+	}
+	int jmp(int x, int d) {
+		F0R(i,sz(par)) if ((d>>i)&1) x = par[i][x];
+		return x; }
+	int lca(int x, int y) {
+		if (depth[x] < depth[y]) swap(x,y);
+		x = jmp(x,depth[x]-depth[y]); if (x == y) return x;
+		R0F(i,sz(par)) {
+			int X = par[i][x], Y = par[i][y];
+			if (X != Y) x = X, y = Y;
+		}
+		return par[0][x];
+	}
+	int dist(int x, int y) { // # edges on path
+		return depth[x]+depth[y]-2*depth[lca(x,y)]; }
 };
-template<class K,class V> using um = unordered_map<K,V,chash>;
-template<class K,class V> using ht = gp_hash_table<K,V,chash>;
-template<class K,class V> V get(ht<K,V>& u, K x) {
-	auto it = u.find(x); return it == end(u) ? 0 : it->s; }
 /* #endregion */
 
-int N, M;
-const int mx = 2e5+1;	
-
-ll pfx[5001][5001]; // [i, j]
+ll N, M;
+const int mx = 2e5+1;
 
 signed main() {
 	// clock_t start = clock();
-	setIO("threesum");
+	setIO();
 
 	re(N, M);
-	vi v(N); re(v);
-
-	F0R(i, N) {
-		gp_hash_table<int,int> m({},{},{},{},{1<<13});
-		FOR(j, i + 1, N) {
-			// a + b + c = 0
-			// c = - (b + a)
-
-			int des = -(v[i] + v[j]);
-			auto it = m.find(des);
-			if(it != end(m))
-				pfx[i][j] = m[des];
-			m[v[j]]++;
-		}
-	}
-
-	R0F(i, N) {
-		FOR(j, i + 1, N) {
-			pfx[i][j] += pfx[i+1][j]+pfx[i][j-1]-pfx[i+1][j-1];
-		}
-	}
-
-	rep(M) {
-		int1(a, b);
-		cout << pfx[a][b] << "\n";
-	}
-
-	// dbg(m);
-
-	// F0R(i, 7) FOR(j, i, 7) {
-	// 	dbg(i, j, pfx[i][j]);
-	// }
+	
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }

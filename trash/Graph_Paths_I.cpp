@@ -23,11 +23,13 @@ using vpi = vector<pi>;
 using vpl = vector<pl>; 
 using vpd = vector<pd>;
 
-using Mii = map<int, int>;
-using Mll = map<ll, ll>;
-
 #define tcT template<class T
 #define tcTU tcT, class U
+#define tcTUU tcT, class ...U
+
+#define tN typename
+#define cexp constexpr
+
 tcT> using V = vector<T>; 
 tcT, size_t SZ> using AR = array<T,SZ>; 
 tcT> using PR = pair<T,T>;
@@ -84,10 +86,34 @@ constexpr int msk2(int x) { return p2(x)-1; }
 ll cdiv(ll a, ll b) { return a/b+((a^b)>0&&a%b); } // divide a by b rounded up
 ll fdiv(ll a, ll b) { return a/b-((a^b)<0&&a%b); } // divide a by b rounded down
 
+// variadic max
+template<tN h0, tN h1, tN...Tl>
+cexp auto max(h0 &&hf, h1 &&hs, Tl &&... tl) {
+	if cexp (sizeof...(tl) == 0)
+		return hf > hs ? hf : hs;
+	else return max(max(hf, hs), tl...);
+}
+
+// vardiadic min
+template<tN h0, tN h1, tN...Tl>
+cexp auto min(h0 &&hf, h1 &&hs, Tl &&... tl) {
+	if cexp (sizeof...(tl) == 0)
+		return hf < hs ? hf : hs;
+	else return min(min(hf, hs), tl...);
+}
+
+// variadic min / max
 tcT> bool ckmin(T& a, const T& b) {
 	return b < a ? a = b, 1 : 0; } // set a = min(a,b)
+tcTUU> bool ckmin(T &a, U... b) {
+	T mn = min(b...);
+	return mn < a ? a = mn, 1 : 0; } // set a = max(a,b)
+
 tcT> bool ckmax(T& a, const T& b) {
 	return a < b ? a = b, 1 : 0; }
+tcTUU> bool ckmax(T &a, U... b) {
+	T mx = max(b...);
+	return mx > a ? a = mx, 1 : 0; } // set a = min(a,b)
 
 // searching
 tcTU> T fstTrue(T lo, T hi, U f) {
@@ -108,27 +134,11 @@ tcTU> T lstTrue(T lo, T hi, U f) {
 	return lo;
 }
 
-tcTU> T ternMax(T l, T r, U f) { // unimodal functions
-    for(;r-l>0;) {
-        T m1 = l+(r-l)/3;T m2=r-(r-l)/3;T f1=f(m1);T f2=f(m2);
-        if(f1<f2)l=m1+1;else r=m2-1; }
-    return f(l);
-}
-
-tcTU> T ternMin(T l, T r, U f) {
-    for(;r-l>0;) {
-        T m1 = l+(r-l)/3;T m2=r-(r-l)/3;T f1=f(m1);T f2=f(m2);
-        if(f1>f2)l=m1+1;else r=m2-1; }
-    return f(l);
-}
-
 tcT> void remDup(vector<T>& v) { // sort and remove duplicates
 	sort(all(v)); v.erase(unique(all(v)),end(v)); }
 tcTU> void erase(T& t, const U& u) { // don't erase
 	auto it = t.find(u); assert(it != end(t));
 	t.erase(it); } // element that doesn't exist from (multi)set
-
-#define tcTUU tcT, class ...U
 
 inline namespace Helpers {
 	//////////// is_iterable
@@ -136,28 +146,28 @@ inline namespace Helpers {
 	// this gets used only when we can call begin() and end() on that type
 	tcT, class = void> struct is_iterable : false_type {};
 	tcT> struct is_iterable<T, void_t<decltype(begin(declval<T>())),
-	                                  decltype(end(declval<T>()))
-	                                 >
-	                       > : true_type {};
+									  decltype(end(declval<T>()))
+									 >
+						   > : true_type {};
 	tcT> constexpr bool is_iterable_v = is_iterable<T>::value;
 
 	//////////// is_readable
 	tcT, class = void> struct is_readable : false_type {};
 	tcT> struct is_readable<T,
-	        typename std::enable_if_t<
-	            is_same_v<decltype(cin >> declval<T&>()), istream&>
-	        >
-	    > : true_type {};
+			typename std::enable_if_t<
+				is_same_v<decltype(cin >> declval<T&>()), istream&>
+			>
+		> : true_type {};
 	tcT> constexpr bool is_readable_v = is_readable<T>::value;
 
 	//////////// is_printable
 	// // https://nafe.es/posts/2020-02-29-is-printable/
 	tcT, class = void> struct is_printable : false_type {};
 	tcT> struct is_printable<T,
-	        typename std::enable_if_t<
-	            is_same_v<decltype(cout << declval<T>()), ostream&>
-	        >
-	    > : true_type {};
+			typename std::enable_if_t<
+				is_same_v<decltype(cout << declval<T>()), ostream&>
+			>
+		> : true_type {};
 	tcT> constexpr bool is_printable_v = is_printable<T>::value;
 }
 
@@ -241,7 +251,7 @@ inline namespace ToString {
 }
 
 inline namespace Output {
-	template<class T> void pr_sep(ostream& os, str, const T& t) { os << ts(t); }
+	tcT> void pr_sep(ostream& os, str, const T& t) { os << ts(t); }
 	template<class T, class... U> void pr_sep(ostream& os, str sep, const T& t, const U&... u) {
 		pr_sep(os,sep,t); os << sep; pr_sep(os,sep,u...); }
 	// print w/ no spaces
@@ -280,68 +290,124 @@ inline namespace FileIO {
 
 /* #region snippets */
 /**
- * Description: Hash map with the same API as unordered\_map, but \tilde 3x faster.
-	 * Initial capacity must be a power of 2 if provided.
- * Source: KACTL
- * Usage: ht<int,int> h({},{},{},{},{1<<16});
+ * Description: modular arithmetic operations 
+ * Source: 
+	* KACTL
+	* https://codeforces.com/blog/entry/63903
+	* https://codeforces.com/contest/1261/submission/65632855 (tourist)
+	* https://codeforces.com/contest/1264/submission/66344993 (ksun)
+	* also see https://github.com/ecnerwala/cp-book/blob/master/src/modnum.hpp (ecnerwal)
+ * Verification: 
+	* https://open.kattis.com/problems/modulararithmetic
  */
 
-#include <ext/pb_ds/assoc_container.hpp>
-using namespace __gnu_pbds;
-struct chash { /// use most bits rather than just the lowest ones
-	const uint64_t C = ll(2e18*PI)+71; // large odd number
-	const int RANDOM = rng();
-	ll operator()(ll x) const { /// https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html
-		return __builtin_bswap64((x^RANDOM)*C); }
+template<int MOD, int RT> struct mint {
+	static const int mod = MOD;
+	static constexpr mint rt() { return RT; } // primitive root for FFT
+	int v; explicit operator int() const { return v; } // explicit -> don't silently convert to int
+	mint() { v = 0; }
+	mint(ll _v) { v = int((-MOD < _v && _v < MOD) ? _v : _v % MOD);
+		if (v < 0) v += MOD; }
+	friend bool operator==(const mint& a, const mint& b) { 
+		return a.v == b.v; }
+	friend bool operator!=(const mint& a, const mint& b) { 
+		return !(a == b); }
+	friend bool operator<(const mint& a, const mint& b) { 
+		return a.v < b.v; }
+	friend void re(mint& a) { ll x; re(x); a = mint(x); }
+	friend str ts(mint a) { return ts(a.v); }
+   
+	mint& operator+=(const mint& m) { 
+		if ((v += m.v) >= MOD) v -= MOD; 
+		return *this; }
+	mint& operator-=(const mint& m) { 
+		if ((v -= m.v) < 0) v += MOD; 
+		return *this; }
+	mint& operator*=(const mint& m) { 
+		v = int((ll)v*m.v%MOD); return *this; }
+	mint& operator/=(const mint& m) { return (*this) *= inv(m); }
+	friend mint pow(mint a, ll p) {
+		mint ans = 1; assert(p >= 0);
+		for (; p; p /= 2, a *= a) if (p&1) ans *= a;
+		return ans; }
+	friend mint inv(const mint& a) { assert(a.v != 0); 
+		return pow(a,MOD-2); }
+		
+	mint operator-() const { return mint(-v); }
+	mint& operator++() { return *this += 1; }
+	mint& operator--() { return *this -= 1; }
+	friend mint operator+(mint a, const mint& b) { return a += b; }
+	friend mint operator-(mint a, const mint& b) { return a -= b; }
+	friend mint operator*(mint a, const mint& b) { return a *= b; }
+	friend mint operator/(mint a, const mint& b) { return a /= b; }
 };
-template<class K,class V> using um = unordered_map<K,V,chash>;
-template<class K,class V> using ht = gp_hash_table<K,V,chash>;
-template<class K,class V> V get(ht<K,V>& u, K x) {
-	auto it = u.find(x); return it == end(u) ? 0 : it->s; }
+
+typedef mint<MOD,5> mi; // 5 is primitive root for both common mods
+typedef vector<mi> vmi;
+typedef pair<mi,mi> pmi;
+typedef vector<pmi> vpmi;
+
+vector<vmi> scmb; // small combinations
+void genComb(int SZ) {
+	scmb.assign(SZ,vmi(SZ)); scmb[0][0] = 1;
+	FOR(i,1,SZ) F0R(j,i+1) 
+		scmb[i][j] = scmb[i-1][j]+(j?scmb[i-1][j-1]:0);
+}
 /* #endregion */
 
-int N, M;
-const int mx = 2e5+1;	
+const int mx = 2e5+1;
 
-ll pfx[5001][5001]; // [i, j]
+V<vmi> mul(V<vmi> mat, V<vmi> b) {
+	int n = sz(mat);
+	V<vmi> ret(n, vmi(n));
+	F0R(i,n) {
+		F0R(j,n) {
+			ret[i][j] = 0;
+			// row dot column
+			F0R(k,n) {
+				ret[i][j] += b[k][j] * mat[i][k];
+			}
+		}
+	}
+
+	return ret;
+}
+
+V<vmi> sq(V<vmi> mat) {
+	return mul(mat, mat);
+}
+
+void solve() {
+	ll n,m,k; re(n,m,k);
+	V<vmi> mat(n, vmi(n));
+	rep(m) {
+		int1(a,b);
+		mat[a][b] = 1;
+		// mat[b][a] = 1;
+	}
+
+	V<vmi> res(n, vmi(n));
+	F0R(i,n) res[i][i] = 1;
+
+	while(k) {
+		if(k&1) res = mul(res, mat);
+		mat = sq(mat);
+		k>>=1;
+
+		// dbg(k);
+		// F0R(i,n) ps(res[i]);
+	}
+
+	ps(res[0][n-1]);
+}
 
 signed main() {
 	// clock_t start = clock();
-	setIO("threesum");
+	setIO();
 
-	re(N, M);
-	vi v(N); re(v);
-
-	F0R(i, N) {
-		gp_hash_table<int,int> m({},{},{},{},{1<<13});
-		FOR(j, i + 1, N) {
-			// a + b + c = 0
-			// c = - (b + a)
-
-			int des = -(v[i] + v[j]);
-			auto it = m.find(des);
-			if(it != end(m))
-				pfx[i][j] = m[des];
-			m[v[j]]++;
-		}
-	}
-
-	R0F(i, N) {
-		FOR(j, i + 1, N) {
-			pfx[i][j] += pfx[i+1][j]+pfx[i][j-1]-pfx[i+1][j-1];
-		}
-	}
-
-	rep(M) {
-		int1(a, b);
-		cout << pfx[a][b] << "\n";
-	}
-
-	// dbg(m);
-
-	// F0R(i, 7) FOR(j, i, 7) {
-	// 	dbg(i, j, pfx[i][j]);
-	// }
+	int n = 1;
+	// re(n);
+	rep(n) solve();
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }

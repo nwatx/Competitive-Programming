@@ -1,6 +1,6 @@
 // Codeforces
-// #pragma GCC optimize ("Ofast")
-// #pragma GCC target ("avx2")
+#pragma GCC optimize ("Ofast")
+#pragma GCC target ("avx2")
 
 #include <bits/stdc++.h>
 using namespace std;
@@ -23,11 +23,13 @@ using vpi = vector<pi>;
 using vpl = vector<pl>; 
 using vpd = vector<pd>;
 
-using Mii = map<int, int>;
-using Mll = map<ll, ll>;
-
 #define tcT template<class T
 #define tcTU tcT, class U
+#define tcTUU tcT, class ...U
+
+#define tN typename
+#define cexp constexpr
+
 tcT> using V = vector<T>; 
 tcT, size_t SZ> using AR = array<T,SZ>; 
 tcT> using PR = pair<T,T>;
@@ -84,10 +86,34 @@ constexpr int msk2(int x) { return p2(x)-1; }
 ll cdiv(ll a, ll b) { return a/b+((a^b)>0&&a%b); } // divide a by b rounded up
 ll fdiv(ll a, ll b) { return a/b-((a^b)<0&&a%b); } // divide a by b rounded down
 
+// variadic max
+template<tN h0, tN h1, tN...Tl>
+cexp auto max(h0 &&hf, h1 &&hs, Tl &&... tl) {
+	if cexp (sizeof...(tl) == 0)
+		return hf > hs ? hf : hs;
+	else return max(max(hf, hs), tl...);
+}
+
+// vardiadic min
+template<tN h0, tN h1, tN...Tl>
+cexp auto min(h0 &&hf, h1 &&hs, Tl &&... tl) {
+	if cexp (sizeof...(tl) == 0)
+		return hf < hs ? hf : hs;
+	else return min(min(hf, hs), tl...);
+}
+
+// variadic min / max
 tcT> bool ckmin(T& a, const T& b) {
 	return b < a ? a = b, 1 : 0; } // set a = min(a,b)
+tcTUU> bool ckmin(T &a, U... b) {
+	T mn = min(b...);
+	return mn < a ? a = mn, 1 : 0; } // set a = max(a,b)
+
 tcT> bool ckmax(T& a, const T& b) {
 	return a < b ? a = b, 1 : 0; }
+tcTUU> bool ckmax(T &a, U... b) {
+	T mx = max(b...);
+	return mx > a ? a = mx, 1 : 0; } // set a = min(a,b)
 
 // searching
 tcTU> T fstTrue(T lo, T hi, U f) {
@@ -108,27 +134,11 @@ tcTU> T lstTrue(T lo, T hi, U f) {
 	return lo;
 }
 
-tcTU> T ternMax(T l, T r, U f) { // unimodal functions
-    for(;r-l>0;) {
-        T m1 = l+(r-l)/3;T m2=r-(r-l)/3;T f1=f(m1);T f2=f(m2);
-        if(f1<f2)l=m1+1;else r=m2-1; }
-    return f(l);
-}
-
-tcTU> T ternMin(T l, T r, U f) {
-    for(;r-l>0;) {
-        T m1 = l+(r-l)/3;T m2=r-(r-l)/3;T f1=f(m1);T f2=f(m2);
-        if(f1>f2)l=m1+1;else r=m2-1; }
-    return f(l);
-}
-
 tcT> void remDup(vector<T>& v) { // sort and remove duplicates
 	sort(all(v)); v.erase(unique(all(v)),end(v)); }
 tcTU> void erase(T& t, const U& u) { // don't erase
 	auto it = t.find(u); assert(it != end(t));
 	t.erase(it); } // element that doesn't exist from (multi)set
-
-#define tcTUU tcT, class ...U
 
 inline namespace Helpers {
 	//////////// is_iterable
@@ -136,28 +146,28 @@ inline namespace Helpers {
 	// this gets used only when we can call begin() and end() on that type
 	tcT, class = void> struct is_iterable : false_type {};
 	tcT> struct is_iterable<T, void_t<decltype(begin(declval<T>())),
-	                                  decltype(end(declval<T>()))
-	                                 >
-	                       > : true_type {};
+									  decltype(end(declval<T>()))
+									 >
+						   > : true_type {};
 	tcT> constexpr bool is_iterable_v = is_iterable<T>::value;
 
 	//////////// is_readable
 	tcT, class = void> struct is_readable : false_type {};
 	tcT> struct is_readable<T,
-	        typename std::enable_if_t<
-	            is_same_v<decltype(cin >> declval<T&>()), istream&>
-	        >
-	    > : true_type {};
+			typename std::enable_if_t<
+				is_same_v<decltype(cin >> declval<T&>()), istream&>
+			>
+		> : true_type {};
 	tcT> constexpr bool is_readable_v = is_readable<T>::value;
 
 	//////////// is_printable
 	// // https://nafe.es/posts/2020-02-29-is-printable/
 	tcT, class = void> struct is_printable : false_type {};
 	tcT> struct is_printable<T,
-	        typename std::enable_if_t<
-	            is_same_v<decltype(cout << declval<T>()), ostream&>
-	        >
-	    > : true_type {};
+			typename std::enable_if_t<
+				is_same_v<decltype(cout << declval<T>()), ostream&>
+			>
+		> : true_type {};
 	tcT> constexpr bool is_printable_v = is_printable<T>::value;
 }
 
@@ -241,7 +251,7 @@ inline namespace ToString {
 }
 
 inline namespace Output {
-	template<class T> void pr_sep(ostream& os, str, const T& t) { os << ts(t); }
+	tcT> void pr_sep(ostream& os, str, const T& t) { os << ts(t); }
 	template<class T, class... U> void pr_sep(ostream& os, str sep, const T& t, const U&... u) {
 		pr_sep(os,sep,t); os << sep; pr_sep(os,sep,u...); }
 	// print w/ no spaces
@@ -279,59 +289,68 @@ inline namespace FileIO {
 /* #endregion */
 
 /* #region snippets */
+/**
+ * Description: Calculates least common ancestor in tree with verts 
+	 * $0\ldots N-1$ and root $R$ using binary jumping. 
+ * Time: O(N\log N) build, O(\log N) query
+ * Memory: O(N\log N)
+ * Source: USACO Camp, KACTL
+ * Verification: *
+ */
 
+struct LCA {
+	int N; vector<vi> par, adj; vi depth;
+	void init(int _N) {  N = _N;
+		int d = 1; while ((1<<d) < N) d ++;
+		par.assign(d,vi(N)); adj.rsz(N); depth.rsz(N);
+	}
+	void ae(int x, int y) { adj[x].pb(y), adj[y].pb(x); }
+	void gen(int R = 0) { par[0][R] = R; dfs(R); }
+	void dfs(int x = 0) {
+		FOR(i,1,sz(par)) par[i][x] = par[i-1][par[i-1][x]];
+		each(y,adj[x]) if (y != par[0][x]) 
+			depth[y] = depth[par[0][y]=x]+1, dfs(y);
+	}
+	int jmp(int x, int d) {
+		F0R(i,sz(par)) if ((d>>i)&1) x = par[i][x];
+		return x; }
+	int lca(int x, int y) {
+		if (depth[x] < depth[y]) swap(x,y);
+		x = jmp(x,depth[x]-depth[y]); if (x == y) return x;
+		R0F(i,sz(par)) {
+			int X = par[i][x], Y = par[i][y];
+			if (X != Y) x = X, y = Y;
+		}
+		return par[0][x];
+	}
+	int dist(int x, int y) { // # edges on path
+		return depth[x]+depth[y]-2*depth[lca(x,y)]; }
+};
 /* #endregion */
 
-int N, M;
-const int mx = 1e5+1;
+const int mx = 2e5+1;
 
-bool conn(pi a, pi b) {
-	return a.f <= b.f && a.s <= b.s;
+void solve() {
+	ints(n,m);
+	LCA lca; lca.init(n);
+	rep(n-1) {
+		int1(a,b);
+		lca.ae(a,b);
+	}
+	lca.dfs();
+	rep(m){
+		int1(a, b);
+		ps(lca.dist(a,b));
+	}
 }
 
-using sb = pair<pi, pi>;
-
-int dp[mx]; // let dp[i] be the shortest distance to springboard i
-
-int main() {
+signed main() {
 	// clock_t start = clock();
-	setIO("boards");
+	setIO();
 
-	re(N, M);
-	V<sb> v(M);
-
-	rep(M) {
-		ints(a, b, c, d);
-		v[_] = {{a, b}, {c, d}};
-	}
-
-	sor(v);
-	// dbg(v);
-
-	fill(dp, dp + M + 1, 2 * N);
-
-	int j = 0;
-
-	F0R(i, M) {
-		ckmin(dp[i], v[i].f.f + v[i].f.s);
-		// for(int j = i + 1; j <  M; j++) {
-			// if(!conn(v[i].s, v[j].f)) continue;
-		while(j <= i) j++;
-		while(j < M && conn(v[i].s, v[j].f)) {
-			//					y                     x
-			ckmin(dp[j], dp[i] + (v[j].f.s - v[i].s.s) + (v[j].f.f - v[i].s.f));
-			j++;
-		}
-	}
-
-	int ret = 2*N;
-
-	F0R(i, M) {
-		// dbg(dp[i]);
-		ckmin(ret, dp[i] + (N - v[i].s.s) + (N - v[i].s.f));
-	}
-
-	ps(ret);
+	int n = 1;
+	// re(n);
+	rep(n) solve();
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }
@@ -342,4 +361,5 @@ int main() {
 	* do smth instead of nothing and stay organized
 	* WRITE STUFF DOWN
 	* DON'T GET STUCK ON ONE APPROACH
+	* geo and benq orz
 */
