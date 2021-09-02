@@ -302,7 +302,7 @@ void solve() {
 	vi v(n); re(v);
 
 	F0R(i, n) {
-		
+		S.push(v[i]);
 
 		lst[v[i]] = i;
 	}
