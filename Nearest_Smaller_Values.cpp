@@ -295,7 +295,15 @@ inline namespace FileIO {
 const int mx = 2e5+1;
 
 void solve() {
-
+	ints(n);
+	vi v(n); re(v);
+	stack<pi> S; // S is monotonic
+	S.push({0, 0});
+	FOR(i,1,n+1) {
+		while(!S.empty() && S.top().f >= v[i-1]) S.pop();
+		pr(S.top().second, " ");
+		S.push({v[i-1], i});
+	}
 }
 
 signed main() {
@@ -315,4 +323,5 @@ signed main() {
 	* do smth instead of nothing and stay organized
 	* WRITE STUFF DOWN
 	* DON'T GET STUCK ON ONE APPROACH
+	* geo and benq orz
 */

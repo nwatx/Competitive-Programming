@@ -23,7 +23,35 @@ void setIO(string name = "") {
 
 //CodeSnip{CPP Short Template}
 
+const int MAX_N = 301;
+
+int A[MAX_N], dp[MAX_N][MAX_N];
+
 int main() {
 	setIO();
 	
+	int n; cin >> n;
+
+	for(int i = 0; i < n; i++) cin >> A[i];
+
+	for(int i = 0; i <= n; i++) {
+		for(int j = 0; j <= n; j++) {
+			dp[i][j] = MAX_N;
+		}
+	}
+
+	for(int i = 0; i < MAX_N; i++) dp[i][i] = 1;
+
+	for(int s = 1; s <= n; s++) {
+		for(int i = 0; i <= n - s; i++) {
+			for(int j = i; j < i + s; j++) {
+				int k = i + s - 1;
+				if(A[i] == A[k])
+					dp[i][k] = min(dp[i][k], dp[i][j] + dp[j + 1][k] - 1);
+				dp[i][k] = min(dp[i][k], dp[i][j] + dp[j + 1][k]);
+			}
+		}
+	}
+
+	cout << dp[0][n - 1] << endl;
 }

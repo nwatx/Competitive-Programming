@@ -96,7 +96,7 @@ cexp auto max(h0 &&hf, h1 &&hs, Tl &&... tl) {
 
 // vardiadic min
 template<tN h0, tN h1, tN...Tl>
-cexp auto min(h0 &&hf, h1 &&hs, Tl &&... tl) {
+cexp auto min(const h0 &hf, h1 &&hs, Tl &&... tl) {
 	if cexp (sizeof...(tl) == 0)
 		return hf < hs ? hf : hs;
 	else return min(min(hf, hs), tl...);
@@ -294,9 +294,35 @@ inline namespace FileIO {
 
 const int mx = 2e5+1;
 
+tcT> void a(T &&c) {
+    c = 5;
+    printf("%x\n", &c);
+}
+
 void solve() {
 
+    int d = 0;
+    a(2);
+    printf("%x\n", &d);
+    printf("%x\n", *((&d)-1));
 }
+
+// void solve() {
+
+// 	int d = 0;
+// 	ps(*((&d)+1));
+// 	a(5);
+// 	ps(*((&d)+1));
+// 	ps(d);
+// }
+
+// void solve() {
+
+//     int d = 5;
+//     a(2);
+//     printf("%x\n", &d);
+//     printf("%d\n", *((&d)+1));
+// }
 
 signed main() {
 	// clock_t start = clock();

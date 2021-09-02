@@ -295,7 +295,13 @@ inline namespace FileIO {
 const int mx = 2e5+1;
 
 void solve() {
-
+	ll n,a,b,p,q;
+	re(n,a,b,p,q);
+	ll pq = 1LL*n / lcm(a,b);
+	ll da = n/a, db = n/b;
+	// dbg(pq, da, db);
+	ll ans = (da - pq)*p + (db - pq)*q + pq * max(p, q);
+	ps(ans);
 }
 
 signed main() {
@@ -315,4 +321,5 @@ signed main() {
 	* do smth instead of nothing and stay organized
 	* WRITE STUFF DOWN
 	* DON'T GET STUCK ON ONE APPROACH
+	* geo and benq orz
 */

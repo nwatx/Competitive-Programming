@@ -295,7 +295,24 @@ inline namespace FileIO {
 const int mx = 2e5+1;
 
 void solve() {
+	ints(n);
+	vl v(n); re(v);
+	stack<pi> S;
+	// S.push({0,0});
+	ll ret = 0;
+	F0R(i, n) { // the area will be x - the location of the nearest smaller element
+		ll x = v[i]; // compare x to the location of the nearest greater element
+		while(sz(S) && S.top().f >= x) S.pop();
+		if(!sz(S)) ckmax(ret, x);
+		else {
+			ll area = (i - S.top().s) * x;
+			dbg(area, i);
+			ckmax(ret, area);
+		}
+		S.push({x, i});
+	}
 
+	ps(ret);
 }
 
 signed main() {
@@ -315,4 +332,5 @@ signed main() {
 	* do smth instead of nothing and stay organized
 	* WRITE STUFF DOWN
 	* DON'T GET STUCK ON ONE APPROACH
+	* geo and benq orz
 */

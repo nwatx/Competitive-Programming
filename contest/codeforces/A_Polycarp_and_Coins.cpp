@@ -295,7 +295,15 @@ inline namespace FileIO {
 const int mx = 2e5+1;
 
 void solve() {
-
+	db n; re(n);
+	ll t = ll(round(n / 3));
+	if(t * 3 < n) 
+		ps(t + 1, t);
+	else if (t * 3 > n) {
+		ps(t - 1, t);
+	}
+	else
+		ps(t, t);
 }
 
 signed main() {
@@ -303,7 +311,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) solve();
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
@@ -315,4 +323,5 @@ signed main() {
 	* do smth instead of nothing and stay organized
 	* WRITE STUFF DOWN
 	* DON'T GET STUCK ON ONE APPROACH
+	* geo and benq orz
 */
