@@ -302,9 +302,9 @@ void solve() {
 	vi v(n); re(v);
 
 	F0R(i, n) {
+		if(sz(S) && S.top() == v[i]) S.pop();
 		S.push(v[i]);
-
-		lst[v[i]] = i;
+		// lst[v[i]] = i;
 	}
 }
 
