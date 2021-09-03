@@ -294,19 +294,22 @@ inline namespace FileIO {
 
 const int mx = 2e5+1;
 
+int l[mx], r[mx];
+
+bool check(ll x) {
+	
+}
+
 void solve() {
+	// is it possible to sum and b in a way such that <= x
 	int n; re(n);
-	int m = 0, mn = 0;
 	rep(n) {
 		ints(a, b);
 		if(a > b) swap(a, b);
-		ckmax(m, b);
-		ckmax(mn, a);
+		l[_] = a, r[_] = b;
 	}
 
-	dbg(mn, m);
-
-	ps(mn * m);
+	ps(fstTrue(1LL, INF, check));
 }
 
 signed main() {
