@@ -295,15 +295,16 @@ inline namespace FileIO {
 const int mx = 2e5+1;
 
 void solve() {
-	db h = 0, w = 0;
 	int n; re(n);
+	db ret = 0;
 	rep(n) {
-		db a, b; re(a, b);
-		ckmax(h, a); ckmax(w, b);
+		db h, w; re(h, w);
+		h /= 2, w /= 2;
+		ret += PI*(h * h + w * w);
 	}
-	dbg(h, w);
-	h /= 2, w /= 2;
-	ps(PI*(h * h + w * w));
+
+	ps(ret);
+
 }
 
 signed main() {
