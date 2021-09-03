@@ -87,12 +87,6 @@ ll cdiv(ll a, ll b) { return a/b+((a^b)>0&&a%b); } // divide a by b rounded up
 ll fdiv(ll a, ll b) { return a/b-((a^b)<0&&a%b); } // divide a by b rounded down
 
 // variadic max
-template<tN h0, tN h1, tN...Tl>
-cexp auto max(h0 &&hf, h1 &&hs, Tl &&... tl) {
-	if cexp (sizeof...(tl) == 0)
-		return hf > hs ? hf : hs;
-	else return max(max(hf, hs), tl...);
-}
 
 // vardiadic min
 template<tN h0, tN h1, tN...Tl>
@@ -111,9 +105,6 @@ tcTUU> bool ckmin(T &a, U... b) {
 
 tcT> bool ckmax(T& a, const T& b) {
 	return a < b ? a = b, 1 : 0; }
-tcTUU> bool ckmax(T &a, U... b) {
-	T mx = max(b...);
-	return mx > a ? a = mx, 1 : 0; } // set a = min(a,b)
 
 // searching
 tcTU> T fstTrue(T lo, T hi, U f) {
@@ -294,22 +285,24 @@ inline namespace FileIO {
 
 const int mx = 2e5+1;
 
-int l[mx], r[mx];
-
-bool check(ll x) {
-	
-}
+// int l[mx], r[mx];
 
 void solve() {
 	// is it possible to sum and b in a way such that <= x
+	// orient the way such that it is currently less
 	int n; re(n);
+	ll ret = 0;
+	ll l = 0, cmax = 0;
 	rep(n) {
-		ints(a, b);
+		ll a, b; re(a, b);
 		if(a > b) swap(a, b);
-		l[_] = a, r[_] = b;
+		ckmax(cmax, b);
+		ret += a;
 	}
 
-	ps(fstTrue(1LL, INF, check));
+	// dbg(l, w);
+
+	ps(max(l, cmax));
 }
 
 signed main() {
