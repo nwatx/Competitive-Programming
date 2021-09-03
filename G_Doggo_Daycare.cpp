@@ -304,9 +304,9 @@ void solve() {
 		adj[b][a] = 1;
 	}
 
-	F0R(i, n) {
-		F0R(j, n) {
-			F0R(k, n) {
+	F0R(i, 11) {
+		F0R(j, 11) {
+			F0R(k, 11) {
 				if(i == j || j == k || i == k) continue;
 				if(adj[i][j] && adj[j][k] && adj[i][k]) {
 					ps("Happy Doggos!");
