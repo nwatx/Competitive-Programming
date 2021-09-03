@@ -295,7 +295,13 @@ inline namespace FileIO {
 const int mx = 2e5+1;
 
 void solve() {
-	db h, w; re(h, w);
+	db h = 0, w = 0;
+	int n; re(n);
+	rep(n) {
+		db a, b; re(a, b);
+		ckmax(h, a); ckmax(w, b);
+	}
+	dbg(h, w);
 	h /= 2, w /= 2;
 	ps(PI*(h * h + w * w));
 }
@@ -305,7 +311,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	re(n);
+	// re(n);
 	rep(n) solve();
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
