@@ -296,10 +296,17 @@ const int mx = 2e5+1;
 
 void solve() {
 	int n; re(n);
-	int ret = MOD;
+	int m = 0, mn = 0;
 	rep(n) {
 		ints(a, b);
+		if(a > b) swap(a, b);
+		ckmax(m, b);
+		ckmax(mn, a);
 	}
+
+	dbg(mn, m);
+
+	ps(mn * m);
 }
 
 signed main() {
