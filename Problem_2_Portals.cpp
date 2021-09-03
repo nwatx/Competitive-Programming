@@ -298,7 +298,7 @@ void solve() {
 	int n; re(n);
 	rep(n) {
 		vi v(5); re(v);
-		dbg(v);
+		dbg(v, " adfasdfa", set<int>());
 	}
 }
 
