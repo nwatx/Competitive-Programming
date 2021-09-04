@@ -367,7 +367,12 @@ void solve() {
 
 			dbg(curr);
 			F0R(i, n) {
-				F0R(j, m) pr()
+				F0R(j, m) pr(mat[i][j]);
+				ps();
+			}
+			F0R(i, n) {
+				F0R(j, m) pr(vis[i][j]);
+				ps();
 			}
 	// 	}
 	// }
