@@ -294,31 +294,44 @@ inline namespace FileIO {
 
 const int mx = 2e5+1;
 
-bool adj[6][6];
+int adj[11][11];
 
 void solve() {
 	int n; re(n);
+	vi in(12);
 	rep(n) {
-		int1(a, b);
-		adj[a][b] = 1, adj[b][a] = 1;
+		ints(a, b);
+		adj[a][b] = 1;
+		adj[b][a] = 1;
+		in[a] = 1, in[b] = 1;
 	}
 
-	F0R(i, 5) {
-		F0R(j, 5) {
-			F0R(k, 5) {
-				if(i == j || j == k || i == k) continue;
-				if(adj[i][j] && adj[j][k] && adj[i][k]) {
-					ps("Happy Doggos!"); return;
-				}
-				if(!adj[i][j] && !adj[j][k] && !adj[i][k]) {
-					ps("Happy Doggos!"); return;
+	int cnt = 0;
+
+	F0R(i, 12) {
+		cnt += in[i];
+	}
+
+	if(cnt >= 6) {
+		ps("Happy Doggos!");
+		return;
+	}
+
+	F0R(i, 6) {
+		F0R(j, 6) {
+			F0R(k, 6) {
+				if(i != j && j != k && i != k && in[i] && in[j] && in[k]) {
+					if((adj[i][j] && adj[j][k] && adj[i][k]) || (!adj[i][j] && !adj[j][k] && !adj[i][k])) {
+						dbg(i, j, k);
+						ps("Happy Doggos!");
+						return;
+					}
 				}
 			}
 		}
 	}
 
 	ps("Sad Doggos...");
-	return;
 }
 
 signed main() {
