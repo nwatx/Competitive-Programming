@@ -294,8 +294,68 @@ inline namespace FileIO {
 
 const int mx = 2e5+1;
 
-void solve() {
+int n, m;
 
+char mat[501][501];
+
+void solve() {
+	re(n, m);
+
+	F0R(i, n) F0R(j, m) re(mat[i][j]);
+	pi a1, a2, b1, b2;
+	a1.f = -1;
+	a2.f = -1, b1.f = -1, b2.f = -1;
+	F0R(i, n) F0R(j, m) {
+		if(mat[i][j] == 'a') {
+			if(a1.f == -1) a2 = {i, j};
+			else a1 = {i, j};
+		} 
+
+		if(mat[i][j] == 'a') {
+			if(b1.f == -1) b2 = {i, j};
+			else b1= {i, j};
+		} 
+	}
+
+	// go through possible intersections
+
+	int ret = MOD;
+
+	F0R(i, n) {
+		F0R(j, m) {
+			int ret = 0;
+			V<vi> dist(n, vi(m, MOD));
+			V<vb> vis(n, vb(m, MOD));
+			queue<pi> bfs;
+			dist[i][j] = 0;
+			bfs.push({i, j});
+			while(sz(bfs)) {
+				pi top = bfs.front();
+				bfs.pop();
+
+				dbg(top);
+
+				vis[top.f][top.s] = true;
+
+				if(vis[top.f][top.s]) continue;
+				
+				F0R(k, 4) {
+					int nx = top.f + dx[k];
+					int ny = top.s + dy[k];
+
+					if(nx < 0 || ny < 0 || nx >= n || ny >= m) continue;
+					if(!vis[nx][ny] && mat[nx][ny] != '#') {
+						dist[nx][ny] = dist[top.f][top.s] + 1;
+						bfs.push({nx, ny});
+					}
+				}
+			}
+
+			ckmin(ret, dist[a1.f][a1.s] + dist[a2.f][a2.s] + dist[b1.f][b1.s] + dist[b2.f][b2.s]);
+		}
+	}
+
+	ps(ret);
 }
 
 signed main() {

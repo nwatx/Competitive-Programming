@@ -304,11 +304,11 @@ void solve() {
 	F0R(i, n-1) { // non-decreasing
 		// if(v[i])
 		if(v[i+1].s < v[i].s) {
-			ps("no");
+			ps("yes");
 			return;
 		}
 	}
-	ps("yes");
+	ps("no");
 }
 
 signed main() {
