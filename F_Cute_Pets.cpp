@@ -296,16 +296,19 @@ const int mx = 2e5+1;
 
 void solve() {
 	int n; re(n);
-	rep(n) {
-		ints(a, b);
-		if(a > b) {
-			ps("yes");
+	vpi v(n); re(v);
+	sor(v);
+
+	dbg(v);
+
+	F0R(i, n-1) { // non-decreasing
+		// if(v[i])
+		if(v[i+1].s < v[i].s) {
+			ps("no");
 			return;
 		}
 	}
-
-	ps("no");
-
+	ps("yes");
 }
 
 signed main() {
