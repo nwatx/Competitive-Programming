@@ -318,6 +318,7 @@ void solve() {
 			}
 		}
 	}
+
 	ps("Sad Doggos...");
 }
 
