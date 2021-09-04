@@ -335,10 +335,9 @@ void solve() {
 
 				dbg(top);
 
+				if(vis[top.f][top.s]) continue;
 				vis[top.f][top.s] = true;
 
-				if(vis[top.f][top.s]) continue;
-				
 				F0R(k, 4) {
 					int nx = top.f + dx[k];
 					int ny = top.s + dy[k];
