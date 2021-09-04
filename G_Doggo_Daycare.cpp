@@ -321,7 +321,7 @@ void solve() {
 		F0R(j, 11) {
 			F0R(k, 11) {
 				if(i != j && j != k && i != k && in[i] && in[j] && in[k]) {
-					if(adj[i][j] && adj[j][k] && adj[i][k] || (!adj[i][j] && !adj[j][k] && !adj[i][k])) {
+					if((adj[i][j] && adj[j][k] && adj[i][k]) || (!adj[i][j] && !adj[j][k] && !adj[i][k])) {
 						ps("Happy Doggos!");
 						return;
 					}
