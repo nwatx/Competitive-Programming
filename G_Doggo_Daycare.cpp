@@ -294,27 +294,21 @@ inline namespace FileIO {
 
 const int mx = 2e5+1;
 
-int adj[11][11];
-
 void solve() {
 	int n; re(n);
+	vi deg(11);
 	rep(n) {
 		ints(a, b);
-		adj[a][b] = 1;
-		adj[b][a] = 1;
+		deg[a]++; deg[b]++;
 	}
 
 	F0R(i, 11) {
-		F0R(j, 11) {
-			F0R(k, 11) {
-				if(i == j || j == k || i == k) continue;
-				if(adj[i][j] && adj[j][k] && adj[i][k]) {
-					ps("Happy Doggos!");
-					return;
-				}
-			}
+		if(deg[i] >= 3) {
+			ps("Happy Doggos!");
+			return;
 		}
 	}
+
 	ps("Sad Doggos...");
 }
 
