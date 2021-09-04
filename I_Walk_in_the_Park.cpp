@@ -298,6 +298,9 @@ int n, m;
 
 char mat[501][501];
 
+int dist[501][501];
+bool vis[501][501];
+
 void solve() {
 	re(n, m);
 
@@ -329,8 +332,10 @@ void solve() {
 		F0R(j, m) {
 			if(mat[i][j] == '#') continue;
 			ll curr = 0;
-			V<vi> dist(n, vi(m, MOD));
-			V<vb> vis(n, vb(m, 0));
+			// fill(dist, dist + 501*501, MOD);
+			F0R(i, n+1) F0R(j, m + 1) dist[i][j] = MOD;
+			memset(vis, false, sizeof vis);
+
 			queue<pi> bfs;
 			dist[i][j] = 0;
 			bfs.push({i, j});
@@ -338,8 +343,6 @@ void solve() {
 				pi top = bfs.front();
 				bfs.pop();
 
-
-				// dbg(top);
 
 				if(vis[top.f][top.s]) continue;
 				vis[top.f][top.s] = true;
@@ -363,11 +366,11 @@ void solve() {
 			curr += dist[b2.f][b2.s];
 
 			if(curr <= MOD) {
-				dbg(i, j, curr);
+				// dbg(i, j, curr);
 				ckmin(ret, curr);
 			}
 
-			dbg(curr);
+			// dbg(curr);
 			// F0R(i, n) {
 			// 	F0R(j, m) pr(mat[i][j]);
 			// 	ps();
