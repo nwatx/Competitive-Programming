@@ -323,10 +323,10 @@ void solve() {
 
 	ll ret = MOD;
 
-	int i = 0, j = 0;
+	int i = 1, j = 6;
 
-	F0R(i, n) {
-		F0R(j, m) {
+	// F0R(i, n) {
+	// 	F0R(j, m) {
 			ll curr = 0;
 			V<vi> dist(n, vi(m, MOD));
 			V<vb> vis(n, vb(m, 0));
@@ -350,7 +350,7 @@ void solve() {
 					if(!vis[nx][ny] && mat[nx][ny] != '#') {
 						dist[nx][ny] = dist[top.f][top.s] + 1;
 						bfs.push({nx, ny});
-						// dbg(mp(nx, ny));
+						dbg(top, mp(nx, ny));
 					}
 				}
 			}
@@ -365,9 +365,12 @@ void solve() {
 				ckmin(ret, curr);
 			}
 
-			dbg(curr, vis);
-		}
-	}
+			dbg(curr);
+			F0R(i, n) {
+				F0R(j, m) pr()
+			}
+	// 	}
+	// }
 
 	ps(ret);
 }
