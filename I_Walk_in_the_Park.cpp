@@ -321,11 +321,13 @@ void solve() {
 
 	int ret = MOD;
 
-	F0R(i, n) {
-		F0R(j, m) {
-			int ret = 0;
+	int i = 0, j = 0;
+
+	// F0R(i, n) {
+	// 	F0R(j, m) {
+			int curr = 0;
 			V<vi> dist(n, vi(m, MOD));
-			V<vb> vis(n, vb(m, MOD));
+			V<vb> vis(n, vb(m, 0));
 			queue<pi> bfs;
 			dist[i][j] = 0;
 			bfs.push({i, j});
@@ -351,8 +353,9 @@ void solve() {
 			}
 
 			ckmin(ret, dist[a1.f][a1.s] + dist[a2.f][a2.s] + dist[b1.f][b1.s] + dist[b2.f][b2.s]);
-		}
-	}
+			dbg(curr, vis);
+	// 	}
+	// }
 
 	ps(ret);
 }
