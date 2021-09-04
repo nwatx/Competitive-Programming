@@ -323,10 +323,11 @@ void solve() {
 
 	ll ret = MOD;
 
-	int i = 1, j = 6;
+	// int i = 1, j = 6;
 
-	// F0R(i, n) {
-	// 	F0R(j, m) {
+	F0R(i, n) {
+		F0R(j, m) {
+			if(mat[i][j] == '#') continue;
 			ll curr = 0;
 			V<vi> dist(n, vi(m, MOD));
 			V<vb> vis(n, vb(m, 0));
@@ -336,6 +337,7 @@ void solve() {
 			while(sz(bfs)) {
 				pi top = bfs.front();
 				bfs.pop();
+
 
 				// dbg(top);
 
@@ -366,18 +368,19 @@ void solve() {
 			}
 
 			dbg(curr);
-			F0R(i, n) {
-				F0R(j, m) pr(mat[i][j]);
-				ps();
-			}
-			F0R(i, n) {
-				F0R(j, m) pr(vis[i][j]);
-				ps();
-			}
-	// 	}
-	// }
+			// F0R(i, n) {
+			// 	F0R(j, m) pr(mat[i][j]);
+			// 	ps();
+			// }
+			// F0R(i, n) {
+			// 	F0R(j, m) pr(vis[i][j]);
+			// 	ps();
+			// }
+		}
+	}
 
-	ps(ret);
+	if(ret == MOD) ps("IMPOSSIBLE");
+	else ps(ret);
 }
 
 signed main() {
