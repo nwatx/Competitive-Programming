@@ -306,6 +306,17 @@ void solve() {
 		in[a] = 1, in[b] = 1;
 	}
 
+	int cnt = 0;
+
+	F0R(i, 12) {
+		cnt += in[i];
+	}
+
+	if(cnt >= 6) {
+		ps("Happy Doggos!");
+		return;
+	}
+
 	F0R(i, 11) {
 		F0R(j, 11) {
 			F0R(k, 11) {
