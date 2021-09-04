@@ -307,25 +307,27 @@ void solve() {
 	a2.f = -1, b1.f = -1, b2.f = -1;
 	F0R(i, n) F0R(j, m) {
 		if(mat[i][j] == 'a') {
-			if(a1.f == -1) a2 = {i, j};
-			else a1 = {i, j};
+			if(a1.f == -1) a1 = {i, j};
+			else a2 = {i, j};
 		} 
 
-		if(mat[i][j] == 'a') {
-			if(b1.f == -1) b2 = {i, j};
-			else b1= {i, j};
+		if(mat[i][j] == 'b') {
+			if(b1.f == -1) b1 = {i, j};
+			else b2= {i, j};
 		} 
 	}
 
+	dbg(a1, a2, b1, b2);
+
 	// go through possible intersections
 
-	int ret = MOD;
+	ll ret = MOD;
 
 	int i = 0, j = 0;
 
-	// F0R(i, n) {
-	// 	F0R(j, m) {
-			int curr = 0;
+	F0R(i, n) {
+		F0R(j, m) {
+			ll curr = 0;
 			V<vi> dist(n, vi(m, MOD));
 			V<vb> vis(n, vb(m, 0));
 			queue<pi> bfs;
@@ -335,7 +337,7 @@ void solve() {
 				pi top = bfs.front();
 				bfs.pop();
 
-				dbg(top);
+				// dbg(top);
 
 				if(vis[top.f][top.s]) continue;
 				vis[top.f][top.s] = true;
@@ -348,14 +350,24 @@ void solve() {
 					if(!vis[nx][ny] && mat[nx][ny] != '#') {
 						dist[nx][ny] = dist[top.f][top.s] + 1;
 						bfs.push({nx, ny});
+						// dbg(mp(nx, ny));
 					}
 				}
 			}
 
-			ckmin(ret, dist[a1.f][a1.s] + dist[a2.f][a2.s] + dist[b1.f][b1.s] + dist[b2.f][b2.s]);
+			curr += dist[a1.f][a1.s];
+			curr += dist[a2.f][a2.s];
+			curr += dist[b1.f][b1.s];
+			curr += dist[b2.f][b2.s];
+
+			if(curr <= MOD) {
+				dbg(i, j, curr);
+				ckmin(ret, curr);
+			}
+
 			dbg(curr, vis);
-	// 	}
-	// }
+		}
+	}
 
 	ps(ret);
 }
