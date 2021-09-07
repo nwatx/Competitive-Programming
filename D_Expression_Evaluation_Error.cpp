@@ -338,7 +338,10 @@ void solve() {
 
 	ans.pb(fst);
 
-	ps(ans);
+	F0R(i, sz(ans)) {
+		pr(ans[i], " ");
+	}
+	ps();
 }
 
 	// partition n into as many biglies as possible
