@@ -294,6 +294,12 @@ inline namespace FileIO {
 
 const int mx = 2e5+1;
 
+ll pow(int x, int p) {
+	ll ret = 1;
+	rep(p) ret *= x;
+	return ret;
+}
+
 void solve() {
 	str x; re(x);
 	while(x.size() < 10) x = "0" + x;
@@ -302,21 +308,38 @@ void solve() {
 	vi num(10);
 	int sum = 0;
 	F0R(i, 10) num[i] = x[i] - '0', sum += num[i];
+	// sum--; // decrement by 1
+	n--;
 	// dbg(sum);
 
 	str curr = "";
 
 	vi ans;
 
-	F0R(i, n) {
-		// if the sum of remaining numbers
-		// sum - x[i] >= n
-		if(sum - x[i] >= n) {
-			curr += x[i];
+	// build from back to front -> repeatedly add 1.
+
+	reverse(all(num));
+	
+	dbg(num);
+
+	F0R(i, 10) {
+		while(n && num[i] > 0) {
+			ans.pb(pow(10, i));
+			num[i]--;
+			n--;
+			// num[i]--;
 		}
 	}
 
-	dbg(num);
+	int fst = 0;
+	F0R(i, 10) {
+		fst += num[i] * pow(10, i);
+	}
+
+	ans.pb(fst);
+
+	ps(ans);
+}
 
 	// partition n into as many biglies as possible
 	// partition into digit count
@@ -327,12 +350,6 @@ void solve() {
 	// if possible to use digit w/ n remaining, use digit.
 	// else don't
 	
-
-	F0R(i, n) {
-
-	}
-
-}
 
 signed main() {
 	// clock_t start = clock();
