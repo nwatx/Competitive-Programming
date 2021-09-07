@@ -298,6 +298,9 @@ void solve() {
 	ints(x, n);
 
 	// partition n into as many biglies as possible
+	// partition into digit count
+	// there will be 100s
+	// so how to deal with this?
 
 	
 }
