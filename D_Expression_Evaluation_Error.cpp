@@ -295,14 +295,28 @@ inline namespace FileIO {
 const int mx = 2e5+1;
 
 void solve() {
-	ints(x, n);
+	str x; re(x);
+	while(x.size() < 10) x = "0" + x;
+	int n; re(n);
+
+	vi num(10); 
+	F0R(i, 10) num[i] = x[i] - '0';
+
+	dbg(num);
 
 	// partition n into as many biglies as possible
 	// partition into digit count
 	// there will be 100s
 	// so how to deal with this?
 
-	// determine if remaining numbers >= n
+	// Algorithm:
+	// if possible to use digit w/ n remaining, use digit.
+	// else don't
+	
+
+	F0R(i, n) {
+
+	}
 
 }
 
