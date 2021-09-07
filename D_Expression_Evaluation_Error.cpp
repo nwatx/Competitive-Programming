@@ -304,7 +304,7 @@ void solve() {
 
 	// determine if remaining numbers >= n
 
-	vi ans;
+	vi ans; // partition to digit counts
 
 	while(n > 0) {
 		
