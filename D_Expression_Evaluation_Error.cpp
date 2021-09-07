@@ -306,7 +306,7 @@ void solve() {
 
 	vi ans; // partition to digit counts
 
-	while(n > 0) {
+	while(n > 0) { // determine if it's possible?
 		
 	}
 }
