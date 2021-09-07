@@ -294,155 +294,12 @@ inline namespace FileIO {
 
 const int mx = 2e5+1;
 
-int n, m;
-
-char mat[501][501];
-
-int dist[501][501];
-int layers[501][501];
-bool vis[501][501];
-
-/**
- * Description: line sweep to find two closest points 
- * Time: O(N\log N)
- * Source: Own
- * Verification: https://open.kattis.com/problems/closestpair2
- */
-
-/**
- * Description: Use in place of \texttt{complex<T>}.
- * Source: http://codeforces.com/blog/entry/22175, KACTL
- * Verification: various
- */
-
-using T = db; // or long long
-const T EPS = 1e-9; // might want to change
-using P = pair<T,T>; using vP = V<P>; using Line = pair<P,P>;
-
-P operator-(const P& l) { return P(-l.f,-l.s); }
-P operator+(const P& l, const P& r) { 
-	return P(l.f+r.f,l.s+r.s); }
-P operator-(const P& l, const P& r) { 
-	return P(l.f-r.f,l.s-r.s); }
-
-T sq(T a) { return a*a; }
-T norm(const P& p) { return sq(p.f)+sq(p.s); }
-T abs(const P& p) { return sqrt(norm(p)); }
-
-pair<P,P> solve(vector<P> v) {
-	pair<long double,pair<P,P>> bes; bes.f = INF;
-	set<P> S; int ind = 0;
-	sort(all(v));
-	F0R(i,sz(v)) {
-		if (i && v[i] == v[i-1]) return {v[i],v[i]};
-		for (; v[i].first-v[ind].first >= bes.first; ++ind) 
-			S.erase({v[ind].s,v[ind].f});
-		for (auto it = S.upper_bound({v[i].second-bes.first,INF});
-			it != end(S) && it->first < v[i].second+bes.first; ++it) {
-			P t = {it->second,it->first};
-			ckmin(bes,{abs(t-v[i]),{t,v[i]}});
-		}
-		S.insert({v[i].second,v[i].first});
-	}
-	return bes.second;
-}
-
-void bfs(pi start) {
-		queue<pi> bfs;
-		bfs.push(start);
-		dist[start.f][start.s] = 0;
-
-		while(sz(bfs)) {
-			pi top = bfs.front();
-			bfs.pop();
-
-			if(vis[top.f][top.s]) continue;
-			vis[top.f][top.s] = true;
-			layers[top.f][top.s] += 1;
-
-			F0R(k, 4) {
-				int nx = top.f + dx[k];
-				int ny = top.s + dy[k];
-
-				if(nx < 0 || ny < 0 || nx >= n || ny >= m) continue;
-				if(!vis[nx][ny] && mat[nx][ny] != '#') {
-					dist[nx][ny] = dist[top.f][top.s] + 1;
-					bfs.push({nx, ny});
-					// dbg(top, mp(nx, ny));
-				}
-			}
-		}
-}
-
 void solve() {
-	re(n, m);
+	ints(x, n);
 
-	F0R(i, n) F0R(j, m) re(mat[i][j]);
-	pi a1, a2, b1, b2;
-	a1.f = -1;
-	a2.f = -1, b1.f = -1, b2.f = -1;
-	F0R(i, n) F0R(j, m) {
-		if(mat[i][j] == 'a') {
-			if(a1.f == -1) a1 = {i, j};
-			else a2 = {i, j};
-		} 
+	// partition n into as many biglies as possible
 
-		if(mat[i][j] == 'b') {
-			if(b1.f == -1) b1 = {i, j};
-			else b2= {i, j};
-		} 
-	}
-
-	// dbg(a1, a2, b1, b2);
-
-	// go through possible intersections
-
-	ll ret = MOD;
-
-	// int i = 1, j = 6;
-
-	// F0R(i, n) {
-	// 	F0R(j, m) {
-	// 		if(mat[i][j] == '#') continue;
-	// 		ll curr = 0;
-	// 		// fill(dist, dist + 501*501, MOD);
-			F0R(i, n+1) F0R(j, m + 1) dist[i][j] = MOD;
-			F0R(i, n+1) F0R(j, m + 1) vis[i][j] = 0;
-
-			bfs(a1);
-			bfs(a2);
-			bfs(b1);
-			bfs(b2);
-			
-
-			// curr += dist[a1.f][a1.s];
-			// curr += dist[a2.f][a2.s];
-			// curr += dist[b1.f][b1.s];
-			// curr += dist[b2.f][b2.s];
-
-			// if(curr <= MOD) {
-			// 	// dbg(i, j, curr);
-			// 	ckmin(ret, curr);
-			// }
-
-			// dbg(curr);
-			// F0R(i, n) {
-			// 	F0R(j, m) pr(mat[i][j]);
-			// 	ps();
-			// }
-			// F0R(i, n) {
-			// 	F0R(j, m) pr(vis[i][j]);
-			// 	ps();
-			// }
-	// 	}
-	// }
-
-	F0R(i, n) F0R(j, m) {
-		if(layers[i][j] == 4)
-	}
-
-	if(ret == MOD) ps("IMPOSSIBLE");
-	else ps(ret);
+	
 }
 
 signed main() {
@@ -450,7 +307,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) solve();
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
