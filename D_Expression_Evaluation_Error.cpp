@@ -304,11 +304,6 @@ void solve() {
 
 	// determine if remaining numbers >= n
 
-	vi ans; // partition to digit counts
-
-	while(n > 0) { // determine if it's possible?
-		
-	}
 }
 
 signed main() {
