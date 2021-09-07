@@ -299,8 +299,22 @@ void solve() {
 	while(x.size() < 10) x = "0" + x;
 	int n; re(n);
 
-	vi num(10); 
-	F0R(i, 10) num[i] = x[i] - '0';
+	vi num(10);
+	int sum = 0;
+	F0R(i, 10) num[i] = x[i] - '0', sum += num[i];
+	// dbg(sum);
+
+	str curr = "";
+
+	vi ans;
+
+	F0R(i, n) {
+		// if the sum of remaining numbers
+		// sum - x[i] >= n
+		if(sum - x[i] >= n) {
+			curr += x[i];
+		}
+	}
 
 	dbg(num);
 
