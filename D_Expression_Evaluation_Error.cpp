@@ -302,7 +302,13 @@ void solve() {
 	// there will be 100s
 	// so how to deal with this?
 
-	
+	// determine if remaining numbers >= n
+
+	vi ans;
+
+	while(n > 0) {
+		
+	}
 }
 
 signed main() {
