@@ -299,7 +299,8 @@ int A[mx];
 
 bool f(int x) {
 	int bC = 0;
-	F0R(i, n) {
+	int i = 0;
+	while(i < n) {
 		dbg(i);
 		int curr = A[i];
 		int cI = i;
