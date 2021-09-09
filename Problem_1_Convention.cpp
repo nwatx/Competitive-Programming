@@ -301,6 +301,7 @@ bool f(int x) {
 	int bC = 0;
 	int i = 0;
 	while(i < n) {
+		dbg(i);
 		int curr = A[i];
 		int cI = i;
 		while(i < n && A[i] - curr <= x && (i - cI + 1 < m)) i++;
@@ -315,13 +316,14 @@ void solve() {
 	F0R(i, n) re(A[i]);
 	sort(A, A + n);
 	F0R(i, n) dbg(A[i]);
-	ps(fstTrue(1, MOD, f));
+	// ps(fstTrue(1, MOD, f));
+	f(1);
 
 }
 
 signed main() {
 	// clock_t start = clock();
-	setIO("convention");
+	// setIO("convention");
 
 	int n = 1;
 	// re(n);
