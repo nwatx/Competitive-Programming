@@ -294,16 +294,21 @@ inline namespace FileIO {
 
 const int mx = 2e5+1;
 
+int pos[mx];
+
 void solve() {
 	int n; re(n);
-	queue<int> q;
-	int ret = 0;
 	F0R(i, n) {
-		int x; re(x);
-		while(sz(q) && q.front() <= x) q.pop();
-		q.push(x);
-		ckmax(ret, sz(q));
+		int1(x);
+		pos[x] = i;
 	}
+
+	int ret = 1;
+
+	FOR(i, 1, n) { // if x appears after x + 1
+		ret += (pos[i] < pos[i - 1]);
+	}
+
 	ps(ret);
 }
 
