@@ -301,23 +301,36 @@ inline namespace FileIO {
 
 // let [l, r] be the distinct values in [l, r]
 // we can query whether something exists in log
+/**
+ * Description: range sum queries and point updates for $D$ dimensions
+ * Source: https://codeforces.com/blog/entry/64914
+ * Verification: SPOJ matsum
+ * Usage: \texttt{BIT<int,10,10>} gives 2D BIT
+ * Time: O((\log N)^D)
+ */
 
-template<class T> struct Seg { // comb(ID,b) = b
-	const T ID = 0; T comb(T a, T b) { return a+b; } 
-	int n; vector<T> seg;
-	void init(int _n) { n = _n; seg.assign(2*n,ID); }
-	void pull(int p) { seg[p] = comb(seg[2*p],seg[2*p+1]); }
-	void upd(int p, T val) { // set val at position p
-		seg[p += n] = val; for (p /= 2; p; p /= 2) pull(p); }
-	T query(int l, int r) {	// sum on interval [l, r]
-		T ra = ID, rb = ID; 
-		for (l += n, r += n+1; l < r; l /= 2, r /= 2) {
-			if (l&1) ra = comb(ra,seg[l++]);
-			if (r&1) rb = comb(seg[--r],rb);
-		}
-		return comb(ra,rb);
-	}
+template <class T, int ...Ns> struct BIT {
+	T val = 0; void upd(T v) { val += v; }
+	T query() { return val; }
 };
+template <class T, int N, int... Ns> struct BIT<T, N, Ns...> {
+	BIT<T,Ns...> bit[N+1];
+	template<typename... Args> void upd(int pos, Args... args) { assert(pos > 0);
+		for (; pos<=N; pos+=pos&-pos) bit[pos].upd(args...); }
+	template<typename... Args> T sum(int r, Args... args) {
+		T res=0; for (;r;r-=r&-r) res += bit[r].query(args...); 
+		return res; }
+	template<typename... Args> T query(int l, int r, Args... 
+		args) { return sum(r,args...)-sum(l-1,args...); }
+}; 
+template<class T, int N> int get_kth(const BIT<T,N>& bit, T des) { 
+	assert(des > 0);
+	int ind = 0;
+	for (int i = 1<<bits(N); i; i /= 2)
+		if (ind+i <= N && bit.bit[ind+i].val < des)
+			des -= bit.bit[ind += i].val;
+	assert(ind < N); return ind+1;
+}
 /* #endregion */
 
 const int mx = 2e5+1;
@@ -332,16 +345,17 @@ void solve() {
 		loc[x].pb(i);
 	}
 
-	Seg<int> S; S.init(n);
-	
+	vpi q(m);
 	rep(m) {
 		int1(l, r);
-		set<int> c;
-		FOR(i, l, r + 1) {
-			c.ins(v[i]);
-		}
-		ps(sz(c));
+		q[_] = mp(r, l);
 	}
+
+	sor(q);
+	
+	rep(m) { swap(q[_].f, q[_].s); }
+
+	dbg(q);
 }
 
 signed main() {
