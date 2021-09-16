@@ -294,7 +294,17 @@ inline namespace FileIO {
 const int mx = 2e5+1;
 
 void solve() {
-
+	int n, m ; re(n, m);
+	vi v(n); re(v);
+	
+	rep(m) {
+		int1(l, r);
+		set<int> c;
+		FOR(i, l, r + 1) {
+			c.ins(v[i]);
+		}
+		ps(sz(c));
+	}
 }
 
 signed main() {
