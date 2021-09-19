@@ -7,7 +7,7 @@
     "workbench.panel.defaultLocation": "right",
     "workbench.colorCustomizations": {
         "editorLineNumber.foreground": "#686868",
-        "editorLineNumber.activeForeground": "#ffe600",
+        // "editorLineNumber.activeForeground": "#ffe600",
         "editor.selectionBackground": "#6b6b6b"
     },
     "explorer.sortOrder": "type",

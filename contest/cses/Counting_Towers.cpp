@@ -23,9 +23,12 @@ using vpi = vector<pi>;
 using vpl = vector<pl>; 
 using vpd = vector<pd>;
 
+<<<<<<< HEAD:contest/cses/Counting_Towers.cpp
 using Mii = map<int, int>;
 using Mll = map<ll, ll>;
 
+=======
+>>>>>>> 5b50eefd016032659f0b8b8ef3343b3d2e934f8d:Problem_2_Modern_Art_3.cpp
 #define tcT template<class T
 #define tcTU tcT, class U
 tcT> using V = vector<T>; 
@@ -84,6 +87,26 @@ constexpr int msk2(int x) { return p2(x)-1; }
 ll cdiv(ll a, ll b) { return a/b+((a^b)>0&&a%b); } // divide a by b rounded up
 ll fdiv(ll a, ll b) { return a/b-((a^b)<0&&a%b); } // divide a by b rounded down
 
+<<<<<<< HEAD:contest/cses/Counting_Towers.cpp
+=======
+// variadic max
+template<tN h0, tN h1, tN...Tl>
+cexp auto max(h0 &&hf, h1 &&hs, Tl &&... tl) {
+	if cexp (sizeof...(tl) == 0)
+		return hf > hs ? hf : hs;
+	else return max(max(hf, hs), tl...);
+}
+
+// vardiadic min
+template<tN h0, tN h1, tN...Tl>
+cexp auto min(h0 &&hf, h1 &&hs, Tl &&... tl) {
+	if cexp (sizeof...(tl) == 0)
+		return hf < hs ? hf : hs;
+	else return min(min(hf, hs), tl...);
+}
+
+// variadic min / max
+>>>>>>> 5b50eefd016032659f0b8b8ef3343b3d2e934f8d:Problem_2_Modern_Art_3.cpp
 tcT> bool ckmin(T& a, const T& b) {
 	return b < a ? a = b, 1 : 0; } // set a = min(a,b)
 tcT> bool ckmax(T& a, const T& b) {
@@ -108,20 +131,6 @@ tcTU> T lstTrue(T lo, T hi, U f) {
 	return lo;
 }
 
-tcTU> T ternMax(T l, T r, U f) { // unimodal functions
-    for(;r-l>0;) {
-        T m1 = l+(r-l)/3;T m2=r-(r-l)/3;T f1=f(m1);T f2=f(m2);
-        if(f1<f2)l=m1+1;else r=m2-1; }
-    return f(l);
-}
-
-tcTU> T ternMin(T l, T r, U f) {
-    for(;r-l>0;) {
-        T m1 = l+(r-l)/3;T m2=r-(r-l)/3;T f1=f(m1);T f2=f(m2);
-        if(f1>f2)l=m1+1;else r=m2-1; }
-    return f(l);
-}
-
 tcT> void remDup(vector<T>& v) { // sort and remove duplicates
 	sort(all(v)); v.erase(unique(all(v)),end(v)); }
 tcTU> void erase(T& t, const U& u) { // don't erase
@@ -136,28 +145,28 @@ inline namespace Helpers {
 	// this gets used only when we can call begin() and end() on that type
 	tcT, class = void> struct is_iterable : false_type {};
 	tcT> struct is_iterable<T, void_t<decltype(begin(declval<T>())),
-	                                  decltype(end(declval<T>()))
-	                                 >
-	                       > : true_type {};
+									  decltype(end(declval<T>()))
+									 >
+						   > : true_type {};
 	tcT> constexpr bool is_iterable_v = is_iterable<T>::value;
 
 	//////////// is_readable
 	tcT, class = void> struct is_readable : false_type {};
 	tcT> struct is_readable<T,
-	        typename std::enable_if_t<
-	            is_same_v<decltype(cin >> declval<T&>()), istream&>
-	        >
-	    > : true_type {};
+			typename std::enable_if_t<
+				is_same_v<decltype(cin >> declval<T&>()), istream&>
+			>
+		> : true_type {};
 	tcT> constexpr bool is_readable_v = is_readable<T>::value;
 
 	//////////// is_printable
 	// // https://nafe.es/posts/2020-02-29-is-printable/
 	tcT, class = void> struct is_printable : false_type {};
 	tcT> struct is_printable<T,
-	        typename std::enable_if_t<
-	            is_same_v<decltype(cout << declval<T>()), ostream&>
-	        >
-	    > : true_type {};
+			typename std::enable_if_t<
+				is_same_v<decltype(cout << declval<T>()), ostream&>
+			>
+		> : true_type {};
 	tcT> constexpr bool is_printable_v = is_printable<T>::value;
 }
 
@@ -241,7 +250,7 @@ inline namespace ToString {
 }
 
 inline namespace Output {
-	template<class T> void pr_sep(ostream& os, str, const T& t) { os << ts(t); }
+	tcT> void pr_sep(ostream& os, str, const T& t) { os << ts(t); }
 	template<class T, class... U> void pr_sep(ostream& os, str sep, const T& t, const U&... u) {
 		pr_sep(os,sep,t); os << sep; pr_sep(os,sep,u...); }
 	// print w/ no spaces
@@ -279,70 +288,61 @@ inline namespace FileIO {
 /* #endregion */
 
 /* #region snippets */
-/**
- * Description: Hash map with the same API as unordered\_map, but \tilde 3x faster.
-	 * Initial capacity must be a power of 2 if provided.
- * Source: KACTL
- * Usage: ht<int,int> h({},{},{},{},{1<<16});
- */
 
-#include <ext/pb_ds/assoc_container.hpp>
-using namespace __gnu_pbds;
-struct chash { /// use most bits rather than just the lowest ones
-	const uint64_t C = ll(2e18*PI)+71; // large odd number
-	const int RANDOM = rng();
-	ll operator()(ll x) const { /// https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html
-		return __builtin_bswap64((x^RANDOM)*C); }
-};
-template<class K,class V> using um = unordered_map<K,V,chash>;
-template<class K,class V> using ht = gp_hash_table<K,V,chash>;
-template<class K,class V> V get(ht<K,V>& u, K x) {
-	auto it = u.find(x); return it == end(u) ? 0 : it->s; }
 /* #endregion */
 
-int N, M;
-const int mx = 2e5+1;	
+const int mx = 2e5+1;
 
-ll pfx[5001][5001]; // [i, j]
+<<<<<<< HEAD:contest/cses/Counting_Towers.cpp
+int dp[mx][5];
+// 2 x 1x1
+=======
+int A[mx];
+int dp[301][301]; // min for [i, j];
+
+void solve() {
+	int n; re(n);
+	F0R(i,n) re(A[i]);
+
+	F0R(i,301)F0R(j,301) dp[i][j] = MOD;
+
+	F0R(i, 301) dp[i][i] = 1;
+
+	FOR(s,1,n+1) {
+		F0R(i,n-s+1) {
+			FOR(j, i, i+s) {
+				// if two intervals share the same endpoint: merge
+				{
+					int k = i + s - 1;
+					if(A[i] == A[k]) ckmin(dp[i][k], dp[i][j] + dp[j+1][k] - 1);
+					ckmin(dp[i][k], dp[i][j] + dp[j+1][k]);
+				}
+			}
+		}
+	}
+
+	// F0R(i, n) {
+	// 	F0R(j, n) {
+	// 		pr(dp[i][j] == MOD ? "=" : ts(dp[i][j]), " ");
+	// 	}
+	// 	ps();
+	// }
+
+	ps(dp[0][n-1]);
+}
+>>>>>>> 5b50eefd016032659f0b8b8ef3343b3d2e934f8d:Problem_2_Modern_Art_3.cpp
 
 signed main() {
 	// clock_t start = clock();
-	setIO("threesum");
+	setIO();
 
-	re(N, M);
-	vi v(N); re(v);
+<<<<<<< HEAD:contest/cses/Counting_Towers.cpp
+=======
+	int n = 1;
+	// re(n);
+	rep(n) solve();
 
-	F0R(i, N) {
-		gp_hash_table<int,int> m({},{},{},{},{1<<13});
-		FOR(j, i + 1, N) {
-			// a + b + c = 0
-			// c = - (b + a)
-
-			int des = -(v[i] + v[j]);
-			auto it = m.find(des);
-			if(it != end(m))
-				pfx[i][j] = m[des];
-			m[v[j]]++;
-		}
-	}
-
-	R0F(i, N) {
-		FOR(j, i + 1, N) {
-			pfx[i][j] += pfx[i+1][j]+pfx[i][j-1]-pfx[i+1][j-1];
-		}
-	}
-
-	rep(M) {
-		int1(a, b);
-		cout << pfx[a][b] << "\n";
-	}
-
-	// dbg(m);
-
-	// F0R(i, 7) FOR(j, i, 7) {
-	// 	dbg(i, j, pfx[i][j]);
-	// }
-
+>>>>>>> 5b50eefd016032659f0b8b8ef3343b3d2e934f8d:Problem_2_Modern_Art_3.cpp
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }
 
@@ -352,4 +352,5 @@ signed main() {
 	* do smth instead of nothing and stay organized
 	* WRITE STUFF DOWN
 	* DON'T GET STUCK ON ONE APPROACH
+	* geo and benq orz
 */

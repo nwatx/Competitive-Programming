@@ -290,10 +290,6 @@ inline namespace FileIO {
 
 /* #region snippets */
 
-/* #endregion */
-
-const int mx = 2e5+1;
-
 /**
  * Description: Disjoint Set Union with path compression
 	 * and union by size. Add edges and test connectivity. 
@@ -302,6 +298,10 @@ const int mx = 2e5+1;
  * Source: CSAcademy, KACTL
  * Verification: *
  */
+
+const int mx = 2e5+1;
+
+vi r_adj[mx];
 
 struct DSU {
 	vi e; void init(int N) { e = vi(N,-1); }
@@ -315,38 +315,36 @@ struct DSU {
 	}
 };
 
-// observation -> connecting two components
-// it doesn't matter which edges we choose to connect, they will remain connected after permuting.
-
 void solve() {
-	// dbg("");
-	ints(n);
-	V<pair<ll, pi>> ed;
-	DSU dsu; dsu.init(4*n+1);
-	F0R(i, n) {
-		ints(a,b,c,d,e);
-	// dbg("");
-		// v[i] = {a,b,c,d,e};
-		dsu.unite(b,c); dsu.unite(d,e);
-		ed.pb({a, {b,d}});
-		ed.pb({a, {b,e}});
-		ed.pb({a, {c,d}});
+	ints(N,M);
+	rep(N) {
+		ints(a, b);
+		r_adj[b].pb(a);
 	}
 
-	// dbg("");
+	DSU dsu; dsu.init(N+1);
 
-	sor(ed);
+	queue<int> tm;
 
-	dbg(ed);
-	ll ret = 0;
-	set<int> used;
-	each(a, ed) if(dsu.unite(a.s.f, a.s.s)) {
-		dbg(a);
-		ret += a.f;
-		used.insert(a.s.f);
+	FOR(i,1,N+1) {
+		if(sz(r_adj[i]) > 1) tm.push(i);
 	}
-	ps(ret);
+
+	while(sz(tm)) {
+		int top = tm.front();
+		if(sz(r_adj[top]) >= 2) {
+			int bkk = r_adj[dsu.get(top)].back(); r_adj[dsu.get(top)].pop_back();
+			dsu.unite(bkk, r_adj[dsu.get(top)].back());
+		} else {
+			tm.pop();
+		}
+	}
+
+	F0R(i, N+1) {
+		ps(i, dsu.get(i));
+	}
 }
+
 
 signed main() {
 	// clock_t start = clock();

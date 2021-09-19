@@ -279,69 +279,99 @@ inline namespace FileIO {
 /* #endregion */
 
 /* #region snippets */
-/**
- * Description: Hash map with the same API as unordered\_map, but \tilde 3x faster.
-	 * Initial capacity must be a power of 2 if provided.
- * Source: KACTL
- * Usage: ht<int,int> h({},{},{},{},{1<<16});
- */
 
-#include <ext/pb_ds/assoc_container.hpp>
-using namespace __gnu_pbds;
-struct chash { /// use most bits rather than just the lowest ones
-	const uint64_t C = ll(2e18*PI)+71; // large odd number
-	const int RANDOM = rng();
-	ll operator()(ll x) const { /// https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html
-		return __builtin_bswap64((x^RANDOM)*C); }
-};
-template<class K,class V> using um = unordered_map<K,V,chash>;
-template<class K,class V> using ht = gp_hash_table<K,V,chash>;
-template<class K,class V> V get(ht<K,V>& u, K x) {
-	auto it = u.find(x); return it == end(u) ? 0 : it->s; }
 /* #endregion */
 
-int N, M;
-const int mx = 2e5+1;	
+tcT> struct HLD {
+	const T ID = 0;
+	void comb(const T &a, const T &b) {
+		return a + b;
+	}
+	template<int SZ> struct LazySeg { 
+		static_assert(pct(SZ) == 1); // SZ must be power of 2
+		T seg[2*SZ], lazy[2*SZ]; 
+		LazySeg() { F0R(i,2*SZ) seg[i] = lazy[i] = ID; }
+		void push(int ind, int L, int R) { /// modify values for current node
+			seg[ind] += (R-L+1)*lazy[ind]; // dependent on operation
+			if (L != R) F0R(i,2) lazy[2*ind+i] += lazy[ind]; /// prop to children
+			lazy[ind] = 0; 
+		} // recalc values for current node
+		void pull(int ind) { seg[ind] = comb(seg[2*ind],seg[2*ind+1]); }
+		void build() { ROF(i,1,SZ) pull(i); }
+		void upd(int lo,int hi,T inc,int ind=1,int L=0, int R=SZ-1) {
+			push(ind,L,R); if (hi < L || R < lo) return;
+			if (lo <= L && R <= hi) { 
+				lazy[ind] = inc; push(ind,L,R); return; }
+			int M = (L+R)/2; upd(lo,hi,inc,2*ind,L,M); 
+			upd(lo,hi,inc,2*ind+1,M+1,R); pull(ind);
+		}
+		T query(int lo, int hi, int ind=1, int L=0, int R=SZ-1) {
+			push(ind,L,R); if (lo > R || L > hi) return ID;
+			if (lo <= L && R <= hi) return seg[ind];
+			int M = (L+R)/2; 
+			return comb(query(lo,hi,2*ind,L,M),query(lo,hi,2*ind+1,M+1,R));
+		}
+	};
+	
+	V<vi> adj;
+	vi sz, in, out, par;
+	int t = 0;
 
-ll pfx[5001][5001]; // [i, j]
+	void init(int _N) {
+		adj.rsz(_N), sz.rsz(_N), in.rsz(_N), out.rsz(_N), par.rsz(_N);
+	}
+	void ae(int &a, int &b) { adj[a].pb(b); adj[b].pb(a); }
+	void dfs_sz(int v = 0, int p = -1) {
+		sz[v] = 1;
+		each(u, adj[v]) {
+			if(u == p) continue;
+			dfs_sz(u, v);
+			sz[v] += sz[u];
+			if(sz[u] > sz[adj[v][0]]) swap(u, adj[v][0]);
+		}
+	}
+
+	void dfs_hld(int v = 0, int p = -1) {
+		in[v] = t++;
+		each(u, adj[v]) {
+			if(u != p) {
+				par[u] = (u == adj[v][0] ? par[v] : u);
+				dfs_hld(u, v);
+			}
+		}
+		out[v] = t;
+	}
+
+	void gen(int r = 0, int p = -1) {
+		dfs_sz(r, p);
+	}
+
+};
+
+ll N, M;
+const int mx = 2e5+1;
 
 signed main() {
 	// clock_t start = clock();
-	setIO("threesum");
+	setIO();
 
 	re(N, M);
 	vi v(N); re(v);
 
-	F0R(i, N) {
-		gp_hash_table<int,int> m({},{},{},{},{1<<13});
-		FOR(j, i + 1, N) {
-			// a + b + c = 0
-			// c = - (b + a)
+	HLD<ll> hld;
+	hld.init(N);
 
-			int des = -(v[i] + v[j]);
-			auto it = m.find(des);
-			if(it != end(m))
-				pfx[i][j] = m[des];
-			m[v[j]]++;
-		}
-	}
-
-	R0F(i, N) {
-		FOR(j, i + 1, N) {
-			pfx[i][j] += pfx[i+1][j]+pfx[i][j-1]-pfx[i+1][j-1];
-		}
-	}
-
-	rep(M) {
+	rep(N - 1) {
 		int1(a, b);
-		cout << pfx[a][b] << "\n";
+		hld.ae(a, b);
 	}
 
-	// dbg(m);
+	hld.gen();
 
-	// F0R(i, 7) FOR(j, i, 7) {
-	// 	dbg(i, j, pfx[i][j]);
-	// }
+	dbg(hld.sz);
+	dbg(hld.in, hld.out);
+
+
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }
