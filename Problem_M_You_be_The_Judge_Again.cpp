@@ -289,11 +289,6 @@ inline namespace FileIO {
 /* #endregion */
 
 /* #region snippets */
-
-/* #endregion */
-
-const int mx = 2e5+1;
-
 /**
  * Description: modular arithmetic operations 
  * Source: 
@@ -358,67 +353,26 @@ void genComb(int SZ) {
 	FOR(i,1,SZ) F0R(j,i+1) 
 		scmb[i][j] = scmb[i-1][j]+(j?scmb[i-1][j-1]:0);
 }
+/* #endregion */
 
-/**
- * Description: Disjoint Set Union with path compression
-	 * and union by size. Add edges and test connectivity. 
-	 * Use for Kruskal's or Boruvka's minimum spanning tree.
- * Time: O(\alpha(N))
- * Source: CSAcademy, KACTL
- * Verification: *
- */
-
-struct DSU {
-	vi e; void init(int N) { e = vi(N,-1); }
-	int get(int x) { return e[x] < 0 ? x : e[x] = get(e[x]); } 
-	bool sameSet(int a, int b) { return get(a) == get(b); }
-	int size(int x) { return -e[get(x)]; }
-	bool unite(int x, int y) { // union by size
-		x = get(x), y = get(y); if (x == y) return 0;
-		if (e[x] > e[y]) swap(x,y);
-		e[x] += e[y]; e[y] = x; return 1;
-	}
-};
-
-/**template<class T> T kruskal(int N, vector<pair<T,pi>> ed) {
-	sort(all(ed));
-	T ans = 0; DSU D; D.init(N); // edges that unite are in MST
-	each(a,ed) if (D.unite(a.s.f,a.s.s)) ans += a.f; 
-	return ans;
-}*/
-
-/**
- * Description: shortest path
- * Source: own
- * Verification: https://open.kattis.com/problems/shortestpath1
- */
-
-template<class C, bool directed> struct Dijkstra {
-	int SZ; V<C> dist; 
-	V<V<pair<int,C>>> adj;
-	void init(int _SZ) { SZ = _SZ; adj.clear(); adj.rsz(SZ); }
-	void ae(int u, int v, C cost) {
-		adj[u].pb({v,cost}); if (!directed) adj[v].pb({u,cost}); }
-	void gen(int st) {
-		dist.assign(SZ,numeric_limits<C>::max());
-		using T = pair<C,int>; pqg<T> pq; 
-		auto ad = [&](int a, C b) {
-			if (dist[a] <= b) return;
-			pq.push({dist[a] = b,a});
-		}; ad(st,0);
-		while (sz(pq)) {
-			T x = pq.top(); pq.pop(); if (dist[x.s] < x.f) continue;
-			each(y,adj[x.s]) ad(y.f,x.f+y.s);
-		}
-	}
-};
-
-
+const int mx = 2e5+1;
 
 void solve() {
-	int n; cin >> n;
-	if(n == 2) ps("NO");
-	else ps((n % 2) ? "NO" : "YES");
+	int n; re(n);
+	int oc = 0;
+	set<int> s;
+	F0R(i, 1<<n) {
+		F0R(j, 1<<n) {
+			int a; re(a);
+			if(a) s.insert(a);
+			if(!a) oc++;
+		}
+	}
+
+	mi dest = (pow(mi(4), n) - 1) / 3;
+	// dbg(dest);
+
+	ps(oc == 1 && sz(s) == dest);
 }
 
 signed main() {
@@ -438,5 +392,4 @@ signed main() {
 	* do smth instead of nothing and stay organized
 	* WRITE STUFF DOWN
 	* DON'T GET STUCK ON ONE APPROACH
-	* geo and benq orz
 */

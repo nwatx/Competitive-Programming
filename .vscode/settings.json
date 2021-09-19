@@ -1,6 +1,6 @@
 {
     "code-runner.executorMap": {
-        "cpp": "cd $dir && g++ -std=c++17 $fileName -O2 -Wall -Wextra -Wno-unknown-pragmas -DLOCAL -o a && $dira"
+        "cpp": "cd $dir && g++ -std=c++17 $fileName -O2 -Wall -Wextra -Wno-unknown-pragmas -o a && $dira"
     },
     "editor.minimap.side": "right",
     "editor.renderLineHighlight": "all",
@@ -52,6 +52,7 @@
         "tuple": "cpp",
         "typeinfo": "cpp",
         "utility": "cpp",
-        "variant": "cpp"
+        "variant": "cpp",
+        "list": "cpp"
     },
 }
