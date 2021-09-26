@@ -294,29 +294,49 @@ inline namespace FileIO {
 
 const int mx = 60;
 
-string A[mx];
+string pp[mx];
 
 void solve() {
 	string n; re(n);
-	int ans = mx;
-	each(x, A) {
-		// x = "64";
-		int ret = 0;
-		string c = n;
-		dbg(c, x);
-		for(int i = 0; i < min(sz(c), sz(n));) {
-			if(c[i] != x[i]) {
-				ret++;
-				c.erase(i);
-			} else {
-				i++;
+	int ret = MOD;
+
+	// 1052
+	// 1
+	// 1
+
+	each(x, pp) {
+		dbg(x);
+		int cnt = 0;
+		string c = n; // c is n
+		if(sz(c) < sz(x)) { // check is greater
+			dbg("t1");
+			for(int i = 0; i < sz(c);) {
+				if(c[i] != x[i]) {
+					// c.erase(i, 1);
+					c.erase(bg(c)+i);
+					cnt++;
+				} else {
+					i++;
+				}
 			}
+			ckmin(ret, cnt + abs(sz(x) - sz(c)));
+		} else { // check is smaller
+			dbg("t2", c);
+
+			for(int i = 0; i < sz(x); i++) {
+				while(i < sz(c) && x[i] != c[i]) {
+					dbg("here");
+					c.erase(i, 1);
+					cnt++;
+				}
+			}
+			dbg(c, cnt, sz(c), sz(x));
+			dbg(cnt + abs(sz(c) - sz(x)));
+			ckmin(ret, cnt + abs(sz(c) - sz(x)));
 		}
-		dbg(n, c, ret);
-		ckmin(ans, ret + sz(x) - sz(c));
-		dbg(c, n, ans);
 	}
-	ps(ans);
+
+	ps(ret);
 }
 
 signed main() {
@@ -324,7 +344,7 @@ signed main() {
 	setIO();
 
 	F0R(i, mx) {
-		A[i] = ts(1LL << i);
+		pp[i] = ts(1LL << i);
 	}
 
 	int n = 1;
@@ -340,5 +360,4 @@ signed main() {
 	* do smth instead of nothing and stay organized
 	* WRITE STUFF DOWN
 	* DON'T GET STUCK ON ONE APPROACH
-	* geo and benq orz
 */

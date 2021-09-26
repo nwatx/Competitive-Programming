@@ -292,27 +292,33 @@ inline namespace FileIO {
 
 /* #endregion */
 
-const int mx = 1e6+1;
+const int mx = 2e5+1;
 
-// observations:
-// do dp by row
-// dp[0] = ending in left columns
-// dp[1] = ending in right columsn
-// dp[2] = ending in both columns
-
-int dp[mx][3];
-
-void gen() {
-	dp[0][0] = dp[0][1] = 1;
-	dp[0][2] = 2;
-	FOR(i, 1, mx) { // the # ending in first column is 
-		dp[i][0] += i * i - i * (1 + i) / 2 + i;
-	}
-}
+set<int> vowels{'A', 'E', 'I', 'O', 'U'};
 
 void solve() {
-	int n; re(n);
+	string s; re(s);
 
+	int ret = MOD;
+	// calcualte the dist for each letter
+	F0R(l, 26) {
+		char curr = l + 'A';
+		int dist = 0;
+		F0R(i, sz(s)) {
+			char c = s[i];
+			// determine type of c
+			if(c == curr) continue;
+			else {
+				dist++;
+				dist += vowels.count(c) == vowels.count(curr);
+			}
+		}
+
+		// dbg(curr, dist);
+		ckmin(ret, dist);
+	}
+
+	ps(ret);
 }
 
 signed main() {
@@ -321,7 +327,10 @@ signed main() {
 
 	int n = 1;
 	re(n);
-	rep(n) solve();
+	rep(n) {
+		pr("Case #", _ + 1, ": ");
+		solve();
+	}
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }
