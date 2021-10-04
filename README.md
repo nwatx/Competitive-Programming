@@ -2,6 +2,11 @@
 
 ### (VSCode version of bqi343's USACO)
 
+## Template Modifications
+
+- CPH extension compiles with `LOCAL` on, terminal compiles with this off.
+- Snippets are generated using a modified version of ben's python script.
+
 ## How to use
 
 Generating the vscode snippets: Navigate to `/templates/` and then proceed to run `py -3 genTemplate.py`

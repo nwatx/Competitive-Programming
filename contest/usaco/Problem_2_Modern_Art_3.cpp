@@ -1,20 +1,15 @@
-// Codeforces
-// #pragma GCC optimize ("Ofast")
-// #pragma GCC target ("avx2")
-
-#include <bits/stdc++.h>
+//BeginCodeSnip{C++ Short Template}
+#include <bits/stdc++.h> // see /general/running-code-locally
 using namespace std;
 
-/* #region template */
 using ll = long long;
-using db = long double; // or double, if TL is tight
-using str = string; // yay python!
-
-using pi = pair<int,int>;
-using pl = pair<ll,ll>;
-using pd = pair<db,db>;
 
 using vi = vector<int>;
+<<<<<<< HEAD:Problem_2_Modern_Art_3.cpp
+#define pb push_back
+#define all(x) begin(x), end(x)
+#define sz(x) (int) (x).size()
+=======
 using vb = vector<bool>;
 using vl = vector<ll>;
 using vd = vector<db>; 
@@ -34,12 +29,21 @@ using Mll = map<ll, ll>;
 tcT> using V = vector<T>; 
 tcT, size_t SZ> using AR = array<T,SZ>; 
 tcT> using PR = pair<T,T>;
+>>>>>>> f01bfc519e39eb3680a5c9457dedff31e99e53f6:contest/usaco/Problem_2_Modern_Art_3.cpp
 
-// pairs
-#define mp make_pair
+using pi = pair<int,int>;
 #define f first
 #define s second
+#define mp make_pair
 
+<<<<<<< HEAD:Problem_2_Modern_Art_3.cpp
+void setIO(string name = "") {
+	cin.tie(0)->sync_with_stdio(0); // see /general/fast-io
+	if (sz(name)) {
+		freopen((name + ".in").c_str(), "r", stdin); // see /general/input-output
+		freopen((name + ".out").c_str(), "w", stdout);
+	}
+=======
 // vectors
 // size(x), rbegin(x), rend(x) need C++17
 #define sz(x) int((x).size())
@@ -199,96 +203,42 @@ inline namespace Input {
 	tcTUU> void decrement(T& t, U&... u) { --t; decrement(u...); }
 	#define ints(...) int __VA_ARGS__; re(__VA_ARGS__);
 	#define int1(...) ints(__VA_ARGS__); decrement(__VA_ARGS__);
+>>>>>>> f01bfc519e39eb3680a5c9457dedff31e99e53f6:contest/usaco/Problem_2_Modern_Art_3.cpp
 }
+//EndCodeSnip
 
-inline namespace ToString {
-	tcT> constexpr bool needs_output_v = !is_printable_v<T> && is_iterable_v<T>;
+const int MAX_N = 301;
 
-	// ts: string representation to print
-	tcT> typename enable_if<is_printable_v<T>,str>::type ts(T v) {
-		stringstream ss; ss << fixed << setprecision(15) << v;
-		return ss.str(); } // default
-	tcT> str bit_vec(T t) { // bit vector to string
-		str res = "{"; F0R(i,sz(t)) res += ts(t[i]);
-		res += "}"; return res; }
-	str ts(V<bool> v) { return bit_vec(v); }
-	template<size_t SZ> str ts(bitset<SZ> b) { return bit_vec(b); } // bit vector
-	tcTU> str ts(pair<T,U> p); // pairs
-	tcT> typename enable_if<needs_output_v<T>,str>::type ts(T v); // vectors, arrays
-	tcTU> str ts(pair<T,U> p) { return "("+ts(p.f)+", "+ts(p.s)+")"; }
-	tcT> typename enable_if<is_iterable_v<T>,str>::type ts_sep(T v, str sep) {
-		// convert container to string w/ separator sep
-		bool fst = 1; str res = "";
-		for (const auto& x: v) {
-			if (!fst) res += sep;
-			fst = 0; res += ts(x);
+int A[MAX_N], dp[MAX_N][MAX_N];
+
+int main() {
+	setIO();
+	
+	int n; cin >> n;
+	for (int i = 0; i < n; i++) cin >> A[i];
+	for (int i = 0; i <= n; i++) {
+		for (int j = 0; j <= n; j++) {
+			dp[i][j] = MAX_N + 1;
 		}
-		return res;
 	}
-	tcT> typename enable_if<needs_output_v<T>,str>::type ts(T v) {
-		return "{"+ts_sep(v,", ")+"}"; }
 
-	// for nested DS
-	template<int, class T> typename enable_if<!needs_output_v<T>,vs>::type 
-	  ts_lev(const T& v) { return {ts(v)}; }
-	template<int lev, class T> typename enable_if<needs_output_v<T>,vs>::type 
-	  ts_lev(const T& v) {
-		if (lev == 0 || !sz(v)) return {ts(v)};
-		vs res;
-		for (const auto& t: v) {
-			if (sz(res)) res.bk += ",";
-			vs tmp = ts_lev<lev-1>(t);
-			res.ins(end(res),all(tmp));
+<<<<<<< HEAD:Problem_2_Modern_Art_3.cpp
+	for (int i = 0; i < n; i++) dp[i][i] = 1;
+	
+	for (int s = 1; s <= n; s++) {
+		for (int i = 0; i <= n - s; i++) {
+			for (int j = i; j < i + s; j++) {
+				int k = i + s - 1;
+				// explained in editorial
+				if (A[i] == A[k])
+					dp[i][k] = min(dp[i][k], dp[i][j] + dp[j + 1][k] - 1);
+				dp[i][k] = min(dp[i][k], dp[i][j] + dp[j + 1][k]);
+			}
 		}
-		F0R(i,sz(res)) {
-			str bef = " "; if (i == 0) bef = "{";
-			res[i] = bef+res[i];
-		}
-		res.bk += "}";
-		return res;
 	}
+	cout << dp[0][n - 1] << endl;
 }
-
-inline namespace Output {
-	tcT> void pr_sep(ostream& os, str, const T& t) { os << ts(t); }
-	template<class T, class... U> void pr_sep(ostream& os, str sep, const T& t, const U&... u) {
-		pr_sep(os,sep,t); os << sep; pr_sep(os,sep,u...); }
-	// print w/ no spaces
-	template<class ...T> void pr(const T&... t) { pr_sep(cout,"",t...); } 
-	// print w/ spaces, end with newline
-	void ps() { cout << "\n"; }
-	template<class ...T> void ps(const T&... t) { pr_sep(cout," ",t...); ps(); } 
-	// debug to cerr
-	template<class ...T> void dbg_out(const T&... t) {
-		pr_sep(cerr," | ",t...); cerr << endl; }
-	void loc_info(int line, str names) {
-		cerr << "Line(" << line << ") -> [" << names << "]: "; }
-	template<int lev, class T> void dbgl_out(const T& t) {
-		cerr << "\n\n" << ts_sep(ts_lev<lev>(t),"\n") << "\n" << endl; }
-	#ifdef LOCAL
-		#define dbg(...) loc_info(__LINE__,#__VA_ARGS__), dbg_out(__VA_ARGS__)
-		#define dbgl(lev,x) loc_info(__LINE__,#x), dbgl_out<lev>(x)
-	#else // don't actually submit with this
-		#define dbg(...) 0
-		#define dbgl(lev,x) 0
-	#endif
-}
-
-inline namespace FileIO {
-	void setIn(str s)  { (void)!freopen(s.c_str(),"r",stdin); }
-	void setOut(str s) { (void)!freopen(s.c_str(),"w",stdout); }
-	void setIO(str s = "") {
-		cin.tie(0)->sync_with_stdio(0); // unsync C / C++ I/O streams
-		// cin.exceptions(cin.failbit);
-		// throws exception when do smth illegal
-		// ex. try to read letter into int
-		if (sz(s)) setIn(s+".in"), setOut(s+".out"); // for old USACO
-	}
-};
-/* #endregion */
-
-/* #region snippets */
-
+=======
 /* #endregion */
 
 const int mx = 2e5+1;
@@ -354,3 +304,4 @@ signed main() {
 	* DON'T GET STUCK ON ONE APPROACH
 	* geo and benq orz
 */
+>>>>>>> f01bfc519e39eb3680a5c9457dedff31e99e53f6:contest/usaco/Problem_2_Modern_Art_3.cpp

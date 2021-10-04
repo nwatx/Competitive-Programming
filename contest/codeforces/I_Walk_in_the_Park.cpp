@@ -294,84 +294,33 @@ inline namespace FileIO {
 
 const int mx = 2e5+1;
 
+ll dist[501][501][4];
+bool mat[501][501];
 int n, m;
 
-char mat[501][501];
+pi a{-1,1}, b{-1,1}, c{-1,1}, d{-1,1};
 
-int dist[501][501];
-int layers[501][501];
-bool vis[501][501];
+void bfs(pi st, int h) {
+	queue<pi> q;
+	q.push(st);
+	dist[st.f][st.s][h] = 0;
 
-/**
- * Description: line sweep to find two closest points 
- * Time: O(N\log N)
- * Source: Own
- * Verification: https://open.kattis.com/problems/closestpair2
- */
+	while(sz(q)) {
+		pi top = q.front();
+		q.pop();
+		
+		F0R(i, 4) {
+			int nx = top.f + dx[i];
+			int ny = top.s + dy[i];
 
-/**
- * Description: Use in place of \texttt{complex<T>}.
- * Source: http://codeforces.com/blog/entry/22175, KACTL
- * Verification: various
- */
-
-using T = db; // or long long
-const T EPS = 1e-9; // might want to change
-using P = pair<T,T>; using vP = V<P>; using Line = pair<P,P>;
-
-P operator-(const P& l) { return P(-l.f,-l.s); }
-P operator+(const P& l, const P& r) { 
-	return P(l.f+r.f,l.s+r.s); }
-P operator-(const P& l, const P& r) { 
-	return P(l.f-r.f,l.s-r.s); }
-
-T sq(T a) { return a*a; }
-T norm(const P& p) { return sq(p.f)+sq(p.s); }
-T abs(const P& p) { return sqrt(norm(p)); }
-
-pair<P,P> solve(vector<P> v) {
-	pair<long double,pair<P,P>> bes; bes.f = INF;
-	set<P> S; int ind = 0;
-	sort(all(v));
-	F0R(i,sz(v)) {
-		if (i && v[i] == v[i-1]) return {v[i],v[i]};
-		for (; v[i].first-v[ind].first >= bes.first; ++ind) 
-			S.erase({v[ind].s,v[ind].f});
-		for (auto it = S.upper_bound({v[i].second-bes.first,INF});
-			it != end(S) && it->first < v[i].second+bes.first; ++it) {
-			P t = {it->second,it->first};
-			ckmin(bes,{abs(t-v[i]),{t,v[i]}});
-		}
-		S.insert({v[i].second,v[i].first});
-	}
-	return bes.second;
-}
-
-void bfs(pi start) {
-		queue<pi> bfs;
-		bfs.push(start);
-		dist[start.f][start.s] = 0;
-
-		while(sz(bfs)) {
-			pi top = bfs.front();
-			bfs.pop();
-
-			if(vis[top.f][top.s]) continue;
-			vis[top.f][top.s] = true;
-			layers[top.f][top.s] += 1;
-
-			F0R(k, 4) {
-				int nx = top.f + dx[k];
-				int ny = top.s + dy[k];
-
-				if(nx < 0 || ny < 0 || nx >= n || ny >= m) continue;
-				if(!vis[nx][ny] && mat[nx][ny] != '#') {
-					dist[nx][ny] = dist[top.f][top.s] + 1;
-					bfs.push({nx, ny});
-					// dbg(top, mp(nx, ny));
-				}
+			if(nx < 0 || ny < 0 || nx >= n || ny >= m) continue;
+			if(mat[nx][ny]) continue;
+			if(dist[nx][ny][h] == MOD) {
+				dist[nx][ny][h] = dist[top.f][top.s][h] + 1;
+				q.push(mp(nx, ny));
 			}
 		}
+	}
 }
 
 void solve() {

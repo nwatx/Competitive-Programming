@@ -23,14 +23,13 @@ using vpi = vector<pi>;
 using vpl = vector<pl>; 
 using vpd = vector<pd>;
 
-<<<<<<< HEAD:contest/cses/Counting_Towers.cpp
-using Mii = map<int, int>;
-using Mll = map<ll, ll>;
-
-=======
->>>>>>> 5b50eefd016032659f0b8b8ef3343b3d2e934f8d:Problem_2_Modern_Art_3.cpp
 #define tcT template<class T
 #define tcTU tcT, class U
+#define tcTUU tcT, class ...U
+
+#define tN typename
+#define cexp constexpr
+
 tcT> using V = vector<T>; 
 tcT, size_t SZ> using AR = array<T,SZ>; 
 tcT> using PR = pair<T,T>;
@@ -87,8 +86,6 @@ constexpr int msk2(int x) { return p2(x)-1; }
 ll cdiv(ll a, ll b) { return a/b+((a^b)>0&&a%b); } // divide a by b rounded up
 ll fdiv(ll a, ll b) { return a/b-((a^b)<0&&a%b); } // divide a by b rounded down
 
-<<<<<<< HEAD:contest/cses/Counting_Towers.cpp
-=======
 // variadic max
 template<tN h0, tN h1, tN...Tl>
 cexp auto max(h0 &&hf, h1 &&hs, Tl &&... tl) {
@@ -106,11 +103,17 @@ cexp auto min(h0 &&hf, h1 &&hs, Tl &&... tl) {
 }
 
 // variadic min / max
->>>>>>> 5b50eefd016032659f0b8b8ef3343b3d2e934f8d:Problem_2_Modern_Art_3.cpp
 tcT> bool ckmin(T& a, const T& b) {
 	return b < a ? a = b, 1 : 0; } // set a = min(a,b)
+tcTUU> bool ckmin(T &a, U... b) {
+	T mn = min(b...);
+	return mn < a ? a = mn, 1 : 0; } // set a = max(a,b)
+
 tcT> bool ckmax(T& a, const T& b) {
 	return a < b ? a = b, 1 : 0; }
+tcTUU> bool ckmax(T &a, U... b) {
+	T mx = max(b...);
+	return mx > a ? a = mx, 1 : 0; } // set a = min(a,b)
 
 // searching
 tcTU> T fstTrue(T lo, T hi, U f) {
@@ -136,8 +139,6 @@ tcT> void remDup(vector<T>& v) { // sort and remove duplicates
 tcTU> void erase(T& t, const U& u) { // don't erase
 	auto it = t.find(u); assert(it != end(t));
 	t.erase(it); } // element that doesn't exist from (multi)set
-
-#define tcTUU tcT, class ...U
 
 inline namespace Helpers {
 	//////////// is_iterable
@@ -291,58 +292,37 @@ inline namespace FileIO {
 
 /* #endregion */
 
-const int mx = 2e5+1;
+const int mx = 1e6+1;
 
-<<<<<<< HEAD:contest/cses/Counting_Towers.cpp
-int dp[mx][5];
-// 2 x 1x1
-=======
-int A[mx];
-int dp[301][301]; // min for [i, j];
+// observations:
+// do dp by row
+// dp[0] = ending in left columns
+// dp[1] = ending in right columsn
+// dp[2] = ending in both columns
+
+int dp[mx][3];
+
+void gen() {
+	dp[0][0] = dp[0][1] = 1;
+	dp[0][2] = 2;
+	FOR(i, 1, mx) { // the # ending in first column is 
+		dp[i][0] += i * i - i * (1 + i) / 2 + i;
+	}
+}
 
 void solve() {
 	int n; re(n);
-	F0R(i,n) re(A[i]);
 
-	F0R(i,301)F0R(j,301) dp[i][j] = MOD;
-
-	F0R(i, 301) dp[i][i] = 1;
-
-	FOR(s,1,n+1) {
-		F0R(i,n-s+1) {
-			FOR(j, i, i+s) {
-				// if two intervals share the same endpoint: merge
-				{
-					int k = i + s - 1;
-					if(A[i] == A[k]) ckmin(dp[i][k], dp[i][j] + dp[j+1][k] - 1);
-					ckmin(dp[i][k], dp[i][j] + dp[j+1][k]);
-				}
-			}
-		}
-	}
-
-	// F0R(i, n) {
-	// 	F0R(j, n) {
-	// 		pr(dp[i][j] == MOD ? "=" : ts(dp[i][j]), " ");
-	// 	}
-	// 	ps();
-	// }
-
-	ps(dp[0][n-1]);
 }
->>>>>>> 5b50eefd016032659f0b8b8ef3343b3d2e934f8d:Problem_2_Modern_Art_3.cpp
 
 signed main() {
 	// clock_t start = clock();
 	setIO();
 
-<<<<<<< HEAD:contest/cses/Counting_Towers.cpp
-=======
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) solve();
 
->>>>>>> 5b50eefd016032659f0b8b8ef3343b3d2e934f8d:Problem_2_Modern_Art_3.cpp
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }
 
@@ -352,5 +332,4 @@ signed main() {
 	* do smth instead of nothing and stay organized
 	* WRITE STUFF DOWN
 	* DON'T GET STUCK ON ONE APPROACH
-	* geo and benq orz
 */
