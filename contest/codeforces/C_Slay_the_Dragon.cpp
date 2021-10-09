@@ -288,37 +288,45 @@ inline namespace FileIO {
 };
 /* #endregion */
 
-const int mx = 1e5+1;
+/* #region snippets */
+
+/* #endregion */
+
+const int mx = 2e5+1;
+
+int n;
 
 void solve() {
-	int n; re(n);
-	stack<int> S;
+	cin >> n;
 	vi v(n); re(v);
-	vi l(n, MOD), r(n, -1);
+	sor(v);
 
-	int ret = 0;
+	// F0R(i, n) pr(A[i], " ");
 
-	F0R(i, n) {
-		ckmin(l[v[i]], i);
-		ckmax(r[v[i]], i);
+	ll sum = accumulate(all(v), 0);
+
+	dbg(v);
+
+	int q; re(q);
+	rep(q) {
+		ints(attack, defense);
+
+		// binary search on closest value
+		// either use smallest value <> attack
+
+		// handles > case
+		int atk = lwb(v, attack);
+		ll ans = INF;
+		if(atk > 0) ans = min(ans, (attack - v[atk - 1]) + max(0, defense - sum + v[atk - 1]));
+		if(atk < n) ans = min(ans, max(0, defense - sum + v[atk]));
+
+		ps(ans);
 	}
-
-	F0R(i, n + 2) {
-		int c = v[i];
-		if(i == l[c]) S.push(c);
-		ckmax(ret, sz(S));
-		if(sz(S) && S.top() != c) {
-			ps(-1); return;
-		}
-		if(i == r[c] && sz(S)) S.pop();
-	}
-
-	ps(ret);
 }
 
 signed main() {
 	// clock_t start = clock();
-	setIO("art2");
+	setIO();
 
 	int n = 1;
 	// re(n);

@@ -325,38 +325,73 @@ void bfs(pi st, int h) {
 
 void solve() {
 	re(n, m);
-	F0R(i, n) F0R(j, m) F0R(k, 4) {
-		dist[i][j][k] = MOD;
-	}
 
+	F0R(i, n) F0R(j, m) re(mat[i][j]);
+	pi a1, a2, b1, b2;
+	a1.f = -1;
+	a2.f = -1, b1.f = -1, b2.f = -1;
 	F0R(i, n) F0R(j, m) {
-		char x; re(x);
-		if(x == '#') mat[i][j] = 1;
-		if(x == 'a') {
-			if(a.f == -1) a = {i, j};
-			else b = {i, j};
-		}
+		if(mat[i][j] == 'a') {
+			if(a1.f == -1) a1 = {i, j};
+			else a2 = {i, j};
+		} 
 
-		if(x == 'b') {
-			if(c.f == -1) c = {i, j};
-			else d = {i, j};
-		}
+		if(mat[i][j] == 'b') {
+			if(b1.f == -1) b1 = {i, j};
+			else b2= {i, j};
+		} 
 	}
 
-	bfs(a, 0);
-	bfs(b, 1);
-	bfs(c, 2);
-	bfs(d, 3);
+	// dbg(a1, a2, b1, b2);
+
+	// go through possible intersections
 
 	ll ret = MOD;
 
+	// int i = 1, j = 6;
+
+	// F0R(i, n) {
+	// 	F0R(j, m) {
+	// 		if(mat[i][j] == '#') continue;
+	// 		ll curr = 0;
+	// 		// fill(dist, dist + 501*501, MOD);
+			F0R(i, n+1) F0R(j, m + 1) dist[i][j] = MOD;
+			F0R(i, n+1) F0R(j, m + 1) vis[i][j] = 0;
+
+			bfs(a1);
+			bfs(a2);
+			bfs(b1);
+			bfs(b2);
+			
+
+			// curr += dist[a1.f][a1.s];
+			// curr += dist[a2.f][a2.s];
+			// curr += dist[b1.f][b1.s];
+			// curr += dist[b2.f][b2.s];
+
+			// if(curr <= MOD) {
+			// 	// dbg(i, j, curr);
+			// 	ckmin(ret, curr);
+			// }
+
+			// dbg(curr);
+			// F0R(i, n) {
+			// 	F0R(j, m) pr(mat[i][j]);
+			// 	ps();
+			// }
+			// F0R(i, n) {
+			// 	F0R(j, m) pr(vis[i][j]);
+			// 	ps();
+			// }
+	// 	}
+	// }
+
 	F0R(i, n) F0R(j, m) {
-		ll c = 0;
-		F0R(h, 4) c += dist[i][j][h];
-		ckmin(ret, c);
+		if(layers[i][j] == 4)
 	}
 
-	ps(ret == MOD ? "IMPOSSIBLE" : ts(ret));
+	if(ret == MOD) ps("IMPOSSIBLE");
+	else ps(ret);
 }
 
 signed main() {

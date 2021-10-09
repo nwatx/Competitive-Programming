@@ -288,37 +288,60 @@ inline namespace FileIO {
 };
 /* #endregion */
 
-const int mx = 1e5+1;
+/* #region snippets */
+/**
+ * Description: 1D point update, range query where \texttt{comb} is
+	 * any associative operation. If $N=2^p$ then \texttt{seg[1]==query(0,N-1)}.
+ * Time: O(\log N)
+ * Source: 
+	* http://codeforces.com/blog/entry/18051
+	* KACTL
+ * Verification: SPOJ Fenwick
+ */
+
+template<class T> struct Seg { // comb(ID,b) = b
+	const T ID = 0; T comb(T a, T b) { return __gcd(a, b); } 
+	int n; vector<T> seg;
+	void init(int _n) { n = _n; seg.assign(2*n,ID); }
+	void pull(int p) { seg[p] = comb(seg[2*p],seg[2*p+1]); }
+	void upd(int p, T val) { // set val at position p
+		seg[p += n] = val; for (p /= 2; p; p /= 2) pull(p); }
+	T query(int l, int r) {	// sum on interval [l, r]
+		T ra = ID, rb = ID; 
+		for (l += n, r += n+1; l < r; l /= 2, r /= 2) {
+			if (l&1) ra = comb(ra,seg[l++]);
+			if (r&1) rb = comb(seg[--r],rb);
+		}
+		return comb(ra,rb);
+	}
+};
+/* #endregion */
+
+const int mx = 2e5+1;
 
 void solve() {
-	int n; re(n);
-	stack<int> S;
-	vi v(n); re(v);
-	vi l(n, MOD), r(n, -1);
-
-	int ret = 0;
-
-	F0R(i, n) {
-		ckmin(l[v[i]], i);
-		ckmax(r[v[i]], i);
+	int n, m; re(n, m);
+	Seg<int> seg; seg.init(n);
+	F0R(i ,n) {
+		ints(a); seg.upd(i, a);
 	}
 
-	F0R(i, n + 2) {
-		int c = v[i];
-		if(i == l[c]) S.push(c);
-		ckmax(ret, sz(S));
-		if(sz(S) && S.top() != c) {
-			ps(-1); return;
+	rep(m) {
+		int t; re(t);
+		if(t == 1) {
+			ints(i, x);
+			i--;
+			seg.upd(i, x);
+		} else {
+			int1(l, r);
+			pr(seg.query(l, r), " ");
 		}
-		if(i == r[c] && sz(S)) S.pop();
 	}
-
-	ps(ret);
 }
 
 signed main() {
 	// clock_t start = clock();
-	setIO("art2");
+	setIO();
 
 	int n = 1;
 	// re(n);

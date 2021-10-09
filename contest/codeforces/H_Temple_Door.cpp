@@ -288,37 +288,125 @@ inline namespace FileIO {
 };
 /* #endregion */
 
-const int mx = 1e5+1;
+/* #region snippets */
+
+/* #endregion */
+
+const int mx = 2e5+1;
+
+bool invalid[10];
+
+bool validDig(int x) {
+	F0R(i, 10) if(invalid[x % 10] || invalid[x / 10]) return false;
+	return true;
+}
+
+int dist(int time, tuple<int, int, int> t) {
+	auto [a, b, c] = t;
+	return abs(time - (a * 3600 + b * 60 + c));
+}
+
+tuple<int, int, int> solve(int a, int hrs, int min, int sec) {
+	// dbg(hrs, min, sec);
+	int time = MOD;
+	int bst = MOD;
+
+	auto ret = make_tuple(0, 0, 0);
+
+	F0R(i, 3600) {
+		int mm = i / 60;
+		int s = i % 60;
+
+		// dbg(mm, s);
+
+		int tDiff = dist(time, make_tuple(a, mm, s));
+
+		if(validDig(mm) && validDig(s) && tDiff < bst) {
+			bst = tDiff;
+			ret = make_tuple(a, mm, s);
+		}
+	}
+
+	return ret;
+}
 
 void solve() {
 	int n; re(n);
-	stack<int> S;
-	vi v(n); re(v);
-	vi l(n, MOD), r(n, -1);
-
-	int ret = 0;
-
-	F0R(i, n) {
-		ckmin(l[v[i]], i);
-		ckmax(r[v[i]], i);
+	rep(n) {
+		ints(a); invalid[a] = true;
 	}
 
-	F0R(i, n + 2) {
-		int c = v[i];
-		if(i == l[c]) S.push(c);
-		ckmax(ret, sz(S));
-		if(sz(S) && S.top() != c) {
-			ps(-1); return;
+	int q; re(q);
+	rep(q) {
+		int tc; re(tc);
+		string time; re(time);
+		dbg(time);
+		int hrs = stoi(time.substr(0, 2));
+		int min = stoi(time.substr(3, 2));
+		int sec = stoi(time.substr(6, 2));
+		dbg(hrs, min, sec);
+
+		// solve for closest hrs -> either below or above
+		int hrsL = -5000, hrsR = 60;
+		F0R(i, 60) {
+			if(abs(hrs - i) < abs(hrsL - hrs) && validDig(i)) hrsL = i;
 		}
-		if(i == r[c] && sz(S)) S.pop();
-	}
 
-	ps(ret);
+		R0F(i, 60) {
+			if(abs(hrs - i) < abs(hrsR - hrs) && validDig(i)) hrsR = i;
+		}
+
+		dbg(hrsL, hrsR);
+
+		auto sol1 = solve(hrsL, hrs, min, sec);
+		auto sol2 = solve(hrsR, hrs, min, sec);
+		auto sol3 = solve(max(0, hrsR-1), hrs, min, sec);
+		auto sol4 = solve(std::min(59, hrsR+1), hrs, min, sec);
+
+		int tm = hrs * 3600 + 60 * min + sec;
+
+		pr(tc, " ");
+
+		vector<tuple<int, int, int>> asdf;
+		asdf.pb(sol1);
+		asdf.pb(sol2);
+		if(validDig(get<0>(sol3))) asdf.pb(sol3);
+		if(validDig(get<0>(sol4))) asdf.pb(sol4);
+		// asdf.pb(sol4);
+
+		F0R(i, sz(asdf)) {
+			auto [a, b, c] = asdf[i];
+			dbg(a, b, c);
+		}
+
+		sort(all(asdf), [&](auto a, auto b) -> bool {
+			return dist(tm, a) < dist(tm, b);
+		});
+
+		// if(dist(tm, sol2) < dist(tm, sol1)) {
+			auto [a, b, c] = asdf[0];
+			cout << setfill('0') << setw(2) << a;
+			cout << ":";
+			cout << setfill('0') << setw(2) << b;
+			cout << ":";
+			cout << setfill('0') << setw(2) << c;
+			ps();
+		// } els {
+		// 	auto [a, b, c] = sol1;
+		// 	// pr(tc, " ", a, ":", b, ":", c, "\n");
+		// 	cout << setfill('0') << setw(2) << a;
+		// 	cout << ":";
+		// 	cout << setfill('0') << setw(2) << b;
+		// 	cout << ":";
+		// 	cout << setfill('0') << setw(2) << c;
+		// 	ps();
+		// }
+	}
 }
 
 signed main() {
 	// clock_t start = clock();
-	setIO("art2");
+	setIO();
 
 	int n = 1;
 	// re(n);

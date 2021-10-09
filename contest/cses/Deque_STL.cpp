@@ -288,40 +288,34 @@ inline namespace FileIO {
 };
 /* #endregion */
 
-const int mx = 1e5+1;
+/* #region snippets */
+
+/* #endregion */
+
+const int mx = 2e5+1;
 
 void solve() {
-	int n; re(n);
-	stack<int> S;
-	vi v(n); re(v);
-	vi l(n, MOD), r(n, -1);
-
-	int ret = 0;
-
+	int n, k; re(n, k);
+	vi v(n); for(int i = 0; i < n; i++) cin >> v[i];
+	multiset<int> m;
 	F0R(i, n) {
-		ckmin(l[v[i]], i);
-		ckmax(r[v[i]], i);
+		if(sz(m) < k) m.ins(v[i]);
+		// dbg(m);
+		if(sz(m) == k) pr(*m.rbegin(), " ");
+		if(sz(m) == k) m.erase(v[i - k]);
+		// ex i = 2
+		// erase i = 0
 	}
 
-	F0R(i, n + 2) {
-		int c = v[i];
-		if(i == l[c]) S.push(c);
-		ckmax(ret, sz(S));
-		if(sz(S) && S.top() != c) {
-			ps(-1); return;
-		}
-		if(i == r[c] && sz(S)) S.pop();
-	}
-
-	ps(ret);
+	ps();
 }
 
 signed main() {
 	// clock_t start = clock();
-	setIO("art2");
+	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) solve();
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;

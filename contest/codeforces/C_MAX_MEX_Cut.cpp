@@ -288,29 +288,50 @@ inline namespace FileIO {
 };
 /* #endregion */
 
-const int mx = 1e5+1;
+/* #region snippets */
+
+/* #endregion */
+
+const int mx = 2e5+1;
 
 void solve() {
 	int n; re(n);
-	stack<int> S;
-	vi v(n); re(v);
-	vi l(n, MOD), r(n, -1);
+	string a, b; re(a, b);
 
 	int ret = 0;
+	V<vi> v;
+	vi curr;
+
+	// type 0: 0 0
+	// type 1: 1 1
 
 	F0R(i, n) {
-		ckmin(l[v[i]], i);
-		ckmax(r[v[i]], i);
+		if(a[i] != b[i]) {
+			ret += 2;
+			if(sz(curr)) v.pb(curr);
+			curr.clear();
+		}
+		if(a[i] == b[i]) {
+			curr.pb(a[i] - '0');
+		}
 	}
 
-	F0R(i, n + 2) {
-		int c = v[i];
-		if(i == l[c]) S.push(c);
-		ckmax(ret, sz(S));
-		if(sz(S) && S.top() != c) {
-			ps(-1); return;
+	if(sz(curr)) v.pb(curr);
+
+	dbg(ret);
+	dbg(v);
+
+	each(x, v) {
+		F0R(i, sz(x)) ret += (x[i] == 0) ? 1 : 0;
+		// F0R(i, sz(x)) ret += x[i];
+		F0R(i, sz(x) - 1) {
+			if(x[i] != x[i + 1]) {
+				ret += 1;
+				i += 1;
+			}
+			// dbg(i, ret);
 		}
-		if(i == r[c] && sz(S)) S.pop();
+		dbg(x, ret);
 	}
 
 	ps(ret);
@@ -318,10 +339,10 @@ void solve() {
 
 signed main() {
 	// clock_t start = clock();
-	setIO("art2");
+	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) solve();
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;

@@ -288,40 +288,78 @@ inline namespace FileIO {
 };
 /* #endregion */
 
-const int mx = 1e5+1;
+/* #region snippets */
+
+/* #endregion */
+
+const int mx = 2e5+1;
+
+ll pow(int x, int p) {
+	ll ret = 1;
+	rep(p) ret *= x;
+	return ret;
+}
 
 void solve() {
+	str x; re(x);
+	while(x.size() < 10) x = "0" + x;
 	int n; re(n);
-	stack<int> S;
-	vi v(n); re(v);
-	vi l(n, MOD), r(n, -1);
 
-	int ret = 0;
+	vi num(10);
+	int sum = 0;
+	F0R(i, 10) num[i] = x[i] - '0', sum += num[i];
+	// sum--; // decrement by 1
+	n--;
+	// dbg(sum);
 
-	F0R(i, n) {
-		ckmin(l[v[i]], i);
-		ckmax(r[v[i]], i);
-	}
+	str curr = "";
 
-	F0R(i, n + 2) {
-		int c = v[i];
-		if(i == l[c]) S.push(c);
-		ckmax(ret, sz(S));
-		if(sz(S) && S.top() != c) {
-			ps(-1); return;
+	vi ans;
+
+	// build from back to front -> repeatedly add 1.
+
+	reverse(all(num));
+	
+	dbg(num);
+
+	F0R(i, 10) {
+		while(n && num[i] > 0) {
+			ans.pb(pow(10, i));
+			num[i]--;
+			n--;
+			// num[i]--;
 		}
-		if(i == r[c] && sz(S)) S.pop();
 	}
 
-	ps(ret);
+	int fst = 0;
+	F0R(i, 10) {
+		fst += num[i] * pow(10, i);
+	}
+
+	ans.pb(fst);
+
+	F0R(i, sz(ans)) {
+		pr(ans[i], " ");
+	}
+	ps();
 }
+
+	// partition n into as many biglies as possible
+	// partition into digit count
+	// there will be 100s
+	// so how to deal with this?
+
+	// Algorithm:
+	// if possible to use digit w/ n remaining, use digit.
+	// else don't
+	
 
 signed main() {
 	// clock_t start = clock();
-	setIO("art2");
+	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) solve();
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;

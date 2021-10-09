@@ -288,37 +288,55 @@ inline namespace FileIO {
 };
 /* #endregion */
 
-const int mx = 1e5+1;
+/* #region snippets */
+
+/* #endregion */
+
+const int mx = 2e5+1;
+
+int adj[11][11];
 
 void solve() {
 	int n; re(n);
-	stack<int> S;
-	vi v(n); re(v);
-	vi l(n, MOD), r(n, -1);
-
-	int ret = 0;
-
-	F0R(i, n) {
-		ckmin(l[v[i]], i);
-		ckmax(r[v[i]], i);
+	vi in(12);
+	rep(n) {
+		ints(a, b);
+		adj[a][b] = 1;
+		adj[b][a] = 1;
+		in[a] = 1, in[b] = 1;
 	}
 
-	F0R(i, n + 2) {
-		int c = v[i];
-		if(i == l[c]) S.push(c);
-		ckmax(ret, sz(S));
-		if(sz(S) && S.top() != c) {
-			ps(-1); return;
+	int cnt = 0;
+
+	F0R(i, 12) {
+		cnt += in[i];
+	}
+
+	if(cnt >= 6) {
+		ps("Happy Doggos!");
+		return;
+	}
+
+	F0R(i, 6) {
+		F0R(j, 6) {
+			F0R(k, 6) {
+				if(i != j && j != k && i != k && in[i] && in[j] && in[k]) {
+					if((adj[i][j] && adj[j][k] && adj[i][k]) || (!adj[i][j] && !adj[j][k] && !adj[i][k])) {
+						dbg(i, j, k);
+						ps("Happy Doggos!");
+						return;
+					}
+				}
+			}
 		}
-		if(i == r[c] && sz(S)) S.pop();
 	}
 
-	ps(ret);
+	ps("Sad Doggos...");
 }
 
 signed main() {
 	// clock_t start = clock();
-	setIO("art2");
+	setIO();
 
 	int n = 1;
 	// re(n);

@@ -288,37 +288,71 @@ inline namespace FileIO {
 };
 /* #endregion */
 
-const int mx = 1e5+1;
+/* #region snippets */
+
+/* #endregion */
+
+const int mx = 2e5+1;
+
+/**
+ * Description: Shortest Path w/ negative edge weights
+	* Can be useful with linear programming
+	* Constraints of the form x_i-x_j<k
+ * Source: Own
+ * Verification: 
+	* https://open.kattis.com/problems/shortestpath3
+	* https://probgate.org/viewproblem.php?pid=378
+ */
+
+template<int SZ> struct BellmanFord {
+	int n;
+	vi adj[SZ];
+	vector<pair<pi,int>> ed;
+	void ae(int u, int v, int w) { 
+		adj[u].pb(v), ed.pb({{u,v},w}); }
+	ll dist[SZ];
+	void genBad(int x) { 
+		// if x is reachable from negative cycle
+		// -> update dists of all vertices which x can go to
+		if (dist[x] == -INF) return;
+		dist[x] = -INF; 
+		each(t,adj[x]) genBad(t);
+	}
+	void init(int _n, int s) {
+		n = _n; F0R(i,n) dist[i] = INF; 
+		dist[s] = 0;
+		F0R(i,n) each(a,ed) if (dist[a.f.f] < INF)
+			ckmin(dist[a.f.s],dist[a.f.f]+a.s);
+		each(a,ed) if (dist[a.f.f] < INF 
+					&& dist[a.f.s] > dist[a.f.f]+a.s)
+						genBad(a.f.s);
+	}
+};
 
 void solve() {
-	int n; re(n);
-	stack<int> S;
-	vi v(n); re(v);
-	vi l(n, MOD), r(n, -1);
-
-	int ret = 0;
-
-	F0R(i, n) {
-		ckmin(l[v[i]], i);
-		ckmax(r[v[i]], i);
+	ints(n, m, k);
+	BellmanFord<mx> bf;
+	rep(m) {
+		ints(a, b, c);
+		a--; b--;
+		bf.ae(a, b, -c);
 	}
 
-	F0R(i, n + 2) {
-		int c = v[i];
-		if(i == l[c]) S.push(c);
-		ckmax(ret, sz(S));
-		if(sz(S) && S.top() != c) {
-			ps(-1); return;
-		}
-		if(i == r[c] && sz(S)) S.pop();
-	}
+	bf.init(n, 0);
 
-	ps(ret);
+	// F0R(i, n) pr(bf.dist[i], " ");
+
+	if(bf.dist[n - 1] == -INF) ps("infinity");
+	else if(bf.dist[n - 1] == INF) ps(-1);
+	else ps(k - bf.dist[n - 1]);
+
+	// if(k < 0) ps("infinity");
+	// else ps(bf.dist[n] + k);
 }
 
 signed main() {
 	// clock_t start = clock();
-	setIO("art2");
+	setIO();
 
 	int n = 1;
 	// re(n);

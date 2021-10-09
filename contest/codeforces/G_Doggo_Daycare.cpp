@@ -288,37 +288,42 @@ inline namespace FileIO {
 };
 /* #endregion */
 
-const int mx = 1e5+1;
+/* #region snippets */
+
+/* #endregion */
+
+const int mx = 2e5+1;
+
+bool adj[6][6];
 
 void solve() {
 	int n; re(n);
-	stack<int> S;
-	vi v(n); re(v);
-	vi l(n, MOD), r(n, -1);
-
-	int ret = 0;
-
-	F0R(i, n) {
-		ckmin(l[v[i]], i);
-		ckmax(r[v[i]], i);
+	rep(n) {
+		int1(a, b);
+		adj[a][b] = 1, adj[b][a] = 1;
 	}
 
-	F0R(i, n + 2) {
-		int c = v[i];
-		if(i == l[c]) S.push(c);
-		ckmax(ret, sz(S));
-		if(sz(S) && S.top() != c) {
-			ps(-1); return;
+	F0R(i, 5) {
+		F0R(j, 5) {
+			F0R(k, 5) {
+				if(i == j || j == k || i == k) continue;
+				if(adj[i][j] && adj[j][k] && adj[i][k]) {
+					ps("Happy Doggos!"); return;
+				}
+				if(!adj[i][j] && !adj[j][k] && !adj[i][k]) {
+					ps("Happy Doggos!"); return;
+				}
+			}
 		}
-		if(i == r[c] && sz(S)) S.pop();
 	}
 
-	ps(ret);
+	ps("Sad Doggos...");
+	return;
 }
 
 signed main() {
 	// clock_t start = clock();
-	setIO("art2");
+	setIO();
 
 	int n = 1;
 	// re(n);

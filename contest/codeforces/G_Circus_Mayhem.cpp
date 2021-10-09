@@ -288,37 +288,45 @@ inline namespace FileIO {
 };
 /* #endregion */
 
-const int mx = 1e5+1;
+/* #region snippets */
+
+/* #endregion */
+
+const int mx = 2e5+1;
+
+// 1 4 5
+// 5 5 -> 5
+// 10 -> 10
+
+ll height[201][201], cst[201][201];
 
 void solve() {
 	int n; re(n);
-	stack<int> S;
+	F0R(i, 201) F0R(j, 201) height[i][j] = MOD, cst[i][j] = MOD;
 	vi v(n); re(v);
-	vi l(n, MOD), r(n, -1);
-
-	int ret = 0;
-
-	F0R(i, n) {
-		ckmin(l[v[i]], i);
-		ckmax(r[v[i]], i);
-	}
-
-	F0R(i, n + 2) {
-		int c = v[i];
-		if(i == l[c]) S.push(c);
-		ckmax(ret, sz(S));
-		if(sz(S) && S.top() != c) {
-			ps(-1); return;
+	F0R(i, n) height[i][i] = v[i], cst[i][i] = 0;
+	FOR(s, 1, n) {
+		F0R(i, n - s) {
+			FOR(j, i, i + s) {
+				int k = i + s;
+				ll sum = cst[i][j] + cst[j + 1][k] + height[i][j] + height[j + 1][k];
+				if(sum < cst[i][k] || cst[i][k] == -1) {
+					// merge
+					cst[i][k] = sum;
+					height[i][k] = height[i][j] + height[j + 1][k];
+				}
+			}
 		}
-		if(i == r[c] && sz(S)) S.pop();
+		// dbg(s);
+		// F0R(i, n + 1) FOR(j, i, n + 1) dbg(i,j,dp2[i][j]);
 	}
 
-	ps(ret);
+	ps(cst[0][n-1]);
 }
 
 signed main() {
 	// clock_t start = clock();
-	setIO("art2");
+	setIO();
 
 	int n = 1;
 	// re(n);

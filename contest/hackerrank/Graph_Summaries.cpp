@@ -288,37 +288,66 @@ inline namespace FileIO {
 };
 /* #endregion */
 
-const int mx = 1e5+1;
+/* #region snippets */
+
+/* #endregion */
+
+const int mx = 2e5+1;
+
+int dist[mx];
+vi adj[mx];
+
+void dfs(int x) {
+	dist[x] = 0;
+	each(e, adj[x]) {
+		if(dist[e] == MOD) dfs(e);
+	}
+}
 
 void solve() {
-	int n; re(n);
-	stack<int> S;
-	vi v(n); re(v);
-	vi l(n, MOD), r(n, -1);
-
-	int ret = 0;
-
-	F0R(i, n) {
-		ckmin(l[v[i]], i);
-		ckmax(r[v[i]], i);
+	int n, m, s, p; re(n, m, s, p);
+	F0R(i, m) {
+		int a, b; re(a, b);
+		adj[a].pb(b);
+		adj[b].pb(a);
 	}
 
-	F0R(i, n + 2) {
-		int c = v[i];
-		if(i == l[c]) S.push(c);
-		ckmax(ret, sz(S));
-		if(sz(S) && S.top() != c) {
-			ps(-1); return;
+	FOR(i, 1, n + 1) dist[i] = MOD;
+
+	queue<int> bfs;
+	dist[s] = 0;
+	bfs.push(s);
+
+	while(sz(bfs)) {
+		int top = bfs.front(); bfs.pop();
+
+		each(x, adj[top]) {
+			if(dist[x] != MOD) continue;
+			dist[x] = dist[top] + 1;
+			bfs.push(x);
 		}
-		if(i == r[c] && sz(S)) S.pop();
 	}
 
-	ps(ret);
+	int cnt = 0;
+
+	FOR(i, 1, n + 1) cnt += dist[i] <= p;
+	// FOR(i, 1, n + 1) dbg(i, dist[i]);
+
+	int comp = 1;
+
+	FOR(i, 1, n + 1) if(dist[i] == MOD) {
+		// dbg(i);
+		comp++;
+		dfs(i);
+	}
+
+	ps(comp, cnt);
+
 }
 
 signed main() {
 	// clock_t start = clock();
-	setIO("art2");
+	setIO();
 
 	int n = 1;
 	// re(n);

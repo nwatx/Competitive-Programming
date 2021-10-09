@@ -288,37 +288,45 @@ inline namespace FileIO {
 };
 /* #endregion */
 
-const int mx = 1e5+1;
+/* #region snippets */
+
+/* #endregion */
+
+const int mx = 2e5+1;
 
 void solve() {
 	int n; re(n);
-	stack<int> S;
-	vi v(n); re(v);
-	vi l(n, MOD), r(n, -1);
-
-	int ret = 0;
-
+	multiset<ll> ms;
 	F0R(i, n) {
-		ckmin(l[v[i]], i);
-		ckmax(r[v[i]], i);
+		int a; re(a); ms.ins(a);
 	}
+	vl v(n); re(v);
+	sorr(v);
 
-	F0R(i, n + 2) {
-		int c = v[i];
-		if(i == l[c]) S.push(c);
-		ckmax(ret, sz(S));
-		if(sz(S) && S.top() != c) {
-			ps(-1); return;
+	dbg(ms, v);
+
+	ll ret = 0;
+
+	each(x, v) {
+		dbg(x);
+		if(x >= (*ms.rbegin())) {
+			ret += *ms.begin();
+			ms.erase(ms.begin());
 		}
-		if(i == r[c] && sz(S)) S.pop();
+		else {
+			dbg(*ms.lb(x + 1));
+			ms.erase(ms.lb(x + 1));
+		}
 	}
 
 	ps(ret);
+
 }
+
 
 signed main() {
 	// clock_t start = clock();
-	setIO("art2");
+	setIO();
 
 	int n = 1;
 	// re(n);

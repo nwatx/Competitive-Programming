@@ -288,41 +288,88 @@ inline namespace FileIO {
 };
 /* #endregion */
 
-const int mx = 1e5+1;
+/* #region snippets */
+
+/* #endregion */
+
+const int mx = 2e5+1;
 
 void solve() {
 	int n; re(n);
-	stack<int> S;
-	vi v(n); re(v);
-	vi l(n, MOD), r(n, -1);
-
+	string c, d; re(c, d);
 	int ret = 0;
-
-	F0R(i, n) {
-		ckmin(l[v[i]], i);
-		ckmax(r[v[i]], i);
-	}
-
-	F0R(i, n + 2) {
-		int c = v[i];
-		if(i == l[c]) S.push(c);
-		ckmax(ret, sz(S));
-		if(sz(S) && S.top() != c) {
-			ps(-1); return;
+	V<vs> eval;
+	string curr = "";
+	for(int i = 0; i < sz(c);) {
+		if(c[i] != d[i]) {
+			c.erase(bg(c) + i);
+			d.erase(bg(d) + i);
+			ret += 2;
 		}
-		if(i == r[c] && sz(S)) S.pop();
+		else i++;
 	}
 
-	ps(ret);
+	dbg(ret);
+
+	vi a(sz(c)), b(sz(d));
+
+	int t1 = 0;
+	F0R(i, sz(c)) {
+		a[i] = c[i] - '0';
+		b[i] = d[i] - '0';
+		if(a[i] == 0) t1++;
+	}
+
+	// type 1 = 0 0
+	// type 2 = 1 1
+	// want to pair type 2 with type 1
+
+
+	dbg(a, b);
+
+	F0R(i, sz(c)) {
+		if(a[i] != b[i + 1]) {
+			ret += 2;
+			t1--;
+			i++;
+		}
+	}
+	
+	// ps(ret + t1);
+
+	// F0R(i, sz(a)) {
+	// 	if(a[i] == b[i]) {
+	// 		if(a[i] == 0) t1++;
+	// 		if(a[i] == 1) t2++;
+	// 		dbg(t1, t2);
+	// 		if(t2 > 0 && t1 > 0) {
+	// 			if(t2 >= t1) {
+	// 				int x = t1;
+	// 				t1 -= x;
+	// 				t2 -= x;
+	// 				ret += 2 * x;
+	// 			}
+	// 		}
+	// 	} else {
+	// 		ret += 2;
+	// 	}
+	// 	// dbg(n, t1, t2, ret);
+	// 	dbg(i, ret + t1);
+	// }
+
+	ps(ret + t1);
 }
 
 signed main() {
 	// clock_t start = clock();
-	setIO("art2");
+	setIO();
 
 	int n = 1;
-	// re(n);
-	rep(n) solve();
+	re(n);
+	rep(n) {
+		dbg(_);
+		solve();
+	}
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }
