@@ -1,4 +1,4 @@
-# CP 
+# CP
 
 ### (VSCode version of bqi343's USACO)
 
@@ -28,7 +28,7 @@ while len(LENGTHS) < len(FILES):
     LENGTHS.append('l')
 ```
 
-Add `make.bat` to path, then you can run the file from anywhere using `make`. Ex. `make -f 1,2,3`. Make sure that the files are separated by commas and are in **one and only one** string.
+Add `make.bat` to path, then you can run the file from anywhere using `make`. Ex. `make -f 1,2,3`. Make sure that the files are separated by commas and are in **one** string.
 
 ## Built in preset flags
 
