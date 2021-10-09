@@ -311,7 +311,7 @@ ll N, M;
 const int mx = 2e5+1;
 
 void solve() {
-
+	
 }
 
 signed main() {
