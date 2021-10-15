@@ -1,6 +1,6 @@
 {
   "DeBruijnSeq": {
-    "prefix": ["DeBruijnSeq"],
+    "prefix":["benq_DeBruijnSeq"],
     "body": [
       "/**",
       " * Description: Recursive FKM, given alphabet \\$[0,k)\\$ constructs cyclic string ",
@@ -28,7 +28,7 @@
     "description": "Recursive FKM, given alphabet \\$[0,k)\\$ constructs cyclic string ,  * of length \\$k^n\\$ that contains every length \\$n\\$ string as substr. , *"
   },
   "IntPerm": {
-    "prefix": ["IntPerm"],
+    "prefix":["benq_IntPerm"],
     "body": [
       "/**",
       " * Description: Unused. Convert permutation of \\$\\{0,1,...,N-1\\}\\$ to integer in \\$[0,N!)\\$ and back.",
@@ -61,7 +61,7 @@
     "description": "Unused. Convert permutation of \\$\\{0,1,...,N-1\\}\\$ to integer in \\$[0,N!)\\$ and back., *"
   },
   "MatroidIsect": {
-    "prefix": ["MatroidIsect"],
+    "prefix":["benq_MatroidIsect"],
     "body": [
       "/**",
       " * Description: Computes a set of maximum size which is independent ",
@@ -153,7 +153,7 @@
     "description": "Computes a set of maximum size which is independent ,  * in both graphic and colorful matroids, aka a spanning forest where,  * no two edges are of the same color. In general, construct the exchange,  * graph and find a shortest path. Can apply similar concept to partition,  * matroid., * Time: \\$O(GI^{1.5})\\$ calls to oracles, where \\$G\\$ is size of ground set ,  * and \\$I\\$ is size of independent set., *"
   },
   "MatroidPart": {
-    "prefix": ["MatroidPart"],
+    "prefix":["benq_MatroidPart"],
     "body": [
       "/**",
       " * Description: Find three edge-disjoint spanning trees ",
@@ -245,7 +245,7 @@
     "description": "Find three edge-disjoint spanning trees ,  * (matroid partition), * Time: ?, *"
   },
   "NimProduct": {
-    "prefix": ["NimProduct"],
+    "prefix":["benq_NimProduct"],
     "body": [
       "/**",
       " * Description: Product of nimbers is associative, commutative, and distributive ",
@@ -317,7 +317,7 @@
     "description": "Product of nimbers is associative, commutative, and distributive ,  * over addition (xor). Forms finite field of size \\$2^{2^k}.\\$ ,  * Defined by \\$ab=\\text{mex}(\\{a'b+ab'+a'b':a'<a,b'<b\\}).\\$ Application: ,  * Given 1D coin turning games \\$G_1,G_2\\$ \\$G_1\\times G_2\\$ is the 2D coin turning ,  * game defined as follows. If turning coins at \\$x_1,x_2,\\ldots,x_m\\$ is legal ,  * in \\$G_1\\$ and \\$y_1,y_2,\\ldots,y_n\\$ is legal in \\$G_2\\$, then turning coins at ,  * all positions \\$(x_i,y_j)\\$ is legal assuming that the coin at \\$(x_m,y_n)\\$ ,  * goes from heads to tails. Then the grundy function \\$g(x,y)\\$ of \\$G_1\\times G_2\\$ ,  * is \\$g_1(x)\\times g_2(y).\\$ , *"
   },
   "PermGroup": {
-    "prefix": ["PermGroup"],
+    "prefix":["benq_PermGroup"],
     "body": [
       "/**",
       " * Description: Used only once. Schreier-Sims lets you",
@@ -378,7 +378,7 @@
     "description": "Used only once. Schreier-Sims lets you, * add a permutation to a group,, * count number of permutations in a group,, * and test whether a permutation is a member of a group., * Time: ?, *"
   },
   "RSK": {
-    "prefix": ["RSK"],
+    "prefix":["benq_RSK"],
     "body": [
       "/**",
       " * Description: Computes \\$S(\\sigma)\\$ in Schensted's algorithm. ",
@@ -424,7 +424,7 @@
     "description": "Computes \\$S(\\sigma)\\$ in Schensted's algorithm. ,  * All elements of \\$A\\$ should be distinct., *"
   },
   "RSKrecover": {
-    "prefix": ["RSKrecover"],
+    "prefix":["benq_RSKrecover"],
     "body": [
       "/**",
       " * Description: Recovers \\$k\\$ increasing disjoint subsequences that ",
@@ -501,7 +501,7 @@
     "description": "Recovers \\$k\\$ increasing disjoint subsequences that ,  * cover the maximum possible number of elements from \\$A\\$, ,  * which must be a permutation of \\$[0,N)\\$. , *"
   },
   "BIT": {
-    "prefix": ["BIT"],
+    "prefix":["benq_BIT"],
     "body": [
       "/**",
       " * Description: range sum queries and point updates for \\$D\\$ dimensions",
@@ -537,7 +537,7 @@
     "description": "range sum queries and point updates for \\$D\\$ dimensions, *"
   },
   "BIToff": {
-    "prefix": ["BIToff"],
+    "prefix":["benq_BIToff"],
     "body": [
       "/**",
       " * Description: Offline BIT with coordinate copmpression. First do all ",
@@ -565,7 +565,7 @@
     "description": "Offline BIT with coordinate copmpression. First do all ,   * updates with \\$\\texttt{mode=0}\\$ and then call \\$\\texttt{init()}\\$., *"
   },
   "BITrange": {
-    "prefix": ["BITrange"],
+    "prefix":["benq_BITrange"],
     "body": [
       "/**",
       " * Description: \\$D\\$-dimensional range increment and sum query with \\$2^D\\$ BITs, case \\$D=1\\$",
@@ -593,7 +593,7 @@
     "description": "\\$D\\$-dimensional range increment and sum query with \\$2^D\\$ BITs, case \\$D=1\\$, *"
   },
   "LazySeg": {
-    "prefix": ["LazySeg"],
+    "prefix":["benq_LazySeg"],
     "body": [
       "/**",
       " * Description: 1D range increment and sum query.",
@@ -631,7 +631,7 @@
     "description": "1D range increment and sum query., *"
   },
   "LazySegAlt": {
-    "prefix": ["LazySegAlt"],
+    "prefix":["benq_LazySegAlt"],
     "body": [
       "/**",
       " * Description: 1D range increment and sum query.",
@@ -692,7 +692,7 @@
     "description": "1D range increment and sum query., *"
   },
   "LichaoSeg": {
-    "prefix": ["LichaoSeg"],
+    "prefix":["benq_LichaoSeg"],
     "body": [
       "/**",
       " * Description: LiChao Segment Tree",
@@ -745,7 +745,7 @@
     "description": "LiChao Segment Tree, *"
   },
   "MaxQuery": {
-    "prefix": ["MaxQuery"],
+    "prefix":["benq_MaxQuery"],
     "body": [
       "/**",
       " * Description: insert pair \\$(a,b)\\$ and query max value ",
@@ -770,7 +770,7 @@
     "description": "insert pair \\$(a,b)\\$ and query max value ,  * of \\$b\\$ over all pairs satisfying \\$a\\ge x\\$., *"
   },
   "Mo": {
-    "prefix": ["Mo"],
+    "prefix":["benq_Mo"],
     "body": [
       "/**",
       " * Description: Answers queries offline in (N+Q)sqrt(N)",
@@ -816,7 +816,7 @@
     "description": "Answers queries offline in (N+Q)sqrt(N), * Also see Mo's on trees, *"
   },
   "PermTree": {
-    "prefix": ["PermTree"],
+    "prefix":["benq_PermTree"],
     "body": [
       "/**",
       " * Description: Permutation Tree, represents all contiguous subsequences",
@@ -938,7 +938,7 @@
     "description": "Permutation Tree, represents all contiguous subsequences,  * of permutation whose values are contiguous (good). Works for both 0-,  * and 1-indexed permutations. \\texttt{typ[i]=1} (increasing) and ,  * \\texttt{typ[i]=2} (decreasing) represent join nodes - every contiguous ,  * subsequence of its children is good. \\texttt{typ[i]=0} represents a leaf ,  * node or a cut node; no contiguous subsequence of its children with length > 1 ,  * is good. Note that a cut node must have \\$\\ge 4\\$ children. \\texttt{loc[i]},  * stores the node corresponding to the \\texttt{i}-th element of the permutation., *"
   },
   "PSeg": {
-    "prefix": ["PSeg"],
+    "prefix":["benq_PSeg"],
     "body": [
       "/**",
       " * Description: Persistent min segtree with lazy updates, no propagation.",
@@ -1002,7 +1002,7 @@
     "description": "Persistent min segtree with lazy updates, no propagation.,  * If making \\texttt{d} a vector then save the results of,  * \\texttt{upd} and \\texttt{build} in local variables first to,  * avoid issues when vector resizes in C++14 or lower., * Memory: O(N+Q\\log N), *"
   },
   "RectUnion": {
-    "prefix": ["RectUnion"],
+    "prefix":["benq_RectUnion"],
     "body": [
       "/**",
       " * Description: Area of rectangle union using segment tree that ",
@@ -1063,7 +1063,7 @@
     "description": "Area of rectangle union using segment tree that , * keeps track of min and # of mins. Rectangles are in form {{x1,x2},{y1,y2}}., *"
   },
   "SegTree": {
-    "prefix": ["SegTree"],
+    "prefix":["benq_SegTree"],
     "body": [
       "/**",
       " * Description: 1D point update, range query where \\texttt{comb} is",
@@ -1095,7 +1095,7 @@
     "description": "1D point update, range query where \\texttt{comb} is,  * any associative operation. If \\$N=2^p\\$ then \\texttt{seg[1]==query(0,N-1)}., * Time: O(\\log N), *"
   },
   "SegTreeBeats": {
-    "prefix": ["SegTreeBeats"],
+    "prefix":["benq_SegTreeBeats"],
     "body": [
       "/**",
       " * Description: Lazy SegTree supports modifications of the form ",
@@ -1171,7 +1171,7 @@
     "description": "Lazy SegTree supports modifications of the form ,  * \\texttt{ckmin(a\\_i,t)} for all \\$l\\le i\\le r\\$, range max and sum queries. ,  * \\texttt{SZ} is power of 2., * Time: O(\\log N), *"
   },
   "SparseSeg": {
-    "prefix": ["SparseSeg"],
+    "prefix":["benq_SparseSeg"],
     "body": [
       "/**",
       " * Description: Does not allocate storage for nodes with no data",
@@ -1221,7 +1221,7 @@
     "description": "Does not allocate storage for nodes with no data, *"
   },
   "Wavelet": {
-    "prefix": ["Wavelet"],
+    "prefix":["benq_Wavelet"],
     "body": [
       "/**",
       "* Description: SegTree on values instead of indices. Returns \\$k\\$-th ",
@@ -1259,7 +1259,7 @@
     "description": "SegTree on values instead of indices. Returns \\$k\\$-th , * largest number in 0-indexed interval \\texttt{[lo,hi)}., * \\$SZ=2^p\\$ and all values in \\$a\\$ must lie in \\$[0,SZ)\\$.,* Memory: O(N\\log N),* Time: O(\\log N) query,*"
   },
   "BIT2DOff": {
-    "prefix": ["BIT2DOff"],
+    "prefix":["benq_BIT2DOff"],
     "body": [
       "/**",
       " * Description: point update and rectangle sum with offline 2D BIT. ",
@@ -1311,7 +1311,7 @@
     "description": "point update and rectangle sum with offline 2D BIT. , * For each of the points to be updated, \\$x\\in (0,SZ)\\$ and \\$y\\neq 0\\$., * Time: O(N\\log^2 N), * Memory: O(N\\log N), *"
   },
   "BITseg": {
-    "prefix": ["BITseg"],
+    "prefix":["benq_BITseg"],
     "body": [
       "/**",
       " * Description: BIT of SegTrees. \\$x\\in (0,SZ), y\\in [0,SZ)\\$.",
@@ -1339,7 +1339,7 @@
     "description": "BIT of SegTrees. \\$x\\in (0,SZ), y\\in [0,SZ)\\$., * Memory: O(N\\log^2 N), *"
   },
   "BITtree": {
-    "prefix": ["BITtree"],
+    "prefix":["benq_BITtree"],
     "body": [
       "/**",
       " * Description: BIT of indexed sets (or treaps). \\$x\\in (0,SZ)\\$.",
@@ -1372,7 +1372,7 @@
     "description": "None"
   },
   "SegSeg": {
-    "prefix": ["SegSeg"],
+    "prefix":["benq_SegSeg"],
     "body": [
       "/**",
       " * Description: SegTree of SegTrees. \\$x,y\\in [0,SZ).\\$",
@@ -1414,7 +1414,7 @@
     "description": "SegTree of SegTrees. \\$x,y\\in [0,SZ).\\$, * Memory: O(N\\log^2 N), *"
   },
   "PrefixSums": {
-    "prefix": ["PrefixSums"],
+    "prefix":["benq_PrefixSums"],
     "body": [
       "/**",
       " * Description: calculates rectangle sums in constant time",
@@ -1440,7 +1440,7 @@
     "description": "calculates rectangle sums in constant time, *"
   },
   "RangeQuery": {
-    "prefix": ["RangeQuery"],
+    "prefix":["benq_RangeQuery"],
     "body": [
       "/**",
       " * Description: Range queries for any associative operation on static array",
@@ -1475,7 +1475,7 @@
     "description": "Range queries for any associative operation on static array, * Time: O(n\\log n) build, O(1) query, *"
   },
   "RMQ": {
-    "prefix": ["RMQ"],
+    "prefix":["benq_RMQ"],
     "body": [
       "/**",
       " * Description: 1D range minimum query. Can also do queries ",
@@ -1511,7 +1511,7 @@
     "description": "1D range minimum query. Can also do queries ,  * for any associative operation in \\$O(1)\\$ with D\\&C, *"
   },
   "Bset": {
-    "prefix": ["Bset"],
+    "prefix":["benq_Bset"],
     "body": [
       "/**",
       " * Description: bitset of variable size",
@@ -1578,7 +1578,7 @@
     "description": "bitset of variable size, *"
   },
   "CoordCompress": {
-    "prefix": ["CoordCompress"],
+    "prefix":["benq_CoordCompress"],
     "body": [
       "/**",
       " * Description: coordinate compression, get index of x by counting # of elements < x",
@@ -1594,7 +1594,7 @@
     "description": "coordinate compression, get index of x by counting # of elements < x, *"
   },
   "HashMap": {
-    "prefix": ["HashMap"],
+    "prefix":["benq_HashMap"],
     "body": [
       "/**",
       " * Description: Hash map with the same API as unordered\\_map, but \\tilde 3x faster.",
@@ -1619,7 +1619,7 @@
     "description": "Hash map with the same API as unordered\\_map, but \\tilde 3x faster.,  * Initial capacity must be a power of 2 if provided., *"
   },
   "HashMapSmall": {
-    "prefix": ["HashMapSmall"],
+    "prefix":["benq_HashMapSmall"],
     "body": [
       "/**",
       " * Description: Unordered map with keys in [0,SZ). (In case you're dumb like me and you need to replace a map rlly quickly ...)",
@@ -1645,7 +1645,7 @@
     "description": "Unordered map with keys in [0,SZ). (In case you're dumb like me and you need to replace a map rlly quickly ...), *"
   },
   "IndexedSet": {
-    "prefix": ["IndexedSet"],
+    "prefix":["benq_IndexedSet"],
     "body": [
       "/**",
       " * Description: A set (not multiset!) with support for finding the \\$n\\$'th",
@@ -1681,7 +1681,7 @@
     "description": "A set (not multiset!) with support for finding the \\$n\\$'th, * element, and finding the index of an element. Change \\texttt{null\\_type} for map., * Time: O(\\log N), *"
   },
   "LCDeque": {
-    "prefix": ["LCDeque"],
+    "prefix":["benq_LCDeque"],
     "body": [
       "/**",
       " * Description: LineContainer assuming both slopes and queries monotonic.",
@@ -1730,7 +1730,7 @@
     "description": "LineContainer assuming both slopes and queries monotonic., * Time: O(1), *"
   },
   "LCnew": {
-    "prefix": ["LCnew"],
+    "prefix":["benq_LCnew"],
     "body": [
       "/**",
       " * Description: LineContainer. Works with C++14 and beyond.",
@@ -1783,7 +1783,7 @@
     "description": "LineContainer. Works with C++14 and beyond.,  * Given set of lines, computes greatest \\$y\\$-coordinate for any \\$x.\\$, * Time: O(\\log N), *"
   },
   "LCold": {
-    "prefix": ["LCold"],
+    "prefix":["benq_LCold"],
     "body": [
       "/**",
       " * Description: LineContainer; add lines of the form \\$ax+b\\$, ",
@@ -1827,7 +1827,7 @@
     "description": "LineContainer; add lines of the form \\$ax+b\\$, ,  * compute greatest \\$y\\$-coordinate for any \\$x\\$., * Time: O(\\log N), *"
   },
   "MapComparator": {
-    "prefix": ["MapComparator"],
+    "prefix":["benq_MapComparator"],
     "body": [
       "/**",
       " * Description: example of function object (functor) for map or set",
@@ -1840,7 +1840,7 @@
     "description": "example of function object (functor) for map or set, *"
   },
   "MinDeque": {
-    "prefix": ["MinDeque"],
+    "prefix":["benq_MinDeque"],
     "body": [
       "/**",
       " * Description: maintains minimum of deque while adding ",
@@ -1868,7 +1868,7 @@
     "description": "maintains minimum of deque while adding , elements to back or deleting elements from front, *"
   },
   "PQ": {
-    "prefix": ["PQ"],
+    "prefix":["benq_PQ"],
     "body": [
       "/**",
       " * Description: Priority queue w/ modification. Use for Dijkstra?",
@@ -1891,7 +1891,7 @@
     "description": "Priority queue w/ modification. Use for Dijkstra?, *"
   },
   "Rope": {
-    "prefix": ["Rope"],
+    "prefix":["benq_Rope"],
     "body": [
       "/**",
       " * Description: insert element at \\$i\\$-th position, cut a substring and ",
@@ -1922,7 +1922,7 @@
     "description": "insert element at \\$i\\$-th position, cut a substring and ,  * re-insert somewhere else. At least 2 times slower than handwritten treap., * Time: O(\\log N) per operation? not well tested, *"
   },
   "DynaCon": {
-    "prefix": ["DynaCon"],
+    "prefix":["benq_DynaCon"],
     "body": [
       "/**",
       " * Description: Dynamic Connectivity with Euler Tour Trees",
@@ -2195,7 +2195,7 @@
     "description": "Dynamic Connectivity with Euler Tour Trees, * Time: O(\\log^2 N), *"
   },
   "ETT": {
-    "prefix": ["ETT"],
+    "prefix":["benq_ETT"],
     "body": [
       "/**",
       " * Description: Euler Tour Tree using treap, each edge is",
@@ -2321,7 +2321,7 @@
     "description": "Euler Tour Tree using treap, each edge is,  * represented by two nodes. Supports reroot, insert edge, ,  * delete edge, get connected component. Can support,  * aggregate over vertices in connected component by ,  * introducing self-loops., * Time: O(\\log N), *"
   },
   "LeftistHeap": {
-    "prefix": ["LeftistHeap"],
+    "prefix":["benq_LeftistHeap"],
     "body": [
       "/**",
       " * Description: Persistent meldable heap.",
@@ -2354,7 +2354,7 @@
     "description": "Persistent meldable heap., * Time: O(\\log N) per meld, * Memory: O(\\log N) per meld, *"
   },
   "Treap": {
-    "prefix": ["Treap"],
+    "prefix":["benq_Treap"],
     "body": [
       "/**",
       " * Description: Easy BBST. Use split and merge to implement insert and delete.",
@@ -2434,7 +2434,7 @@
     "description": "Easy BBST. Use split and merge to implement insert and delete., * Time: O(\\log N), *"
   },
   "Hull3D": {
-    "prefix": ["Hull3D"],
+    "prefix":["benq_Hull3D"],
     "body": [
       "/**",
       " * Description: Incremental 3D convex hull where not all points ",
@@ -2541,7 +2541,7 @@
     "description": "Incremental 3D convex hull where not all points ,  * are coplanar. Normals to returned faces point outwards. ,  * If coordinates are ints at most \\$B\\$ then \\texttt{T} ,  * should be large enough to support ints on the order ,  * of \\$B^3\\$., * Time: O(N^2), O(N\\log N), *"
   },
   "Hull3D_kactl": {
-    "prefix": ["Hull3D_kactl"],
+    "prefix":["benq_Hull3D_kactl"],
     "body": [
       "/**",
       " * Description: 3D convex hull where no four points coplanar, polyedron volume",
@@ -2602,7 +2602,7 @@
     "description": "3D convex hull where no four points coplanar, polyedron volume, * Time: O(N^2), *"
   },
   "Point3D": {
-    "prefix": ["Point3D"],
+    "prefix":["benq_Point3D"],
     "body": [
       "/**",
       " * Description: Basic 3D geometry. ",
@@ -2710,7 +2710,7 @@
     "description": "Basic 3D geometry. , *"
   },
   "PolySaVol": {
-    "prefix": ["PolySaVol"],
+    "prefix":["benq_PolySaVol"],
     "body": [
       "/**",
       " * Description: surface area and volume of polyhedron,",
@@ -2733,7 +2733,7 @@
     "description": "surface area and volume of polyhedron,,  * normals to faces must point outwards, *"
   },
   "Quater": {
-    "prefix": ["Quater"],
+    "prefix":["benq_Quater"],
     "body": [
       "/**",
       " * Description: Operations on quaternions, useful for totations in 3D",
@@ -2851,7 +2851,7 @@
     "description": "Operations on quaternions, useful for totations in 3D, *"
   },
   "Circle": {
-    "prefix": ["Circle"],
+    "prefix":["benq_Circle"],
     "body": [
       "/**",
       " * Description: represent circle as \\{center,radius\\}",
@@ -2870,7 +2870,7 @@
     "description": "represent circle as \\{center,radius\\}, *"
   },
   "CircleIsect": {
-    "prefix": ["CircleIsect"],
+    "prefix":["benq_CircleIsect"],
     "body": [
       "/**",
       " * Description: Circle intersection points and intersection area. ",
@@ -2908,7 +2908,7 @@
     "description": "Circle intersection points and intersection area. ,  * Tangents will be returned twice., *"
   },
   "CircleTangents": {
-    "prefix": ["CircleTangents"],
+    "prefix":["benq_CircleTangents"],
     "body": [
       " /**",
       " * Description: internal and external tangents between two circles",
@@ -2944,7 +2944,7 @@
     "description": "internal and external tangents between two circles, *"
   },
   "Circumcenter": {
-    "prefix": ["Circumcenter"],
+    "prefix":["benq_Circumcenter"],
     "body": [
       "/**",
       " * Description: returns \\{circumcenter,circumradius\\}",
@@ -2963,7 +2963,7 @@
     "description": "returns \\{circumcenter,circumradius\\}, *"
   },
   "MinEnclosingCirc": {
-    "prefix": ["MinEnclosingCirc"],
+    "prefix":["benq_MinEnclosingCirc"],
     "body": [
       "/**",
       " * Description: minimum enclosing circle",
@@ -2991,7 +2991,7 @@
     "description": "minimum enclosing circle, * Time: expected \\$O(N)\\$, *"
   },
   "ClosestPair": {
-    "prefix": ["ClosestPair"],
+    "prefix":["benq_ClosestPair"],
     "body": [
       "/**",
       " * Description: line sweep to find two closest points ",
@@ -3023,7 +3023,7 @@
     "description": "line sweep to find two closest points , * Time: O(N\\log N), *"
   },
   "Delaunay3": {
-    "prefix": ["Delaunay3"],
+    "prefix":["benq_Delaunay3"],
     "body": [
       "/**",
       " * Description: Delaunay triangulation with 3D hull. ",
@@ -3054,7 +3054,7 @@
     "description": "Delaunay triangulation with 3D hull. ,  * Fails when all points collinear., *"
   },
   "DelaunayFast": {
-    "prefix": ["DelaunayFast"],
+    "prefix":["benq_DelaunayFast"],
     "body": [
       "/**",
       " * Description: Fast Delaunay triangulation assuming no duplicates and not ",
@@ -3155,7 +3155,7 @@
     "description": "Fast Delaunay triangulation assuming no duplicates and not ,  * all points collinear (in latter case, result will be empty). Should ,  * work for doubles as well, though there may be precision issues in 'circ'., * Returns triangles in ccw order. Each circumcircle will contain none , * of the input points. If coordinates are ints at most \\$B\\$ then \\texttt{T} , * should be large enough to support ints on the order of \\$B^4\\$., * Time: O(N\\log N), *"
   },
   "DelaunayIncremental": {
-    "prefix": ["DelaunayIncremental"],
+    "prefix":["benq_DelaunayIncremental"],
     "body": [
       "/**",
       " * Description: Bowyer-Watson where not all points collinear. ",
@@ -3208,7 +3208,7 @@
     "description": "Bowyer-Watson where not all points collinear. ,  * Works for \\$|x|,|y|\\le 10^4,\\$ assuming that all circumradii ,  * in final triangulation are \\$\\ll 10^9.\\$, * Time: O(N^2\\log N), *"
   },
   "KDtree": {
-    "prefix": ["KDtree"],
+    "prefix":["benq_KDtree"],
     "body": [
       "/**",
       " * Description: nearest neighbor to point and squared dist",
@@ -3261,7 +3261,7 @@
     "description": "nearest neighbor to point and squared dist, * Time: Assume points are distributed uniformly at random. ,  * Insertion and find nearest neighbor are \\$O(\\log N)\\$,,  * rectangle queries are \\$O(N^{1-1/D})\\$ on average., *"
   },
   "ManhattanMST": {
-    "prefix": ["ManhattanMST"],
+    "prefix":["benq_ManhattanMST"],
     "body": [
       "/**",
       " * Description: Given \\$N\\$ points, returns up to \\$4N\\$ edges which are guaranteed",
@@ -3303,7 +3303,7 @@
     "description": "Given \\$N\\$ points, returns up to \\$4N\\$ edges which are guaranteed, * to contain a MST for graph with edge weights \\$w(p,q) =|p.x-q.x|+|p.y-q.y|.\\$ , * Edges are in the form \\texttt{\\{dist, \\{src, dst\\}\\}}. , * Time: O(N\\log N), *"
   },
   "MaxCollinear": {
-    "prefix": ["MaxCollinear"],
+    "prefix":["benq_MaxCollinear"],
     "body": [
       "/**",
       " * Description: Compute the maximum number of points which lie on the same line in O(n^2logn)",
@@ -3332,7 +3332,7 @@
     "description": "Compute the maximum number of points which lie on the same line in O(n^2logn), *"
   },
   "ConvexHull": {
-    "prefix": ["ConvexHull"],
+    "prefix":["benq_ConvexHull"],
     "body": [
       "/**",
       " * Description: top-bottom convex hull",
@@ -3367,7 +3367,7 @@
     "description": "top-bottom convex hull, * Time: O(N\\log N), *"
   },
   "ConvexHull2": {
-    "prefix": ["ConvexHull2"],
+    "prefix":["benq_ConvexHull2"],
     "body": [
       "/**",
       " * Description: Graham Scan",
@@ -3401,7 +3401,7 @@
     "description": "Graham Scan, * Time: O(N\\log N), *"
   },
   "Diameter": {
-    "prefix": ["Diameter"],
+    "prefix":["benq_Diameter"],
     "body": [
       "/**",
       " * Description: rotating caliphers, gives greatest distance between two points in \\$P\\$",
@@ -3425,7 +3425,7 @@
     "description": "rotating caliphers, gives greatest distance between two points in \\$P\\$, * Time: \\$O(N)\\$ given convex hull, *"
   },
   "HalfPlaneIsect": {
-    "prefix": ["HalfPlaneIsect"],
+    "prefix":["benq_HalfPlaneIsect"],
     "body": [
       "/**",
       " * Description: half-plane intersection area",
@@ -3523,7 +3523,7 @@
     "description": "half-plane intersection area, * Time: O(N\\log N), *"
   },
   "HullTangents": {
-    "prefix": ["HullTangents"],
+    "prefix":["benq_HullTangents"],
     "body": [
       "/** ",
       " * Description: Given convex polygon with no three points collinear and a point ",
@@ -3575,7 +3575,7 @@
     "description": "Given convex polygon with no three points collinear and a point ,  * strictly outside of it, computes the lower and upper tangents., *"
   },
   "LineHull": {
-    "prefix": ["LineHull"],
+    "prefix":["benq_LineHull"],
     "body": [
       "/**",
       " * Description: \\texttt{lineHull} accepts line and ccw convex polygon. If all vertices in poly ",
@@ -3635,7 +3635,7 @@
     "description": "\\texttt{lineHull} accepts line and ccw convex polygon. If all vertices in poly ,  * lie to one side of the line, returns a vector of closest vertices to line as well as ,  * orientation of poly with respect to line (\\$\\pm 1\\$ for above/below). Otherwise, returns ,  * the range of vertices that lie on or below the line. \\texttt{extrVertex} returns the point ,  * of a hull with the max projection onto a line., *"
   },
   "PolyCenArea": {
-    "prefix": ["PolyCenArea"],
+    "prefix":["benq_PolyCenArea"],
     "body": [
       "/**",
       " * Description: centroid (center of mass) of a polygon with ",
@@ -3659,7 +3659,7 @@
     "description": "centroid (center of mass) of a polygon with ,  * constant mass per unit area and SIGNED area, * Time: O(N), *"
   },
   "PolyIn": {
-    "prefix": ["PolyIn"],
+    "prefix":["benq_PolyIn"],
     "body": [
       "/** ",
       " * Description: Tests whether point is inside, on, or outside of a polygon ",
@@ -3683,7 +3683,7 @@
     "description": "None"
   },
   "AngleCmp": {
-    "prefix": ["AngleCmp"],
+    "prefix":["benq_AngleCmp"],
     "body": [
       "/**",
       " * Description: Sorts points in ccw order about origin in the same way as",
@@ -3711,7 +3711,7 @@
     "description": "None"
   },
   "Complex": {
-    "prefix": ["Complex"],
+    "prefix":["benq_Complex"],
     "body": [
       "/**",
       " * Description: Easy geo. ",
@@ -3742,7 +3742,7 @@
     "description": "Easy geo. , *"
   },
   "ComplexComp": {
-    "prefix": ["ComplexComp"],
+    "prefix":["benq_ComplexComp"],
     "body": [
       "/**",
       " * Description: Allows you to sort complex numbers.",
@@ -3761,7 +3761,7 @@
     "description": "Allows you to sort complex numbers., *"
   },
   "LineIsect": {
-    "prefix": ["LineIsect"],
+    "prefix":["benq_LineIsect"],
     "body": [
       "/** ",
       " * Description: Computes the intersection point(s) of lines \\$AB\\$, \\$CD.\\$",
@@ -3783,7 +3783,7 @@
     "description": "Computes the intersection point(s) of lines \\$AB\\$, \\$CD.\\$,  * Returns \\$\\{-1,\\{0,0\\}\\}\\$ if infinitely many, \\$\\{0,\\{0,0\\}\\}\\$ if none, ,  * \\$\\{1,x\\}\\$ if \\$x\\$ is the unique point., *"
   },
   "Point": {
-    "prefix": ["Point"],
+    "prefix":["benq_Point"],
     "body": [
       "/**",
       " * Description: Use in place of \\texttt{complex<T>}.",
@@ -3843,7 +3843,7 @@
     "description": "Use in place of \\texttt{complex<T>}., *"
   },
   "PointShort": {
-    "prefix": ["PointShort"],
+    "prefix":["benq_PointShort"],
     "body": [
       "/**",
       " * Description: Use in place of \\texttt{complex<T>}.",
@@ -3885,7 +3885,7 @@
     "description": "Use in place of \\texttt{complex<T>}., *"
   },
   "SegDist": {
-    "prefix": ["SegDist"],
+    "prefix":["benq_SegDist"],
     "body": [
       "/**",
       " * Description: computes distance between \\$P\\$ and line (segment) \\$AB\\$",
@@ -3905,7 +3905,7 @@
     "description": "computes distance between \\$P\\$ and line (segment) \\$AB\\$, *"
   },
   "SegIsect": {
-    "prefix": ["SegIsect"],
+    "prefix":["benq_SegIsect"],
     "body": [
       "/** ",
       " * Description: computes the intersection point(s) of line segments \\$AB\\$, \\$CD\\$",
@@ -3934,7 +3934,7 @@
     "description": "computes the intersection point(s) of line segments \\$AB\\$, \\$CD\\$, *"
   },
   "DirectedMST": {
-    "prefix": ["DirectedMST"],
+    "prefix":["benq_DirectedMST"],
     "body": [
       "/**",
       " * Description: Chu-Liu-Edmonds algorithm. Computes minimum weight directed ",
@@ -4015,7 +4015,7 @@
     "description": "Chu-Liu-Edmonds algorithm. Computes minimum weight directed ,  * spanning tree rooted at \\$r\\$, edge from \\$par[i]\\to i\\$ for all \\$i\\neq r.\\$,  * Use DSU with rollback if need to return edges., * Time: O(M\\log M), *"
   },
   "DirectedMST_KACTL": {
-    "prefix": ["DirectedMST_KACTL"],
+    "prefix":["benq_DirectedMST_KACTL"],
     "body": [
       "/**",
       " * Description: computes weight of minimum directed spanning tree",
@@ -4078,7 +4078,7 @@
     "description": "computes weight of minimum directed spanning tree, * Time: O(M\\log M), *"
   },
   "DominatorTree": {
-    "prefix": ["DominatorTree"],
+    "prefix":["benq_DominatorTree"],
     "body": [
       "/**",
       " * Description: Used only a few times. Assuming that all nodes are ",
@@ -4136,7 +4136,7 @@
     "description": "Used only a few times. Assuming that all nodes are ,  * reachable from \\$root,\\$ \\$a\\$ dominates \\$b\\$ iff every path from ,  * \\$root\\$ to \\$b\\$ passes through \\$a.\\$, * Time: O(M\\log N), *"
   },
   "EdgeColor": {
-    "prefix": ["EdgeColor"],
+    "prefix":["benq_EdgeColor"],
     "body": [
       "/**",
       " * Description: Used only once. Naive implementation of Misra \\& Gries edge coloring. ",
@@ -4201,7 +4201,7 @@
     "description": "Used only once. Naive implementation of Misra \\& Gries edge coloring. , * By Vizing's Theorem, a simple graph with max degree \\$d\\$ can be , * edge colored with at most \\$d+1\\$ colors , * Time: O(N^2M), faster in practice, *"
   },
   "EdgeColorBip": {
-    "prefix": ["EdgeColorBip"],
+    "prefix":["benq_EdgeColorBip"],
     "body": [
       "=/**",
       " * Description: Partition each edge of bipartite graph into one of",
@@ -4347,7 +4347,7 @@
     "description": "Partition each edge of bipartite graph into one of,  * \\$maxDeg\\$ parts such that no two edges in the same part share,  * a vertex., * Time: O(M\\log M), *"
   },
   "KthWalk": {
-    "prefix": ["KthWalk"],
+    "prefix":["benq_KthWalk"],
     "body": [
       "/** ",
       " * Description: \\$K\\$-th shortest walk from \\texttt{src} to \\texttt{des} in digraph. ",
@@ -4425,7 +4425,7 @@
     "description": "\\$K\\$-th shortest walk from \\texttt{src} to \\texttt{des} in digraph. ,  * All edge weights must be non-negative., * Time: O((M+N)\\log N+K\\log K), * Memory: O((M+N)\\log N+K), *"
   },
   "LCT": {
-    "prefix": ["LCT"],
+    "prefix":["benq_LCT"],
     "body": [
       "/**",
       " * Description: Link-Cut Tree. Given a function \\$f(1\\ldots N)\\to 1\\ldots N,\\$ ",
@@ -4566,7 +4566,7 @@
     "description": "Link-Cut Tree. Given a function \\$f(1\\ldots N)\\to 1\\ldots N,\\$ ,  * evaluates \\$f^b(a)\\$ for any \\$a,b.\\$ \\texttt{sz} is for path queries; ,  * \\texttt{sub}, \\texttt{vsub} are for subtree queries. \\texttt{x->access()} ,  * brings \\texttt{x} to the top and propagates it; its left subtree will be ,  * the path from \\texttt{x} to the root and its right subtree will be empty. ,  * Then \\texttt{sub} will be the number of nodes in the connected component,  * of \\texttt{x} and \\texttt{vsub} will be the number of nodes under \\texttt{x}.,  * Use \\texttt{makeRoot} for arbitrary path queries., * Time: O(\\log N), * Usage: FOR(i,1,N+1)LCT[i]=new snode(i); link(LCT[1],LCT[2],1);, *"
   },
   "MaxClique": {
-    "prefix": ["MaxClique"],
+    "prefix":["benq_MaxClique"],
     "body": [
       "/**",
       " * Description: Quickly finds a maximum clique of a graph (given as symmetric bitset",
@@ -4623,7 +4623,7 @@
     "description": "Quickly finds a maximum clique of a graph (given as symmetric bitset, * matrix; self-edges not allowed). To find maximum independent set consider complement., *"
   },
   "StableRoommates": {
-    "prefix": ["StableRoommates"],
+    "prefix":["benq_StableRoommates"],
     "body": [
       "/**",
       " * Description: Stable Roommates problem. Exits with -1 if no solution.",
@@ -4736,7 +4736,7 @@
     "description": "Stable Roommates problem. Exits with -1 if no solution., * Time: O(N^2), * Source:,  * https://en.wikipedia.org/wiki/Stable_roommates_problem,  * probably better to check https://codeforces.com/contest/1423/submission/94783878, * Verification: https://codeforces.com/contest/1423/problem/A, */,,/**, * Description: Stable Roommates problem. Exists with -1 if no solution., * Time: O(N^3) (idk if this worst case is achievable tho) Can make O(N^2) if needed ..., *"
   },
   "ThreeEdgeCC": {
-    "prefix": ["ThreeEdgeCC"],
+    "prefix":["benq_ThreeEdgeCC"],
     "body": [
       "/**",
       " * Description: Three-Edge-Connected Components",
@@ -4790,7 +4790,7 @@
     "description": "Three-Edge-Connected Components, * Time: O(N+M) (+ DSU constant that can be removed), *"
   },
   "TreeDecomp2": {
-    "prefix": ["TreeDecomp2"],
+    "prefix":["benq_TreeDecomp2"],
     "body": [
       "/**",
       " * Description: Tree decomposition of width 2. Just keep removing ",
@@ -4874,7 +4874,7 @@
     "description": "Tree decomposition of width 2. Just keep removing ,  * verts with degree at most 2., * Time: O((N+M)\\log N), *"
   },
   "BellmanFord": {
-    "prefix": ["BellmanFord"],
+    "prefix":["benq_BellmanFord"],
     "body": [
       "/**",
       " * Description: Shortest Path w/ negative edge weights",
@@ -4914,7 +4914,7 @@
     "description": "Shortest Path w/ negative edge weights,    * Can be useful with linear programming,    * Constraints of the form x_i-x_j<k, *"
   },
   "Dijkstra": {
-    "prefix": ["Dijkstra"],
+    "prefix":["benq_Dijkstra"],
     "body": [
       "/**",
       " * Description: shortest path",
@@ -4945,7 +4945,7 @@
     "description": "shortest path, *"
   },
   "DirectedCycle": {
-    "prefix": ["DirectedCycle"],
+    "prefix":["benq_DirectedCycle"],
     "body": [
       "/**",
       " * Description: stack",
@@ -4974,7 +4974,7 @@
     "description": "stack, *"
   },
   "FloydWarshall": {
-    "prefix": ["FloydWarshall"],
+    "prefix":["benq_FloydWarshall"],
     "body": [
       "/**",
       " * Description: All-Pairs Shortest Path",
@@ -4999,7 +4999,7 @@
     "description": "All-Pairs Shortest Path, *"
   },
   "GridBFS": {
-    "prefix": ["GridBFS"],
+    "prefix":["benq_GridBFS"],
     "body": [
       "/**",
       " * Description: BFS through grid with fixed xdir and ydir arrays",
@@ -5036,7 +5036,7 @@
     "description": "BFS through grid with fixed xdir and ydir arrays, *"
   },
   "NegativeCycle": {
-    "prefix": ["NegativeCycle"],
+    "prefix":["benq_NegativeCycle"],
     "body": [
       "/**",
       " * Description: use Bellman-Ford (make sure no underflow)",
@@ -5069,7 +5069,7 @@
     "description": "use Bellman-Ford (make sure no underflow), *"
   },
   "TopoSort": {
-    "prefix": ["TopoSort"],
+    "prefix":["benq_TopoSort"],
     "body": [
       "/**",
       " * Description: sorts vertices such that if there exists an edge x->y, then x goes before y",
@@ -5096,7 +5096,7 @@
     "description": "sorts vertices such that if there exists an edge x->y, then x goes before y, *"
   },
   "TreeTour": {
-    "prefix": ["TreeTour"],
+    "prefix":["benq_TreeTour"],
     "body": [
       "/**",
       " * Description: Subtree corresponding to \\texttt{x} -> range \\texttt{[st[x],en[x]]}",
@@ -5126,7 +5126,7 @@
     "description": "Subtree corresponding to \\texttt{x} -> range \\texttt{[st[x],en[x]]}, *"
   },
   "BCC": {
-    "prefix": ["BCC"],
+    "prefix":["benq_BCC"],
     "body": [
       "/**",
       " * Description: Biconnected components of edges. Removing any vertex in BCC",
@@ -5180,7 +5180,7 @@
     "description": "Biconnected components of edges. Removing any vertex in BCC,  * doesn't disconnect it. To get block-cut tree, create a bipartite graph,  * with the original vertices on the left and a vertex for each BCC on the right. ,  * Draw edge \\$u\\leftrightarrow v\\$ if \\$u\\$ is contained within the BCC for \\$v\\$.,  * Self-loops are not included in any BCC while BCCS of size 1 represent,  * bridges., * Time: O(N+M), *"
   },
   "EulerPath": {
-    "prefix": ["EulerPath"],
+    "prefix":["benq_EulerPath"],
     "body": [
       "/**",
       " * Description: Eulerian path starting at \\texttt{src} if it exists, ",
@@ -5220,7 +5220,7 @@
     "description": "Eulerian path starting at \\texttt{src} if it exists, ,     * visits all edges exactly once. Works for both directed and ,     * undirected. Returns vector of {vertex,label of edge to vertex}.,     * The second element of the first pair is always \\$-1\\$., * Time: O(N+M), *"
   },
   "MaximalCliques": {
-    "prefix": ["MaximalCliques"],
+    "prefix":["benq_MaximalCliques"],
     "body": [
       "/**",
       " * Description: Used only once. Finds all maximal cliques.",
@@ -5249,7 +5249,7 @@
     "description": "Used only once. Finds all maximal cliques., * Time: O(3^{N/3}), *"
   },
   "SCCK": {
-    "prefix": ["SCCK"],
+    "prefix":["benq_SCCK"],
     "body": [
       "/**",
       " * Description: Kosaraju's Algorithm, DFS twice to generate ",
@@ -5282,7 +5282,7 @@
     "description": "Kosaraju's Algorithm, DFS twice to generate ,  * strongly connected components in topological order. \\$a,b\\$,  * in same component if both \\$a\\to b\\$ and \\$b\\to a\\$ exist., * Time: O(N+M), *"
   },
   "SCCT": {
-    "prefix": ["SCCT"],
+    "prefix":["benq_SCCT"],
     "body": [
       "/**",
       " * Description: Tarjan's, DFS once to generate ",
@@ -5318,7 +5318,7 @@
     "description": "Tarjan's, DFS once to generate ,  * strongly connected components in topological order. \\$a,b\\$,  * in same component if both \\$a\\to b\\$ and \\$b\\to a\\$ exist.,  * Uses less memory than Kosaraju b/c doesn't store reverse edges., * Time: O(N+M), *"
   },
   "TwoSAT": {
-    "prefix": ["TwoSAT"],
+    "prefix":["benq_TwoSAT"],
     "body": [
       "/**",
       " * Description: Calculates a valid assignment to boolean variables a, b, c,... ",
@@ -5374,7 +5374,7 @@
     "description": "Calculates a valid assignment to boolean variables a, b, c,... ,  * to a 2-SAT problem, so that an expression of the type ,  * \\$(a\\|\\|b)\\&\\&(!a\\|\\|c)\\&\\&(d\\|\\|!b)\\&\\&...\\$ becomes true, ,  * or reports that it is unsatisfiable.,  * Negated variables are represented by bit-inversions (\\texttt{\\tilde{}x})., * Usage:, * TwoSat ts;, * ts.either(0, \\tilde3); // Var 0 is true or var 3 is false, * ts.setVal(2); // Var 2 is true, * ts.atMostOne({0,\\tilde1,2}); // <= 1 of vars 0, \\tilde1 and 2 are true, * ts.solve(N); // Returns true iff it is solvable, * ts.ans[0..N-1] holds the assigned values to the vars, *"
   },
   "DSU": {
-    "prefix": ["DSU"],
+    "prefix":["benq_DSU"],
     "body": [
       "/**",
       " * Description: Disjoint Set Union with path compression",
@@ -5407,7 +5407,7 @@
     "description": "Disjoint Set Union with path compression,  * and union by size. Add edges and test connectivity. ,  * Use for Kruskal's or Boruvka's minimum spanning tree., * Time: O(\\alpha(N)), *"
   },
   "DSUrb": {
-    "prefix": ["DSUrb"],
+    "prefix":["benq_DSUrb"],
     "body": [
       "/**",
       " * Description: Disjoint Set Union with Rollback",
@@ -5437,7 +5437,7 @@
     "description": "Disjoint Set Union with Rollback, *"
   },
   "DynaCon": {
-    "prefix": ["DynaCon"],
+    "prefix":["benq_DynaCon"],
     "body": [
       "/**",
       " * Description: offline dynamic connectivity",
@@ -5467,7 +5467,7 @@
     "description": "offline dynamic connectivity, *"
   },
   "TwoEdgeCC": {
-    "prefix": ["TwoEdgeCC"],
+    "prefix":["benq_TwoEdgeCC"],
     "body": [
       "/** ",
       " * Description: 2-Edge-Connected Components",
@@ -5517,7 +5517,7 @@
     "description": "2-Edge-Connected Components, * Time: O((M+N)\\log N), *"
   },
   "Dinic": {
-    "prefix": ["Dinic"],
+    "prefix":["benq_Dinic"],
     "body": [
       "/**",
       " * Description: Fast flow. After computing flow, edges \\$\\{u,v\\}\\$ such that ",
@@ -5571,7 +5571,7 @@
     "description": "Fast flow. After computing flow, edges \\$\\{u,v\\}\\$ such that , * \\$lev[u] \\neq 0,\\$ \\$lev[v] = 0\\$ are part of min cut., * Use \\texttt{reset} and \\texttt{rcap} for Gomory-Hu., * Time: \\$O(N^2M)\\$ flow, \\$O(M\\sqrt N)\\$ bipartite matching, *"
   },
   "Dinic_2": {
-    "prefix": ["Dinic_2"],
+    "prefix":["benq_Dinic_2"],
     "body": [
       "/**",
       " * Description: Fast flow. After computing flow, edges \\$\\{u,v\\}\\$ such that ",
@@ -5626,7 +5626,7 @@
     "description": "Fast flow. After computing flow, edges \\$\\{u,v\\}\\$ such that , * \\$lev[u] \\neq -1,\\$ \\$lev[v] = -1\\$ are part of min cut., * Use \\texttt{reset} and \\texttt{rcap} for Gomory-Hu., * Time: \\$O(N^2M)\\$ flow, \\$O(M\\sqrt N)\\$ bipartite matching, *"
   },
   "GlobalMinCut": {
-    "prefix": ["GlobalMinCut"],
+    "prefix":["benq_GlobalMinCut"],
     "body": [
       "/**",
       " * Description: Used only once. Stoer-Wagner, find a global minimum cut in ",
@@ -5667,7 +5667,7 @@
     "description": "Used only once. Stoer-Wagner, find a global minimum cut in ,  * an undirected graph as represented by an adjacency matrix., * Time: O(N^3), *"
   },
   "GomoryHu": {
-    "prefix": ["GomoryHu"],
+    "prefix":["benq_GomoryHu"],
     "body": [
       "/**",
       " * Description: Returns edges of Gomory-Hu tree (second element is weight). ",
@@ -5702,7 +5702,7 @@
     "description": "Returns edges of Gomory-Hu tree (second element is weight). ,  * Max flow between pair of vertices of undirected graph is given by min edge, * weight along tree path. Uses the fact that for any \\$i,j,k,\\$, * \\$\\lambda_{ik}\\ge \\min(\\lambda_{ij},\\lambda_{jk}),\\$ , * where \\$\\lambda_{ij}\\$ denotes the flow between \\$i\\$ and \\$j.\\$, *"
   },
   "HLPP": {
-    "prefix": ["HLPP"],
+    "prefix":["benq_HLPP"],
     "body": [
       "/**",
       " * Description: Quickly calculate max flow",
@@ -5793,7 +5793,7 @@
     "description": "Quickly calculate max flow, *"
   },
   "MCMF": {
-    "prefix": ["MCMF"],
+    "prefix":["benq_MCMF"],
     "body": [
       "/**",
       " * Description: Minimum-cost maximum flow, assumes no negative cycles. ",
@@ -5861,7 +5861,7 @@
     "description": "Minimum-cost maximum flow, assumes no negative cycles. ,  * It is possible to choose negative edge costs such that the first ,  * run of Dijkstra is slow, but this hasn't been an issue in the past. ,  * Edge weights \\$\\ge 0\\$ for every subsequent run. To get flow through ,  * original edges, assign ID's during \\texttt{ae}., * Time: Ignoring first run of Dijkstra, \\$O(FM\\log M)\\$ ,  * if caps are integers and \\$F\\$ is max flow., *"
   },
   "MCMF_2": {
-    "prefix": ["MCMF_2"],
+    "prefix":["benq_MCMF_2"],
     "body": [
       "/**",
       " * Description: Minimum-cost maximum flow, assumes no negative cycles. ",
@@ -5926,7 +5926,7 @@
     "description": "Minimum-cost maximum flow, assumes no negative cycles. ,  * It is possible to choose negative edge costs such that the first ,  * run of Dijkstra is slow, but this hasn't been an issue in the past. ,  * Edge weights \\$\\ge 0\\$ for every subsequent run. To get flow through ,  * original edges, assign ID's during \\texttt{ae}., * Time: Ignoring first run of Dijkstra, \\$O(FM\\log M)\\$ ,  * if caps are integers and \\$F\\$ is max flow., *"
   },
   "DFSmatch": {
-    "prefix": ["DFSmatch"],
+    "prefix":["benq_DFSmatch"],
     "body": [
       "/**",
       " * Description: naive bipartite matching",
@@ -5960,7 +5960,7 @@
     "description": "naive bipartite matching, * Time: O(NM), *"
   },
   "FakeMatch": {
-    "prefix": ["FakeMatch"],
+    "prefix":["benq_FakeMatch"],
     "body": [
       "/**",
       " * Description: General matching with capacity scaling. ",
@@ -6015,7 +6015,7 @@
     "description": "General matching with capacity scaling. ,  * Assign an integer \\$0\\le cur[i,j]\\le cap[i,j]\\$ ,  * to every edge such that \\$\\sum_{j\\in N(i)}cur[i,j]=f_i\\$,,  * assuming that a solution exists. Correctness is questionable., * Time: ?, *"
   },
   "Hungarian": {
-    "prefix": ["Hungarian"],
+    "prefix":["benq_Hungarian"],
     "body": [
       "/**",
       " * Description: Given array of (possibly negative) costs to complete ",
@@ -6067,7 +6067,7 @@
     "description": "Given array of (possibly negative) costs to complete , * each of \\$N\\$ (1-indexed) jobs w/ each of \\$M\\$ workers \\$(N\\le M)\\$, , * finds min cost to complete all jobs such that each worker is , * assigned to at most one job. Dijkstra with potentials works, * in almost the same way as MCMF., * Time: O(N^2M), *"
   },
   "MaxMatchLexMin": {
-    "prefix": ["MaxMatchLexMin"],
+    "prefix":["benq_MaxMatchLexMin"],
     "body": [
       "/**",
       " * Description: lexiographically least matching wrt left vertices",
@@ -6107,7 +6107,7 @@
     "description": "lexiographically least matching wrt left vertices, * Time: \\$\\log |L|\\$ times sum of complexities of \\texttt{gen}, \\texttt{maxMatch}, *"
   },
   "UnweightedMatch": {
-    "prefix": ["UnweightedMatch"],
+    "prefix":["benq_UnweightedMatch"],
     "body": [
       "/**",
       " * Description: Edmond's Blossom Algorithm. General unweighted ",
@@ -6182,7 +6182,7 @@
     "description": "Edmond's Blossom Algorithm. General unweighted ,  * matching with 1-based indexing. If \\texttt{vis[v]=0},  * when \\texttt{bfs} returns 0, \\texttt{v} is not part of every ,  * max matching., * Time: O(N^3), faster in practice, *"
   },
   "UnweightedMatch2": {
-    "prefix": ["UnweightedMatch2"],
+    "prefix":["benq_UnweightedMatch2"],
     "body": [
       "/**",
       " * Description: Matching for general graphs. Fails with probability \\$N/MOD\\$.",
@@ -6235,7 +6235,7 @@
     "description": "Matching for general graphs. Fails with probability \\$N/MOD\\$., * Time: O(N^3), *"
   },
   "WeightedMatch": {
-    "prefix": ["WeightedMatch"],
+    "prefix":["benq_WeightedMatch"],
     "body": [
       "/**",
       " * Description: General max weight max matching with 1-based indexing.",
@@ -6402,7 +6402,7 @@
     "description": "General max weight max matching with 1-based indexing.,  * Edge weights must be positive, combo of UnweightedMatch and,  * Hungarian., * Time: O(N^3)?, *"
   },
   "Centroid": {
-    "prefix": ["Centroid"],
+    "prefix":["benq_Centroid"],
     "body": [
       "/**",
       " * Description: The centroid of a tree of size \\$N\\$ is a vertex such that ",
@@ -6475,7 +6475,7 @@
     "description": "The centroid of a tree of size \\$N\\$ is a vertex such that ,  * after removing it, all resulting subtrees have size at most \\$\\frac{N}{2}.\\$ ,  * Supports updates in the form ``add 1 to all verts \\$v\\$ such that \\$dist(x,v)\\le y\\$.\", * Time: O(N\\log N) build, O(\\log N) update and query, * Memory: O(N\\log N), *"
   },
   "HLD": {
-    "prefix": ["HLD"],
+    "prefix":["benq_HLD"],
     "body": [
       "/**",
       " * Description: Heavy-Light Decomposition, add val to verts ",
@@ -6541,7 +6541,7 @@
     "description": "Heavy-Light Decomposition, add val to verts ,  * and query sum in path/subtree., * Time: any tree path is split into \\$O(\\log N)\\$ parts, *"
   },
   "LCAjump": {
-    "prefix": ["LCAjump"],
+    "prefix":["benq_LCAjump"],
     "body": [
       "/**",
       " * Description: Calculates least common ancestor in tree with verts ",
@@ -6584,7 +6584,7 @@
     "description": "Calculates least common ancestor in tree with verts ,  * \\$0\\ldots N-1\\$ and root \\$R\\$ using binary jumping. , * Time: O(N\\log N) build, O(\\log N) query, * Memory: O(N\\log N), *"
   },
   "LCArmq": {
-    "prefix": ["LCArmq"],
+    "prefix":["benq_LCArmq"],
     "body": [
       "/**",
       " * Description: Euler Tour LCA. Compress takes a subset \\$S\\$ of nodes ",
@@ -6632,7 +6632,7 @@
     "description": "Euler Tour LCA. Compress takes a subset \\$S\\$ of nodes ,  * and computes the minimal subtree that contains all the nodes , * pairwise LCAs and compressing edges. Returns a list of, * \\texttt{(par, orig\\_index)} representing a tree rooted at 0. , * The root points to itself., * Time: O(N\\log N) build, O(1) LCA, O(|S|\\log |S|) compress, *"
   },
   "SmallToLarge": {
-    "prefix": ["SmallToLarge"],
+    "prefix":["benq_SmallToLarge"],
     "body": [
       "/**",
       " * Description: offline subtree queries in \\$O(N\\log^2N)\\$",
@@ -6665,7 +6665,7 @@
     "description": "offline subtree queries in \\$O(N\\log^2N)\\$, *"
   },
   "TreeDiameter": {
-    "prefix": ["TreeDiameter"],
+    "prefix":["benq_TreeDiameter"],
     "body": [
       "/**",
       " * Description: Calculates longest path in tree. The vertex furthest",
@@ -6699,7 +6699,7 @@
     "description": "Calculates longest path in tree. The vertex furthest,  * from 0 must be an endpoint of the diameter., *"
   },
   "CRT": {
-    "prefix": ["CRT"],
+    "prefix":["benq_CRT"],
     "body": [
       "/**",
       " * Description: Chinese Remainder Theorem. ",
@@ -6725,7 +6725,7 @@
     "description": "Chinese Remainder Theorem. ,  * \\$a.f\\pmod{a.s},b.f\\pmod{b.s}\\$ \\$\\implies ? \\pmod{\\text{lcm}(a.s,b.s)}\\$. ,  * Should work for \\$ab<2^{62}\\$., *"
   },
   "Euclid": {
-    "prefix": ["Euclid"],
+    "prefix":["benq_Euclid"],
     "body": [
       "/**",
       " * Description: Generalized Euclidean algorithm. \\texttt{euclid} and ",
@@ -6778,7 +6778,7 @@
     "description": "Generalized Euclidean algorithm. \\texttt{euclid} and ,  * \\texttt{invGen} work for \\$A,B<2^{62}\\$. \\texttt{bet} assumes ,  * that \\$0\\le L\\le R<B\\$, works for \\$AB<2^{62}\\$., *"
   },
   "FracInterval": {
-    "prefix": ["FracInterval"],
+    "prefix":["benq_FracInterval"],
     "body": [
       "/**",
       " * Description: Given fractions \\$a<b\\$ with non-negative numerators and denominators, ",
@@ -6798,7 +6798,7 @@
     "description": "Given fractions \\$a<b\\$ with non-negative numerators and denominators, ,  * finds fraction \\$f\\$ with lowest denominator such that \\$a<f<b.\\$ Should work with , * all numbers less than \\$2^{62}.\\$, *"
   },
   "DiscreteLog": {
-    "prefix": ["DiscreteLog"],
+    "prefix":["benq_DiscreteLog"],
     "body": [
       "/**",
       " * Description: find least integer p such that r^p=x(mod MOD)",
@@ -6834,7 +6834,7 @@
     "description": "find least integer p such that r^p=x(mod MOD), * meet in the middle: O(sqrt(mod)) per query, *"
   },
   "FastMod": {
-    "prefix": ["FastMod"],
+    "prefix":["benq_FastMod"],
     "body": [
       "/**",
       " * Description: Barrett reduction computes \\$a \\% b\\$ about 4 times faster than usual ",
@@ -6857,7 +6857,7 @@
     "description": "Barrett reduction computes \\$a \\% b\\$ about 4 times faster than usual ,  * where \\$b>1\\$ is constant but not known at compile time. Division by \\$b\\$ is replaced,  * by multiplication by m and shifting right 64 bits., *"
   },
   "ModFact": {
-    "prefix": ["ModFact"],
+    "prefix":["benq_ModFact"],
     "body": [
       "/**",
       " * Description: pre-compute factorial mod inverses,",
@@ -6885,7 +6885,7 @@
     "description": "pre-compute factorial mod inverses,,  * assumes \\$MOD\\$ is prime and \\$SZ < MOD\\$., * Time: O(SZ), *"
   },
   "ModFactInt": {
-    "prefix": ["ModFactInt"],
+    "prefix":["benq_ModFactInt"],
     "body": [
       "/**",
       " * Description: pre-compute factorial mod inverses,",
@@ -6915,7 +6915,7 @@
     "description": "pre-compute factorial mod inverses,,  * assumes \\$MOD\\$ is prime and \\$SZ < MOD\\$., * Time: O(SZ), *"
   },
   "ModInt": {
-    "prefix": ["ModInt"],
+    "prefix":["benq_ModInt"],
     "body": [
       "/**",
       " * Description: modular arithmetic operations ",
@@ -6985,7 +6985,7 @@
     "description": "modular arithmetic operations , *"
   },
   "ModIntDynamic": {
-    "prefix": ["ModIntDynamic"],
+    "prefix":["benq_ModIntDynamic"],
     "body": [
       "/**",
       " * Description: modular arithmetic operations ",
@@ -7058,7 +7058,7 @@
     "description": "modular arithmetic operations , *"
   },
   "ModIntShort": {
-    "prefix": ["ModIntShort"],
+    "prefix":["benq_ModIntShort"],
     "body": [
       "/**",
       " * Description: Modular arithmetic.",
@@ -7090,7 +7090,7 @@
     "description": "Modular arithmetic., *"
   },
   "ModMulLL": {
-    "prefix": ["ModMulLL"],
+    "prefix":["benq_ModMulLL"],
     "body": [
       "/**",
       " * Description: Multiply two 64-bit integers mod another if 128-bit is not available.",
@@ -7113,7 +7113,7 @@
     "description": "Multiply two 64-bit integers mod another if 128-bit is not available., * modMul is equivalent to \\texttt{(ul)(\\_\\_int128(a)*b\\%mod)}. , * Works for \\$0\\le a,b<mod<2^{63}.\\$, *"
   },
   "ModSqrt": {
-    "prefix": ["ModSqrt"],
+    "prefix":["benq_ModSqrt"],
     "body": [
       "/**",
       " * Description: square root of integer mod a prime",
@@ -7143,7 +7143,7 @@
     "description": "square root of integer mod a prime, * Time: O(\\log^2(MOD)), *"
   },
   "ModSum": {
-    "prefix": ["ModSum"],
+    "prefix":["benq_ModSum"],
     "body": [
       "/**",
       " * Description: divsum computes \\$\\sum_{i=0}^{to-1}\\left\\lfloor\\frac{ki+c}{m}\\right\\rfloor,\\$ ",
@@ -7169,7 +7169,7 @@
     "description": "divsum computes \\$\\sum_{i=0}^{to-1}\\left\\lfloor\\frac{ki+c}{m}\\right\\rfloor,\\$ ,  * modsum defined similarly, * Time: O(\\log m), *"
   },
   "Order": {
-    "prefix": ["Order"],
+    "prefix":["benq_Order"],
     "body": [
       "/**",
       " * Description: Calculates smallest P such that x^P equiv 1 (mod p)",
@@ -7191,7 +7191,7 @@
     "description": "Calculates smallest P such that x^P equiv 1 (mod p), *"
   },
   "FactorBasic": {
-    "prefix": ["FactorBasic"],
+    "prefix":["benq_FactorBasic"],
     "body": [
       "/**",
       " * Description: Factors integers.",
@@ -7244,7 +7244,7 @@
     "description": "Factors integers., * Time: O(\\sqrt N), *"
   },
   "FactorFast": {
-    "prefix": ["FactorFast"],
+    "prefix":["benq_FactorFast"],
     "body": [
       "/**",
       " * Description: Pollard's rho factors integers up to \\$2^{60}\\$. ",
@@ -7290,7 +7290,7 @@
     "description": "Pollard's rho factors integers up to \\$2^{60}\\$. ,  * Returns primes in sorted order., * Time: \\$O(N^{1/4})\\$ gcd calls, less for numbers with small factors, *"
   },
   "MillerRabin": {
-    "prefix": ["MillerRabin"],
+    "prefix":["benq_MillerRabin"],
     "body": [
       "/**",
       " * Description: Deterministic primality test, works up to \\$2^{64}\\$.",
@@ -7317,7 +7317,7 @@
     "description": "Deterministic primality test, works up to \\$2^{64}\\$.,  * For larger numbers, extend \\$A\\$ randomly., *"
   },
   "MultiplicativePrefix": {
-    "prefix": ["MultiplicativePrefix"],
+    "prefix":["benq_MultiplicativePrefix"],
     "body": [
       "/**",
       " * Description: Prefix sums of some multiplicative functions.",
@@ -7354,7 +7354,7 @@
     "description": "Prefix sums of some multiplicative functions.,  * Solve for all square-free numbers in range, then fix., * Time: faster than \\$O(N^{2/3})\\$?, *"
   },
   "PrimeCnt": {
-    "prefix": ["PrimeCnt"],
+    "prefix":["benq_PrimeCnt"],
     "body": [
       "/**",
       " * Description: Counts number of primes up to \\$N\\$. Can also count ",
@@ -7400,7 +7400,7 @@
     "description": "Counts number of primes up to \\$N\\$. Can also count ,  * sum of primes. For faster performance, only consider odd values,  * of \\texttt{i} in the loops involving \\texttt{B[i]}., * Time: \\$O(N^{3/4}/\\log N)\\$, works for \\$N=10^{11}\\$., *"
   },
   "PrimeCntNeal": {
-    "prefix": ["PrimeCntNeal"],
+    "prefix":["benq_PrimeCntNeal"],
     "body": [
       "/**",
       " * Description: Counts number of primes up to \\$n\\$. Can also count sum of primes.",
@@ -7459,7 +7459,7 @@
     "description": "Counts number of primes up to \\$n\\$. Can also count sum of primes., * Time: \\$O(n^{3/4}/\\log n)\\$, *"
   },
   "Sieve": {
-    "prefix": ["Sieve"],
+    "prefix":["benq_Sieve"],
     "body": [
       "/**",
       " * Description: Tests primality up to \\$SZ\\$. Runs faster if only",
@@ -7495,7 +7495,7 @@
     "description": "Tests primality up to \\$SZ\\$. Runs faster if only,  * odd indices are stored., * Time: O(SZ\\log\\log SZ) or O(SZ), *"
   },
   "BigInt": {
-    "prefix": ["BigInt"],
+    "prefix":["benq_BigInt"],
     "body": [
       "/**",
       " * Description: Big Integer",
@@ -7797,7 +7797,7 @@
     "description": "Big Integer, *"
   },
   "ExprParse": {
-    "prefix": ["ExprParse"],
+    "prefix":["benq_ExprParse"],
     "body": [
       "/**",
       " * Description: Evaluates mod expression with parentheses, or returns -1 if it is invalid",
@@ -7893,7 +7893,7 @@
     "description": "Evaluates mod expression with parentheses, or returns -1 if it is invalid, *"
   },
   "Frac": {
-    "prefix": ["Frac"],
+    "prefix":["benq_Frac"],
     "body": [
       "/**",
       " * Description: Operations with fractions",
@@ -7936,7 +7936,7 @@
     "description": "Operations with fractions, *"
   },
   "CharPoly": {
-    "prefix": ["CharPoly"],
+    "prefix":["benq_CharPoly"],
     "body": [
       "/**",
       " * Description: Characteristic polynomial of matrix.",
@@ -7997,7 +7997,7 @@
     "description": "Characteristic polynomial of matrix., * Time: O(N^4), O(N^3), * Verification: K from https://official.contest.yandex.ru/opencupXX/contest/17333/enter/,  * relevant paper: https://www.hindawi.com/journals/mpe/2014/750618/, *"
   },
   "Hafnian": {
-    "prefix": ["Hafnian"],
+    "prefix":["benq_Hafnian"],
     "body": [
       "/**",
       " * Description: Counts number of perfect matchings given adjacency matrix,",
@@ -8039,7 +8039,7 @@
     "description": "Counts number of perfect matchings given adjacency matrix,,  * which is symmetric and whose main diagonal contains only 0s. Must,  * have an even # of vertices. Uses PIE., * Time: O(N^42^{N/2}), <2s for \\$N=38\\$., *"
   },
   "Matrix": {
-    "prefix": ["Matrix"],
+    "prefix":["benq_Matrix"],
     "body": [
       "/**",
       " * Description: 2D matrix operations. Use array instead of ",
@@ -8088,7 +8088,7 @@
     "description": "2D matrix operations. Use array instead of ,  * vector when possible., *"
   },
   "MatrixInv": {
-    "prefix": ["MatrixInv"],
+    "prefix":["benq_MatrixInv"],
     "body": [
       "/**",
       " * Description: Uses gaussian elimination to convert into reduced row echelon form",
@@ -8147,7 +8147,7 @@
     "description": "Uses gaussian elimination to convert into reduced row echelon form, * and calculates determinant. For determinant via arbitrary modulos, , * use a modified form of the Euclidean algorithm because modular inverse , * may not exist. If you have computed \\$A^{-1}\\pmod{p^k},\\$ then the inverse , * \\$\\pmod{p^{2k}}\\$ is \\$A^{-1}(2I-AA^{-1}).\\$, * Time: O(N^3), determinant of \\$1000\\times 1000\\$ matrix of modints in , * 1 second if you reduce \\# of operations by half, *"
   },
   "MatrixTree": {
-    "prefix": ["MatrixTree"],
+    "prefix":["benq_MatrixTree"],
     "body": [
       "/**",
       " * Description: Kirchhoff's Matrix Tree Theorem.",
@@ -8173,7 +8173,7 @@
     "description": "Kirchhoff's Matrix Tree Theorem., * Given adjacency matrix, calculates \\# of spanning trees., *"
   },
   "ShermanMorrison": {
-    "prefix": ["ShermanMorrison"],
+    "prefix":["benq_ShermanMorrison"],
     "body": [
       "/**",
       " * Description: Calculates \\$(A+uv^T)^{-1}\\$ given \\$A^{-1}\\$. ",
@@ -8195,7 +8195,7 @@
     "description": "Calculates \\$(A+uv^T)^{-1}\\$ given \\$A^{-1}\\$. ,  * Not invertible if \\texttt{sum=0}., *"
   },
   "SparseDet": {
-    "prefix": ["SparseDet"],
+    "prefix":["benq_SparseDet"],
     "body": [
       "/**",
       " * Description: Tries to find characteristic equation of matrix -> determinant.",
@@ -8226,7 +8226,7 @@
     "description": "Tries to find characteristic equation of matrix -> determinant., *"
   },
   "XorBasis": {
-    "prefix": ["XorBasis"],
+    "prefix":["benq_XorBasis"],
     "body": [
       "/**",
       " * Description: XOR basis. If \\texttt{x} is in basis \\texttt{b} ",
@@ -8256,7 +8256,7 @@
     "description": "XOR basis. If \\texttt{x} is in basis \\texttt{b} ,  * then returns 0, otherwise returns adds it to 1. Equivalent,  * to Gaussian Elimination., *"
   },
   "GoldenSectionSearch": {
-    "prefix": ["GoldenSectionSearch"],
+    "prefix":["benq_GoldenSectionSearch"],
     "body": [
       "/**",
       " * Description: Finds the argument minimizing the function \\$f\\$ in the interval \\$[a,b]\\$ assuming ",
@@ -8287,7 +8287,7 @@
     "description": "Finds the argument minimizing the function \\$f\\$ in the interval \\$[a,b]\\$ assuming ,  * \\$f\\$ is unimodal on the interval, i.e. has only one local minimum. The maximum error in the ,  * result is \\$eps\\$. Works equally well for maximization with a small change in the code. , *"
   },
   "Integrate": {
-    "prefix": ["Integrate"],
+    "prefix":["benq_Integrate"],
     "body": [
       "/**",
       " * Description: Integration of a function over an interval using",
@@ -8310,7 +8310,7 @@
     "description": "Integration of a function over an interval using,   * Simpson's rule. The error should be proportional to \\$dif^4\\$, although in,   * practice you will want to verify that the result is stable to desired,   * precision when epsilon changes., *"
   },
   "IntegrateAdaptive": {
-    "prefix": ["IntegrateAdaptive"],
+    "prefix":["benq_IntegrateAdaptive"],
     "body": [
       "/**",
       " * Description: Unused. Fast integration using adaptive Simpson's rule,",
@@ -8341,7 +8341,7 @@
     "description": "Unused. Fast integration using adaptive Simpson's rule,,  * exact for polynomials of degree up to 5., *"
   },
   "LinRec": {
-    "prefix": ["LinRec"],
+    "prefix":["benq_LinRec"],
     "body": [
       "/**",
       " * Description: Berlekamp-Massey, computes linear recurrence ",
@@ -8398,7 +8398,7 @@
     "description": "Berlekamp-Massey, computes linear recurrence , * \\texttt{C} of order \\$N\\$ for sequence \\texttt{s} of \\$2N\\$ terms., * Time: \\texttt{init} \\$\\Rightarrow O(N|C|),\\$ , * \\texttt{eval} \\$\\Rightarrow O(|C|^2\\log p)\\$., * Usage: LinRec L; L.init({0,1,1,2,3,5,8}); // Fibonacci, *"
   },
   "LinRec2": {
-    "prefix": ["LinRec2"],
+    "prefix":["benq_LinRec2"],
     "body": [
       "/**",
       " * Description: Reeds-Sloane, generalizes Berlekamp-Massey to non-prime moduli",
@@ -8485,7 +8485,7 @@
     "description": "Reeds-Sloane, generalizes Berlekamp-Massey to non-prime moduli, *"
   },
   "Simplex": {
-    "prefix": ["Simplex"],
+    "prefix":["benq_Simplex"],
     "body": [
       "/**",
       " * Description: Solves a general linear maximization problem: ",
@@ -8583,7 +8583,7 @@
     "description": "Solves a general linear maximization problem: ,  * maximize \\$c^T x\\$ subject to \\$Ax \\le b\\$, \\$x \\ge 0\\$., * Returns -inf if there is no solution, , * inf if there are arbitrarily good solutions, , * or the maximum value of \\$c^T x\\$ otherwise., * The input vector is set to an optimal \\$x\\$ , * (or in the unbounded case, an arbitrary solution fulfilling the constraints)., * Numerical stability is not guaranteed. For better performance, , * define variables such that \\$x = 0\\$ is viable., * Usage:,  * vvd A = {{1,-1}, {-1,1}, {-1,-2}};,  * vd b = {1,1,-4}, c = {-1,-1}, x;,  * T val = LPSolver(A, b, c).solve(x);, * Time: O(NM \\cdot \\#pivots), where a pivot may be e.g. an edge relaxation. O(2^N) in the general case., *"
   },
   "ChirpZ": {
-    "prefix": ["ChirpZ"],
+    "prefix":["benq_ChirpZ"],
     "body": [
       "/**",
       " * Description: Modified Chirp-Z. For \\$x\\neq 0\\$, computes ",
@@ -8616,7 +8616,7 @@
     "description": "Modified Chirp-Z. For \\$x\\neq 0\\$, computes ,  * \\$A(x^0), A(x^1), \\ldots, A(x^{n-1})\\$., * Time: FFT(2|A|+n), *"
   },
   "FFT": {
-    "prefix": ["FFT"],
+    "prefix":["benq_FFT"],
     "body": [
       "/**",
       " * Description: Multiply polynomials of ints for any modulus \\$<2^{31}\\$. ",
@@ -8679,7 +8679,7 @@
     "description": "Multiply polynomials of ints for any modulus \\$<2^{31}\\$. ,  * For XOR convolution ignore \\texttt{m} within \\texttt{fft}. , * Time: O(N\\log N), *"
   },
   "Karatsuba": {
-    "prefix": ["Karatsuba"],
+    "prefix":["benq_Karatsuba"],
     "body": [
       "/**",
       " * Description: Multiply two polynomials (but FFTmod suffices).",
@@ -8718,7 +8718,7 @@
     "description": "Multiply two polynomials (but FFTmod suffices)., * Time: \\$O(N^{\\log_2 3})\\$, *"
   },
   "Poly": {
-    "prefix": ["Poly"],
+    "prefix":["benq_Poly"],
     "body": [
       "/**",
       " * Description: Basic poly ops including division. Can replace \\texttt{T} with double, complex.",
@@ -8806,7 +8806,7 @@
     "description": "Basic poly ops including division. Can replace \\texttt{T} with double, complex., *"
   },
   "PolyConv": {
-    "prefix": ["PolyConv"],
+    "prefix":["benq_PolyConv"],
     "body": [
       "/**",
       " * Description: Multiply small polys directly, otherwise use FFT.",
@@ -8829,7 +8829,7 @@
     "description": "Multiply small polys directly, otherwise use FFT., *"
   },
   "PolyEuclid": {
-    "prefix": ["PolyEuclid"],
+    "prefix":["benq_PolyEuclid"],
     "body": [
       "/**",
       " * Description: Euclidean Algorithm for polynomials using Half-GCD",
@@ -8885,7 +8885,7 @@
     "description": "Euclidean Algorithm for polynomials using Half-GCD, *"
   },
   "PolyInterpolate": {
-    "prefix": ["PolyInterpolate"],
+    "prefix":["benq_PolyInterpolate"],
     "body": [
       "/**",
       " * Description: \\$n\\$ points determine unique polynomial of degree \\$\\le n-1\\$.",
@@ -8923,7 +8923,7 @@
     "description": "\\$n\\$ points determine unique polynomial of degree \\$\\le n-1\\$.,  * For numerical precision pick \\$v[k].f = c*\\cos(k/(n-1)*\\pi), k=0 \\dots n-1\\$., * Time: O(n^2), *"
   },
   "PolyInv": {
-    "prefix": ["PolyInv"],
+    "prefix":["benq_PolyInv"],
     "body": [
       "/**",
       " * Description: computes \\$A^{-1}\\$ such that \\$AA^{-1}\\equiv 1\\pmod{x^n}\\$.",
@@ -9011,7 +9011,7 @@
     "description": "computes \\$A^{-1}\\$ such that \\$AA^{-1}\\equiv 1\\pmod{x^n}\\$.,  * Newton's method: If you want \\$F(x)=0\\$ and \\$F(Q_k)\\equiv 0\\pmod{x^a}\\$,  * then \\$Q_{k+1}=Q_k-\\frac{F(Q_k)}{F'(Q_k)}\\pmod{x^{2a}}\\$ satisfies,  * \\$F(Q_{k+1})\\equiv 0 \\pmod{x^{2a}}\\$. Application: if \\$f(n),g(n)\\$ are the,  * \\#s of forests and trees on \\$n\\$ nodes then ,  * \\$\\sum_{n=0}^{\\infty}f(n)x^n=\\exp\\left(\\sum_{n=1}^{\\infty}\\frac{g(n)}{n!}\\right)\\$., * Time: O(N\\log N), *"
   },
   "PolyRoots": {
-    "prefix": ["PolyRoots"],
+    "prefix":["benq_PolyRoots"],
     "body": [
       "/**",
       " * Source: KACTL",
@@ -9047,7 +9047,7 @@
     "description": "None"
   },
   "PalTree": {
-    "prefix": ["PalTree"],
+    "prefix":["benq_PalTree"],
     "body": [
       "/**",
       " * Description: Used infrequently. Palindromic tree computes ",
@@ -9110,7 +9110,7 @@
     "description": "Used infrequently. Palindromic tree computes , * number of occurrences of each palindrome within string., * \\texttt{ans[i][0]} stores min even \\$x\\$ such that , * the prefix \\$s[1..i]\\$ can be split into exactly \\$x\\$, * palindromes, \\texttt{ans[i][1]} does the same for odd \\$x.\\$, * Time: \\$O(N\\sum)\\$ for addChar, \\$O(N\\log N)\\$ for updAns, *"
   },
   "SuffixAutomaton": {
-    "prefix": ["SuffixAutomaton"],
+    "prefix":["benq_SuffixAutomaton"],
     "body": [
       "/**",
       " * Description: Used infrequently. Constructs minimal deterministic ",
@@ -9189,7 +9189,7 @@
     "description": "Used infrequently. Constructs minimal deterministic ,  * finite automaton (DFA) that recognizes all suffixes of a string.,  * \\texttt{len} corresponds to the maximum length of a string in,  * the equivalence class, \\texttt{pos} corresponds to,  * the first ending position of such a string, \\texttt{lnk},  * corresponds to the longest suffix that is in a different class.,  * Suffix links correspond to suffix tree of the reversed string!, * Time: O(N\\log \\sum), *"
   },
   "SuffixTree": {
-    "prefix": ["SuffixTree"],
+    "prefix":["benq_SuffixTree"],
     "body": [
       "/**",
       " * Description: Used infrequently. Ukkonen's algorithm for suffix tree. Longest",
@@ -9248,7 +9248,7 @@
     "description": "Used infrequently. Ukkonen's algorithm for suffix tree. Longest,   * non-unique suffix of \\texttt{s} has length \\texttt{len[p]+lef} after each,   * call to \\texttt{add} terminates. Each iteration of loop within \\texttt{add},   * decreases this quantity by one., * Time: O(N\\log \\sum), *"
   },
   "ACfixed": {
-    "prefix": ["ACfixed"],
+    "prefix":["benq_ACfixed"],
     "body": [
       "/**",
       " * Description: Aho-Corasick for fixed alphabet. For each prefix, ",
@@ -9291,7 +9291,7 @@
     "description": "Aho-Corasick for fixed alphabet. For each prefix, ,  * stores link to max length suffix which is also a prefix., * Time: O(N\\sum), *"
   },
   "ACunfixed": {
-    "prefix": ["ACunfixed"],
+    "prefix":["benq_ACunfixed"],
     "body": [
       "/**",
       " * Description: for each prefix, stores link to max length suffix which is also a prefix",
@@ -9338,7 +9338,7 @@
     "description": "for each prefix, stores link to max length suffix which is also a prefix, *"
   },
   "HashRange": {
-    "prefix": ["HashRange"],
+    "prefix":["benq_HashRange"],
     "body": [
       "/**",
       " * Description: Polynomial hash for substrings with two bases.",
@@ -9384,7 +9384,7 @@
     "description": "Polynomial hash for substrings with two bases., *"
   },
   "KMP": {
-    "prefix": ["KMP"],
+    "prefix":["benq_KMP"],
     "body": [
       "/**",
       " * Source: KACTL",
@@ -9411,7 +9411,7 @@
     "description": "None"
   },
   "LyndonFactor": {
-    "prefix": ["LyndonFactor"],
+    "prefix":["benq_LyndonFactor"],
     "body": [
       "/**",
       " * Description: ",
@@ -9447,7 +9447,7 @@
     "description": "* A string is \"simple\" if it is strictly smaller than any of its own nontrivial suffixes., * The Lyndon factorization of the string \\$s\\$ is a factorization \\$s=w_1w_2\\ldots w_k\\$, * where all strings \\$w_i\\$ are simple and \\$w_1\\ge w_2\\ge \\cdots \\ge w_k.\\$ Min rotation, * gets min index i such that cyclic shift of s starting at i is minimum., *"
   },
   "Manacher": {
-    "prefix": ["Manacher"],
+    "prefix":["benq_Manacher"],
     "body": [
       "/**",
       " * Source: http://codeforces.com/blog/entry/12143",
@@ -9475,7 +9475,7 @@
     "description": "None"
   },
   "MinRotation": {
-    "prefix": ["MinRotation"],
+    "prefix":["benq_MinRotation"],
     "body": [
       "/**",
       " * Description: minimum cyclic shift",
@@ -9498,7 +9498,7 @@
     "description": "minimum cyclic shift, * Time: O(N), *"
   },
   "ReverseBW": {
-    "prefix": ["ReverseBW"],
+    "prefix":["benq_ReverseBW"],
     "body": [
       "/**",
       " * Description: Used only once. Burrows-Wheeler Transform appends ",
@@ -9521,7 +9521,7 @@
     "description": "Used only once. Burrows-Wheeler Transform appends ,  * \\# to a string, sorts the rotations of the string in increasing order, , * and constructs a new string that contains the last character , * of each rotation. This function reverses the transform., * Time: O(N\\log N), *"
   },
   "SuffixArray": {
-    "prefix": ["SuffixArray"],
+    "prefix":["benq_SuffixArray"],
     "body": [
       "/**",
       " * Description: Sort suffixes. First element of \\texttt{sa} is \\texttt{sz(S)},",
@@ -9570,7 +9570,7 @@
     "description": "Sort suffixes. First element of \\texttt{sa} is \\texttt{sz(S)},,  * \\texttt{isa} is the inverse of \\texttt{sa}, and \\texttt{lcp} stores,  * the longest common prefix between every two consecutive elements of \\texttt{sa}., * Time: O(N\\log N), *"
   },
   "SuffixArrayLinear": {
-    "prefix": ["SuffixArrayLinear"],
+    "prefix":["benq_SuffixArrayLinear"],
     "body": [
       "/**",
       " * Description: Linear Time Suffix Array",
@@ -9633,7 +9633,7 @@
     "description": "Linear Time Suffix Array, *"
   },
   "TandemRepeats": {
-    "prefix": ["TandemRepeats"],
+    "prefix":["benq_TandemRepeats"],
     "body": [
       "/**",
       " * Description: Find all \\$(i,p)\\$ such that ",
@@ -9664,7 +9664,7 @@
     "description": "Find all \\$(i,p)\\$ such that ,  * \\texttt{s.substr(i,p) == s.substr(i+p,p)}. No two intervals,  * with the same period intersect or touch., * Time: O(N\\log N), *"
   },
   "Trie": {
-    "prefix": ["Trie"],
+    "prefix":["benq_Trie"],
     "body": [
       "/**",
       " * Description: insert int, query max xor with some int in the trie",
@@ -9700,7 +9700,7 @@
     "description": "insert int, query max xor with some int in the trie, * Time: O(MXBIT), *"
   },
   "TrieAlpha": {
-    "prefix": ["TrieAlpha"],
+    "prefix":["benq_TrieAlpha"],
     "body": [
       "/**",
       " * Description: insert string of lowercase letters",
@@ -9723,7 +9723,7 @@
     "description": "None"
   },
   "Z": {
-    "prefix": ["Z"],
+    "prefix":["benq_Z"],
     "body": [
       "/**",
       " * Description: \\texttt{f[i]} is the max \\texttt{len} such that ",
@@ -9753,7 +9753,7 @@
     "description": "\\texttt{f[i]} is the max \\texttt{len} such that ,  * \\texttt{s.substr(0,len) == s.substr(i,len)}, * Time: O(N), *"
   },
   "BumpAllocator": {
-    "prefix": ["BumpAllocator"],
+    "prefix":["benq_BumpAllocator"],
     "body": [
       "/**",
       " * Description: When you need to dynamically allocate many objects and don't care about freeing them.",
@@ -9773,7 +9773,7 @@
     "description": "When you need to dynamically allocate many objects and don't care about freeing them.,  * \"new X\" otherwise has an overhead of something like 0.05us + 16 bytes per allocation., *"
   },
   "BumpAllocatorSTL": {
-    "prefix": ["BumpAllocatorSTL"],
+    "prefix":["benq_BumpAllocatorSTL"],
     "body": [
       "/**",
       " * Description: Unused. BumpAllocator for STL containers.",
@@ -9799,7 +9799,7 @@
     "description": "Unused. BumpAllocator for STL containers., *"
   },
   "CircLCS": {
-    "prefix": ["CircLCS"],
+    "prefix":["benq_CircLCS"],
     "body": [
       "/**",
       " * Description: Used only twice. For strs \\$a,b\\$ calculates ",
@@ -9850,7 +9850,7 @@
     "description": "Used only twice. For strs \\$a,b\\$ calculates ,  * longest common subsequence of \\$a\\$ with all rotations of \\$b\\$, * Time: O(|A|\\cdot |B|), *"
   },
   "DynaLIS": {
-    "prefix": ["DynaLIS"],
+    "prefix":["benq_DynaLIS"],
     "body": [
       "/**",
       " * Description: Insert and delete elements from any position. \\texttt{sz(v)-1=min(k,length of LIS)}.",
@@ -9995,7 +9995,7 @@
     "description": "Insert and delete elements from any position. \\texttt{sz(v)-1=min(k,length of LIS)}., * Time: O(k(n+q)\\log n), *"
   },
   "FastIO": {
-    "prefix": ["FastIO"],
+    "prefix":["benq_FastIO"],
     "body": [
       "/**",
       " * Description: Fast input and output.",
@@ -10050,7 +10050,7 @@
     "description": "Fast input and output., * Time: input is \\$\\sim\\$300ms faster for \\$10^6\\$ long longs on CF, *"
   },
   "Knapsack": {
-    "prefix": ["Knapsack"],
+    "prefix":["benq_Knapsack"],
     "body": [
       "/**",
       " * Description: Linear Time Knapsack w/ Bounded Weights",
@@ -10081,7 +10081,7 @@
     "description": "Linear Time Knapsack w/ Bounded Weights, * Time: O(N\\cdot (\\text{max weight})), *"
   },
   "Ops": {
-    "prefix": ["Ops"],
+    "prefix":["benq_Ops"],
     "body": [
       "/**",
       " * Description: operations with pairs / arrays (LOL is there a better way to do this)",
@@ -10153,7 +10153,7 @@
     "description": "operations with pairs / arrays (LOL is there a better way to do this), *"
   },
   "SmallPtr": {
-    "prefix": ["SmallPtr"],
+    "prefix":["benq_SmallPtr"],
     "body": [
       "/**",
       " * Description: Unused. A 32-bit pointer that points into BumpAllocator memory.",
@@ -10176,7 +10176,7 @@
     "description": "Unused. A 32-bit pointer that points into BumpAllocator memory., *"
   },
   "SMAWK": {
-    "prefix": ["SMAWK"],
+    "prefix":["benq_SMAWK"],
     "body": [
       "/**",
       " * Description: Given negation of totally monotone matrix with entries of type \\texttt{D}, ",

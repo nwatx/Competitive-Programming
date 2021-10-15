@@ -23,17 +23,16 @@ using vi = V<int>;
 #define rep(a) F0R(_,a)
 #define each(a,x) for (auto& a: x)
 
-const int MOD = 1e9+7;
+const ll MOD = 1e9+7;
 const db PI = acos((db)-1);
 
 void solve() {
-
+	
 }
 
-int main() { cin.tie(0)->sync_with_stdio(0);
+int main() {
+	cin.tie(0)->sync_with_stdio(0);
 	int n = 1;
-	cin >> n;
-	for(int i = 0; i < n; i++) {
-		solve();
-	}
+	// cin >> n;
+	rep(n) solve();
 }
