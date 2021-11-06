@@ -294,45 +294,50 @@ inline namespace FileIO {
 
 const int mx = 2e5+1;
 
-/**
- * Description: 1D point update, range query where \texttt{comb} is
-	 * any associative operation. If $N=2^p$ then \texttt{seg[1]==query(0,N-1)}.
- * Time: O(\log N)
- * Source: 
-	* http://codeforces.com/blog/entry/18051
-	* KACTL
- * Verification: SPOJ Fenwick
- */
+// let dp[i][j] # you can pick up
+// ending at cell i and j
 
-template<class T> struct Seg { // comb(ID,b) = b
-	const T ID = 0; T comb(T a, T b) { return max(a, b); } 
-	int n; vector<T> seg;
-	void init(int _n) { n = _n; seg.assign(2*n,ID); }
-	void pull(int p) { seg[p] = comb(seg[2*p],seg[2*p+1]); }
-	void upd(int p, T val) { // set val at position p
-		seg[p += n] = val; for (p /= 2; p; p /= 2) pull(p); }
-	T query(int l, int r) {	// sum on interval [l, r]
-		T ra = ID, rb = ID; 
-		for (l += n, r += n+1; l < r; l /= 2, r /= 2) {
-			if (l&1) ra = comb(ra,seg[l++]);
-			if (r&1) rb = comb(seg[--r],rb);
-		}
-		return comb(ra,rb);
-	}
-};
+/*
+Step 1: For each iteration you can be at a total of x different locations
+*/
+
+int dp[751][751];
+int dp2[751][751];
+int pos[751][751];
 
 void solve() {
-	ints(n, k);
-	Seg<int> s; s.init(n);
+	ints(n, p, x, y);
+	V<pair<int, pi>> drops;
+	F0R(i, p) {
+		ints(a, b, c);
+		b--; c--;
+		drops.pb({a, {b, c}});
+	}
+
+	sor(drops);
+	
+	each(drop, drops) {
+		int time = drop.f;
+		auto [x, y] = drop.s;
+		F0R(i, n) F0R(j, n) {
+			if(abs(i - x) + abs(j - y) <= time) pos[i][j]=1;
+		}
+		F0R(i, n) F0R(j, n) {
+			if(abs(i - x) + abs(j - y) <= time) ckmax(dp2[i][j], dp[x][y] + pos[i][j]);
+		}
+		dp = dp2;
+		// if you are in the radius of time from x y you can get it
+	}
+
+	ps(dp[x-1][y-1]);
+
 	F0R(i, n) {
-		int x; cin >> x; s.upd(i, x);
+		F0R(j, n) {
+			pr(dp[i][j], " ");
+		}
+		ps();
 	}
 
-	FOR(i, k - 1, n) {
-		cout << s.query(i - k + 1, i) << " ";
-	}
-
-	ps();
 }
 
 signed main() {
@@ -340,7 +345,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	re(n);
+	// re(n);
 	rep(n) solve();
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;

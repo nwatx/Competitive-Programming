@@ -5,7 +5,6 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-
 /* #region template */
 using ll = long long;
 using db = long double; // or double, if TL is tight
@@ -289,62 +288,70 @@ inline namespace FileIO {
 };
 /* #endregion */
 
-/**e
- * Description: 1D point update, range query where \texttt{comb} is
-	 * any associative operation. If $N=2^p$ then \texttt{seg[1]==query(0,N-1)}.
- * Time: O(\log N)
- * Source: 
-	* http://codeforces.com/blog/entry/18051
-	* KACTL
- * Verification: SPOJ Fenwick
+/* #region snippets */
+/**
+ * Description: range sum queries and point updates for $D$ dimensions
+ * Source: https://codeforces.com/blog/entry/64914
+ * Verification: SPOJ matsum
+ * Usage: \texttt{BIT<int,10,10>} gives 2D BIT
+ * Time: O((\log N)^D)
  */
 
-using T = set<int>; 
-struct Seg { // comb(ID,b) = b
-	const T ID = set<int>(); T comb(T a, T b) {
-		T ret;
-		if(sz(a) > sz(b)) {
-			ret = a; each(x, b) ret.insert(x);
-		} else {
-			ret = b; each(x, a) ret.insert(x);
-		}
-		return ret;
-	} 
-	int n; vector<T> seg;
-	void init(int _n) { n = _n; seg.assign(2*n,ID); }
-	void pull(int p) { seg[p] = comb(seg[2*p],seg[2*p+1]); }
-	void upd(int p, T val) { // set val at position p
-		seg[p += n] = val; for (p /= 2; p; p /= 2) pull(p); }
-	T query(int l, int r) {	// sum on interval [l, r]
-		T ra = ID, rb = ID; 
-		for (l += n, r += n+1; l < r; l /= 2, r /= 2) {
-			if (l&1) ra = comb(ra,seg[l++]);
-			if (r&1) rb = comb(seg[--r],rb);
-		}
-		return comb(ra,rb);
-	}
+template <class T, int ...Ns> struct BIT {
+	T val = 0; void upd(T v) { val += v; }
+	T query() { return val; }
 };
+template <class T, int N, int... Ns> struct BIT<T, N, Ns...> {
+	BIT<T,Ns...> bit[N+1];
+	template<typename... Args> void upd(int pos, Args... args) { assert(pos > 0);
+		for (; pos<=N; pos+=pos&-pos) bit[pos].upd(args...); }
+	template<typename... Args> T sum(int r, Args... args) {
+		T res=0; for (;r;r-=r&-r) res += bit[r].query(args...); 
+		return res; }
+	template<typename... Args> T query(int l, int r, Args... 
+		args) { return sum(r,args...)-sum(l-1,args...); }
+}; 
+template<class T, int N> int get_kth(const BIT<T,N>& bit, T des) { 
+	assert(des > 0);
+	int ind = 0;
+	for (int i = 1<<bits(N); i; i /= 2)
+		if (ind+i <= N && bit.bit[ind+i].val < des)
+			des -= bit.bit[ind += i].val;
+	assert(ind < N); return ind+1;
+}
+/* #endregion */
 
-/* #region snippets */
-const int mx = 2e5 + 1;
+const int mx = 2e5+1;
+
+map<int, int> fst, ret;
+vpi queries[mx];
+BIT<int, mx> B;
 
 void solve() {
-	int n, m ; re(n, m);
-	Seg seg; seg.init(n + 1);
-	F0R(i, n) {
-		int x; cin >> x;
-		set<int> s; s.insert(x);
-		seg.upd(i, s);
+	int n, m; re(n, m);
+	vi v(n); re(v);
+	F0R(i, m) {
+		ints(a, b); queries[a].pb({b, i});
+	}
+
+	ROF(i, 1, n + 1) {
+		int z = v[i - 1];
+
+		if (fst.count(z)) B.upd(fst[z], -1);
+		fst[z] = i;
+
+		B.upd(i, 1);
+
+		each(t, queries[i]) {
+			ret[t.s] = B.sum(t.f);
+		}
 	}
 
 	F0R(i, m) {
-		int1(a, b);
-		// a--;
-
-		ps(sz(seg.query(a, b)));
+		ps(ret[i]);
 	}
 
-	vpi q(m); re(q);
+	// ps(ret);
 }
 
 signed main() {

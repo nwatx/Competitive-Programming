@@ -294,45 +294,54 @@ inline namespace FileIO {
 
 const int mx = 2e5+1;
 
-/**
- * Description: 1D point update, range query where \texttt{comb} is
-	 * any associative operation. If $N=2^p$ then \texttt{seg[1]==query(0,N-1)}.
- * Time: O(\log N)
- * Source: 
-	* http://codeforces.com/blog/entry/18051
-	* KACTL
- * Verification: SPOJ Fenwick
- */
+int sign(ll x) {
+	return x > 0 ? 1 : -1;
+}
 
-template<class T> struct Seg { // comb(ID,b) = b
-	const T ID = 0; T comb(T a, T b) { return max(a, b); } 
-	int n; vector<T> seg;
-	void init(int _n) { n = _n; seg.assign(2*n,ID); }
-	void pull(int p) { seg[p] = comb(seg[2*p],seg[2*p+1]); }
-	void upd(int p, T val) { // set val at position p
-		seg[p += n] = val; for (p /= 2; p; p /= 2) pull(p); }
-	T query(int l, int r) {	// sum on interval [l, r]
-		T ra = ID, rb = ID; 
-		for (l += n, r += n+1; l < r; l /= 2, r /= 2) {
-			if (l&1) ra = comb(ra,seg[l++]);
-			if (r&1) rb = comb(seg[--r],rb);
-		}
-		return comb(ra,rb);
-	}
-};
+#define GOOD { ps("Yes"); return; }
 
 void solve() {
-	ints(n, k);
-	Seg<int> s; s.init(n);
-	F0R(i, n) {
-		int x; cin >> x; s.upd(i, x);
+	ll a, b; re(a, b);
+	ll x = 0, y = 0;
+	string s; re(s);
+	s = " " + s;
+	each(c, s) {
+		if(c=='U') y++;
+		if(c=='D') y--;
+		if(c=='R') x++;
+		if(c=='L') x--;
 	}
 
-	FOR(i, k - 1, n) {
-		cout << s.query(i - k + 1, i) << " ";
+	dbg(x, y);
+
+	ll nx = 0, ny = 0;
+	each(c, s) {
+		if(c=='U') ny++;
+		if(c=='D') ny--;
+		if(c=='R') nx++;
+		if(c=='L') nx--;
+
+		// process
+
+		dbg(nx, ny);
+		if(nx == a && ny == b) GOOD
+
+		// make sure dx and dy have the same sign (otherwise impossible)
+		ll dx = a - nx, dy = b - ny;
+		// bool good = (sign(nx)*sign(x) > 0 && sign(ny)*sign(y) > 0);
+		bool good = (sign(dx) == sign(x) && sign(dy) == sign(y));
+		dbg(good);
+		if(!good) continue;
+		dbg(nx, ny, dx, dy);
+		if(x == 0 && y != 0 && dx == 0) GOOD
+		else if(x==0)continue;
+		if(y == 0 && x != 0 && dy == 0) GOOD
+		else if(y==0) continue;
+		dbg(dx/x, dx/x*y, dy);
+		if(dx % x == 0 && dx/x*y == dy) GOOD
 	}
 
-	ps();
+	ps("No");
 }
 
 signed main() {
@@ -340,7 +349,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	re(n);
+	// re(n);
 	rep(n) solve();
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;

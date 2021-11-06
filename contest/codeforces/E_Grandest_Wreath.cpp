@@ -289,50 +289,57 @@ inline namespace FileIO {
 /* #endregion */
 
 /* #region snippets */
-
-/* #endregion */
-
-const int mx = 2e5+1;
-
 /**
- * Description: 1D point update, range query where \texttt{comb} is
-	 * any associative operation. If $N=2^p$ then \texttt{seg[1]==query(0,N-1)}.
- * Time: O(\log N)
- * Source: 
-	* http://codeforces.com/blog/entry/18051
-	* KACTL
- * Verification: SPOJ Fenwick
+ * Description: Calculates longest path in tree. The vertex furthest
+	 * from 0 must be an endpoint of the diameter.
+ * Source: own
+ * Verification: 
+   * http://www.spoj.com/problems/PT07Z/
+   * https://codeforces.com/contest/1182/problem/D
  */
 
-template<class T> struct Seg { // comb(ID,b) = b
-	const T ID = 0; T comb(T a, T b) { return max(a, b); } 
-	int n; vector<T> seg;
-	void init(int _n) { n = _n; seg.assign(2*n,ID); }
-	void pull(int p) { seg[p] = comb(seg[2*p],seg[2*p+1]); }
-	void upd(int p, T val) { // set val at position p
-		seg[p += n] = val; for (p /= 2; p; p /= 2) pull(p); }
-	T query(int l, int r) {	// sum on interval [l, r]
-		T ra = ID, rb = ID; 
-		for (l += n, r += n+1; l < r; l /= 2, r /= 2) {
-			if (l&1) ra = comb(ra,seg[l++]);
-			if (r&1) rb = comb(seg[--r],rb);
-		}
-		return comb(ra,rb);
+template<int SZ> struct TreeDiameter {
+	int N, par[SZ], dist[SZ], diaLen;  
+	vi adj[SZ], dia, center;
+	void ae(int a, int b) { adj[a].pb(b), adj[b].pb(a); }
+	void dfs(int x) {
+		each(y,adj[x]) if (y != par[x]) {
+			par[y] = x; dist[y] = dist[x]+1; 
+			dfs(y); }
+	}
+	void genDist(int x) { par[x] = -1; dist[x] = 0; dfs(x); }
+	void init(int _N) {
+		N = _N; dia = {0,0}; 
+		genDist(0); F0R(i,N) if (dist[i]>dist[dia[0]]) dia[0] = i; 
+		genDist(dia[0]); F0R(i,N) if (dist[i]>dist[dia[1]]) dia[1] = i;
+		diaLen = dist[dia[1]];
+		int cen = dia[1]; F0R(i,diaLen/2) cen = par[cen];
+		center = {cen}; if (diaLen&1) center.pb(par[cen]);
 	}
 };
+/* #endregion */
+
+const int mx = 1e6+1;
 
 void solve() {
-	ints(n, k);
-	Seg<int> s; s.init(n);
-	F0R(i, n) {
-		int x; cin >> x; s.upd(i, x);
+	// dbg("hi");
+	TreeDiameter<mx> td, tb;
+	// dbg("hi");
+	int n; re(n);
+	rep(n - 1) {
+		int1(a, b);
+		// dbg(a, b);
+		td.ae(a, b);
 	}
-
-	FOR(i, k - 1, n) {
-		cout << s.query(i - k + 1, i) << " ";
+	td.init(n);
+	re(n);
+	rep(n - 1) {
+		int1(a, b);
+		tb.ae(a, b);
 	}
+	tb.init(n);
 
-	ps();
+	ps(td.diaLen + tb.diaLen + 2);
 }
 
 signed main() {
@@ -340,7 +347,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	re(n);
+	// re(n);
 	rep(n) solve();
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;

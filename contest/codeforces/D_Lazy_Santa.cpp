@@ -295,44 +295,55 @@ inline namespace FileIO {
 const int mx = 2e5+1;
 
 /**
- * Description: 1D point update, range query where \texttt{comb} is
-	 * any associative operation. If $N=2^p$ then \texttt{seg[1]==query(0,N-1)}.
- * Time: O(\log N)
- * Source: 
-	* http://codeforces.com/blog/entry/18051
-	* KACTL
- * Verification: SPOJ Fenwick
+ * Description: shortest path
+ * Source: own
+ * Verification: https://open.kattis.com/problems/shortestpath1
  */
 
-template<class T> struct Seg { // comb(ID,b) = b
-	const T ID = 0; T comb(T a, T b) { return max(a, b); } 
-	int n; vector<T> seg;
-	void init(int _n) { n = _n; seg.assign(2*n,ID); }
-	void pull(int p) { seg[p] = comb(seg[2*p],seg[2*p+1]); }
-	void upd(int p, T val) { // set val at position p
-		seg[p += n] = val; for (p /= 2; p; p /= 2) pull(p); }
-	T query(int l, int r) {	// sum on interval [l, r]
-		T ra = ID, rb = ID; 
-		for (l += n, r += n+1; l < r; l /= 2, r /= 2) {
-			if (l&1) ra = comb(ra,seg[l++]);
-			if (r&1) rb = comb(seg[--r],rb);
+template<class C, bool directed> struct Dijkstra {
+	int SZ; V<C> dist; 
+	V<V<pair<int,C>>> adj;
+	void init(int _SZ) { SZ = _SZ; adj.clear(); adj.rsz(SZ); }
+	void ae(int u, int v, C cost) {
+		adj[u].pb({v,cost}); if (!directed) adj[v].pb({u,cost}); }
+	void gen(int st) {
+		dist.assign(SZ,numeric_limits<C>::max());
+		using T = pair<C,int>; pqg<T> pq; 
+		auto ad = [&](int a, C b) {
+			if (dist[a] <= b) return;
+			pq.push({dist[a] = b,a});
+		}; ad(st,0);
+		while (sz(pq)) {
+			T x = pq.top(); pq.pop(); if (dist[x.s] < x.f) continue;
+			each(y,adj[x.s]) ad(y.f,x.f+y.s);
 		}
-		return comb(ra,rb);
 	}
 };
 
 void solve() {
-	ints(n, k);
-	Seg<int> s; s.init(n);
-	F0R(i, n) {
-		int x; cin >> x; s.upd(i, x);
+	int n, m, k;
+	re(n, m, k);
+	vi loc(m); re(loc);
+	// dbg(loc);
+	Dijkstra<ll, false> d; d.init(n + 1);
+	rep(k) {
+		ints(a, b); ll c; re(c);
+		dbg(a, b, c);
+		d.ae(a, b, ll(c));
 	}
 
-	FOR(i, k - 1, n) {
-		cout << s.query(i - k + 1, i) << " ";
+	ll sum = 0;
+	ll ma = 0;
+	d.gen(0);
+	dbg(d.dist);
+	each(elf, loc) {
+		ll time = d.dist[elf];
+		time *= 2;
+		sum += time;
+		// dbg(time);
+		ckmax(ma, time);
 	}
-
-	ps();
+	ps(sum, ma);
 }
 
 signed main() {
@@ -340,7 +351,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	re(n);
+	// re(n);
 	rep(n) solve();
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;

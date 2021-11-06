@@ -4,7 +4,7 @@
 			"name": "Ubuntu",
 			"includePath": [
 				"${workspaceFolder}/**",
-				// "/usr/include/x86_64-linux-gnu/**",
+				"/usr/include/x86_64-linux-gnu/**",
 				"/usr/lib/gcc/**"
 			],
 			"defines": ["_DEBUG", "UNICODE", "_UNICODE"],

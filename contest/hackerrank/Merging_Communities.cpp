@@ -295,44 +295,47 @@ inline namespace FileIO {
 const int mx = 2e5+1;
 
 /**
- * Description: 1D point update, range query where \texttt{comb} is
-	 * any associative operation. If $N=2^p$ then \texttt{seg[1]==query(0,N-1)}.
- * Time: O(\log N)
- * Source: 
-	* http://codeforces.com/blog/entry/18051
-	* KACTL
- * Verification: SPOJ Fenwick
+ * Description: Disjoint Set Union with path compression
+	 * and union by size. Add edges and test connectivity. 
+	 * Use for Kruskal's or Boruvka's minimum spanning tree.
+ * Time: O(\alpha(N))
+ * Source: CSAcademy, KACTL
+ * Verification: *
  */
 
-template<class T> struct Seg { // comb(ID,b) = b
-	const T ID = 0; T comb(T a, T b) { return max(a, b); } 
-	int n; vector<T> seg;
-	void init(int _n) { n = _n; seg.assign(2*n,ID); }
-	void pull(int p) { seg[p] = comb(seg[2*p],seg[2*p+1]); }
-	void upd(int p, T val) { // set val at position p
-		seg[p += n] = val; for (p /= 2; p; p /= 2) pull(p); }
-	T query(int l, int r) {	// sum on interval [l, r]
-		T ra = ID, rb = ID; 
-		for (l += n, r += n+1; l < r; l /= 2, r /= 2) {
-			if (l&1) ra = comb(ra,seg[l++]);
-			if (r&1) rb = comb(seg[--r],rb);
-		}
-		return comb(ra,rb);
+struct DSU {
+	vi e; void init(int N) { e = vi(N,-1); }
+	int get(int x) { return e[x] < 0 ? x : e[x] = get(e[x]); } 
+	bool sameSet(int a, int b) { return get(a) == get(b); }
+	int size(int x) { return -e[get(x)]; }
+	bool unite(int x, int y) { // union by size
+		x = get(x), y = get(y); if (x == y) return 0;
+		if (e[x] > e[y]) swap(x,y);
+		e[x] += e[y]; e[y] = x; return 1;
 	}
 };
 
+/**template<class T> T kruskal(int N, vector<pair<T,pi>> ed) {
+	sort(all(ed));
+	T ans = 0; DSU D; D.init(N); // edges that unite are in MST
+	each(a,ed) if (D.unite(a.s.f,a.s.s)) ans += a.f; 
+	return ans;
+}*/
+
 void solve() {
-	ints(n, k);
-	Seg<int> s; s.init(n);
-	F0R(i, n) {
-		int x; cin >> x; s.upd(i, x);
+	ints(n, m);
+	DSU d; d.init(n);
+	rep(m) {
+		char t; re(t);
+		if(t=='Q') {
+			int x; re(x);
+			--x;
+			ps(d.size(x));
+		} else {
+			int1(a, b);
+			d.unite(a, b);
+		}
 	}
-
-	FOR(i, k - 1, n) {
-		cout << s.query(i - k + 1, i) << " ";
-	}
-
-	ps();
 }
 
 signed main() {
@@ -340,7 +343,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	re(n);
+	// re(n);
 	rep(n) solve();
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;

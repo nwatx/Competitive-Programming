@@ -10,6 +10,14 @@
         // "editorLineNumber.activeForeground": "#ffe600",
         "editor.selectionBackground": "#6b6b6b"
     },
+    "files.exclude": {
+        "/**.cpp": false,
+        "trash/**.cpp": true,
+        "contest/**/**.cpp": true,
+        "implementations/**.cpp": true,
+        "templates/implementations/**": true,
+    },
+    "editor.minimap.enabled": false,
     "explorer.sortOrder": "type",
     "cph.general.defaultLanguage": "cpp",
     "explorer.autoReveal": false,

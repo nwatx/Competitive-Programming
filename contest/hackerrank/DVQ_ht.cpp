@@ -289,50 +289,83 @@ inline namespace FileIO {
 /* #endregion */
 
 /* #region snippets */
+/**
+ * Description: Hash map with the same API as unordered\_map, but \tilde 3x faster.
+	 * Initial capacity must be a power of 2 if provided.
+ * Source: KACTL
+ * Usage: ht<int,int> h({},{},{},{},{1<<16});
+ */
 
+#include <ext/pb_ds/assoc_container.hpp>
+using namespace __gnu_pbds;
+struct chash { /// use most bits rather than just the lowest ones
+	const uint64_t C = ll(2e18*PI)+71; // large odd number
+	const int RANDOM = rng();
+	ll operator()(ll x) const { /// https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html
+		return __builtin_bswap64((x^RANDOM)*C); }
+};
+template<class K,class V> using um = unordered_map<K,V,chash>;
+template<class K,class V> using ht = gp_hash_table<K,V,chash>;
+template<class K,class V> V get(ht<K,V>& u, K x) {
+	auto it = u.find(x); return it == end(u) ? 0 : it->s; }
 /* #endregion */
 
 const int mx = 2e5+1;
 
-/**
- * Description: 1D point update, range query where \texttt{comb} is
-	 * any associative operation. If $N=2^p$ then \texttt{seg[1]==query(0,N-1)}.
- * Time: O(\log N)
- * Source: 
-	* http://codeforces.com/blog/entry/18051
-	* KACTL
- * Verification: SPOJ Fenwick
- */
+int A[mx];
+int ans = 0;
+ht<int, int> freq{{}, {}, {}, {}, {1<<16}};
 
-template<class T> struct Seg { // comb(ID,b) = b
-	const T ID = 0; T comb(T a, T b) { return max(a, b); } 
-	int n; vector<T> seg;
-	void init(int _n) { n = _n; seg.assign(2*n,ID); }
-	void pull(int p) { seg[p] = comb(seg[2*p],seg[2*p+1]); }
-	void upd(int p, T val) { // set val at position p
-		seg[p += n] = val; for (p /= 2; p; p /= 2) pull(p); }
-	T query(int l, int r) {	// sum on interval [l, r]
-		T ra = ID, rb = ID; 
-		for (l += n, r += n+1; l < r; l /= 2, r /= 2) {
-			if (l&1) ra = comb(ra,seg[l++]);
-			if (r&1) rb = comb(seg[--r],rb);
-		}
-		return comb(ra,rb);
-	}
-};
+void ins(int x) {
+	if(!freq[x]) ans++;
+	freq[x]++;
+}
+
+void del(int x) {
+	freq[x]--;
+	if(!freq[x]) ans--;
+}
+
+int ret[mx];
 
 void solve() {
-	ints(n, k);
-	Seg<int> s; s.init(n);
-	F0R(i, n) {
-		int x; cin >> x; s.upd(i, x);
+	int n, k; re(n, k);
+	int blk = (int)sqrt(n);
+	F0R(i, n) cin >> A[i];
+	V<pair<pi, int>> queries(k);
+	F0R(i, k) {
+		int a, b; cin >> a >> b;
+		a--;
+		queries[i] = {{a, b}, i};
 	}
 
-	FOR(i, k - 1, n) {
-		cout << s.query(i - k + 1, i) << " ";
+	sort(all(queries), [&](auto a, auto b) {
+		if(a.f.f / blk != b.f.f / blk) return a.f.f < b.f.f;
+		return a.f.s < b.f.s;
+	});
+
+	int left = 0, right = 0;
+	each(query, queries) {
+		while(left < query.f.f) {
+			del(A[left++]);
+		}
+
+		while(left > query.f.f) {
+			ins(A[--left]);
+		}
+
+		while(right > query.f.s) {
+			del(A[--right]);
+		}
+
+		while(right < query.f.s) {
+			ins(A[right++]);
+		}
+
+		ret[query.s] = ans;
 	}
 
-	ps();
+	F0R(i, k) cout << ret[i] << "\n";
 }
 
 signed main() {
@@ -340,7 +373,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	re(n);
+	// re(n);
 	rep(n) solve();
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;

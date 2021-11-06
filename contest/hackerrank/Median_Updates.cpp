@@ -207,7 +207,7 @@ inline namespace ToString {
 
 	// ts: string representation to print
 	tcT> typename enable_if<is_printable_v<T>,str>::type ts(T v) {
-		stringstream ss; ss << fixed << setprecision(15) << v;
+		stringstream ss; ss << fixed << setprecision(1) << v;
 		return ss.str(); } // default
 	tcT> str bit_vec(T t) { // bit vector to string
 		str res = "{"; F0R(i,sz(t)) res += ts(t[i]);
@@ -289,50 +289,67 @@ inline namespace FileIO {
 /* #endregion */
 
 /* #region snippets */
+/**
+ * Description: A set (not multiset!) with support for finding the $n$'th
+ * element, and finding the index of an element. Change \texttt{null\_type} for map.
+ * Time: O(\log N)
+ * Source: KACTL
+   * https://codeforces.com/blog/entry/11080
+ * Verification: many
+ */
 
+#include <ext/pb_ds/tree_policy.hpp>
+#include <ext/pb_ds/assoc_container.hpp>
+using namespace __gnu_pbds;
+template <class T> using Tree = tree<T, null_type, less<T>, 
+	rb_tree_tag, tree_order_statistics_node_update>; 
+#define ook order_of_key
+#define fbo find_by_order
+
+void treeExample() {
+	Tree<int> t, t2; t.insert(8);
+	auto it = t.insert(10).f; assert(it == t.lb(9));
+	assert(t.ook(10) == 1 && t.ook(11) == 2 && *t.fbo(0) == 8);
+	t.join(t2); // assuming T < T2 or T > T2, merge t2 into t
+}
+
+/**
+int atMost(Tree<pi>& T, int r) { 
+	return T.ook({r,MOD}); }
+int getSum(Tree<pi>& T, int l, int r) { 
+	return atMost(T,r)-atMost(T,l-1); }
+*/
 /* #endregion */
 
 const int mx = 2e5+1;
 
-/**
- * Description: 1D point update, range query where \texttt{comb} is
-	 * any associative operation. If $N=2^p$ then \texttt{seg[1]==query(0,N-1)}.
- * Time: O(\log N)
- * Source: 
-	* http://codeforces.com/blog/entry/18051
-	* KACTL
- * Verification: SPOJ Fenwick
- */
-
-template<class T> struct Seg { // comb(ID,b) = b
-	const T ID = 0; T comb(T a, T b) { return max(a, b); } 
-	int n; vector<T> seg;
-	void init(int _n) { n = _n; seg.assign(2*n,ID); }
-	void pull(int p) { seg[p] = comb(seg[2*p],seg[2*p+1]); }
-	void upd(int p, T val) { // set val at position p
-		seg[p += n] = val; for (p /= 2; p; p /= 2) pull(p); }
-	T query(int l, int r) {	// sum on interval [l, r]
-		T ra = ID, rb = ID; 
-		for (l += n, r += n+1; l < r; l /= 2, r /= 2) {
-			if (l&1) ra = comb(ra,seg[l++]);
-			if (r&1) rb = comb(seg[--r],rb);
-		}
-		return comb(ra,rb);
-	}
-};
-
 void solve() {
-	ints(n, k);
-	Seg<int> s; s.init(n);
-	F0R(i, n) {
-		int x; cin >> x; s.upd(i, x);
-	}
+	int n; re(n);
 
-	FOR(i, k - 1, n) {
-		cout << s.query(i - k + 1, i) << " ";
-	}
+	map<int, set<int>> ind;
+	Tree<pd> s;
+	
+	rep(n) {
+		char t; cin >> t;
+		if(t == 'r') {
+			int x; cin >> x;
+			if(ind.count(x)) {
+				s.erase({x, *ind[x].begin()});
+				ind[x].erase(ind[x].begin());
+			}
+		} else if(t == 'a') {
+			int x; cin >> x;
+			ind[x].ins(_);
+			s.ins({x,_});
+		}
 
-	ps();
+		if(sz(s)) {
+			if(sz(s) % 2) ps(ll((*s.fbo(sz(s)/2)).f));
+			else ps(((*s.fbo(sz(s)/2-1)).f+(*s.fbo(sz(s)/2)).f)/2);
+		} else {
+			ps("Wrong!");
+		}
+	}
 }
 
 signed main() {
@@ -340,7 +357,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	re(n);
+	// re(n);
 	rep(n) solve();
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
