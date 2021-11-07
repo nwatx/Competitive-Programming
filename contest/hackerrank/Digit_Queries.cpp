@@ -207,7 +207,7 @@ inline namespace ToString {
 
 	// ts: string representation to print
 	tcT> typename enable_if<is_printable_v<T>,str>::type ts(T v) {
-		stringstream ss; ss << fixed << setprecision(1) << v;
+		stringstream ss; ss << fixed << setprecision(15) << v;
 		return ss.str(); } // default
 	tcT> str bit_vec(T t) { // bit vector to string
 		str res = "{"; F0R(i,sz(t)) res += ts(t[i]);
@@ -289,52 +289,40 @@ inline namespace FileIO {
 /* #endregion */
 
 /* #region snippets */
-/**
- * Description: A set (not multiset!) with support for finding the $n$'th
- * element, and finding the index of an element. Change \texttt{null\_type} for map.
- * Time: O(\log N)
- * Source: KACTL
-   * https://codeforces.com/blog/entry/11080
- * Verification: many
- */
 
-#include <ext/pb_ds/tree_policy.hpp>
-#include <ext/pb_ds/assoc_container.hpp>
-using namespace __gnu_pbds;
-template <class T> using Tree = tree<T, null_type, less<T>, 
-	rb_tree_tag, tree_order_statistics_node_update>; 
-#define ook order_of_key
-#define fbo find_by_order
-
-void treeExample() {
-	Tree<int> t, t2; t.insert(8);
-	auto it = t.insert(10).f; assert(it == t.lb(9));
-	assert(t.ook(10) == 1 && t.ook(11) == 2 && *t.fbo(0) == 8);
-	t.join(t2); // assuming T < T2 or T > T2, merge t2 into t
-}
-
-/**
-int atMost(Tree<pi>& T, int r) { 
-	return T.ook({r,MOD}); }
-int getSum(Tree<pi>& T, int l, int r) { 
-	return atMost(T,r)-atMost(T,l-1); }
-*/
 /* #endregion */
 
 const int mx = 2e5+1;
 
-void solve() {
-	int n; re(n);
-	vd v(n); re(v);
-	Tree<db> t;
-	each(x, v) {
-		t.ins(x);
-		if(sz(t) % 2) cout << setprecision(1) << fixed << (db(*t.fbo(sz(t)/2))) << nl;
-		else cout << setprecision(1) << fixed << (((db)(*t.fbo(sz(t)/2 - 1)) + db(*t.fbo(sz(t)/2))) / 2) << nl;
-		// dbg(t);
-		// dbg(*t.fbo(sz(t)/2) - 1);
-		// dbg(*t.fbo(sz(t)/2 + 1) - 1);
+vl gen() {
+	vl d(20);
+	F0R(i, 20) {
+		d[i] = (i+1) * ll(pow(10LL, i + 1));
+		// if(i)d[i] -= (i+1)*d[i-1];
 	}
+	return d;
+}
+
+void solve() {
+	vl d = gen();
+	dbg(d);
+	ll x; re(x);
+	int pos = 0;
+	rep(20) {
+		if(x < d[_]) {
+			pos = _;
+			break;
+		}
+	}
+
+	if(pos == 0) {
+		ps(x);
+		return;
+	}
+
+	++pos;
+	x -= pos;
+	dbg(pos, x);
 }
 
 signed main() {
@@ -342,7 +330,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) solve();
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;

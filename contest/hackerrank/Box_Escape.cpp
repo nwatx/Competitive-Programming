@@ -27,8 +27,19 @@ const ll MOD = 1e9+7;
 const db PI = acos((db)-1);
 const char nl = '\n';
 
+bool vis[1001][1001];
+
 void solve() {
-	
+	// construct top
+	int n; cin >> n;
+	int y = 2, x = 0;
+	int d = 4;
+	rep(n) {
+		rep(4) vis[x][y] = 1, y++;
+		rep(d) vis[x][y] = 1, x++;
+	}
+
+	F0R(i, 12) {F0R(j, 12) cout << vis[i][j]; cout << nl;}
 }
 
 int main() {

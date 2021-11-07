@@ -207,7 +207,7 @@ inline namespace ToString {
 
 	// ts: string representation to print
 	tcT> typename enable_if<is_printable_v<T>,str>::type ts(T v) {
-		stringstream ss; ss << fixed << setprecision(1) << v;
+		stringstream ss; ss << fixed << setprecision(15) << v;
 		return ss.str(); } // default
 	tcT> str bit_vec(T t) { // bit vector to string
 		str res = "{"; F0R(i,sz(t)) res += ts(t[i]);
@@ -290,51 +290,112 @@ inline namespace FileIO {
 
 /* #region snippets */
 /**
- * Description: A set (not multiset!) with support for finding the $n$'th
- * element, and finding the index of an element. Change \texttt{null\_type} for map.
- * Time: O(\log N)
- * Source: KACTL
-   * https://codeforces.com/blog/entry/11080
- * Verification: many
+ * Description: modular arithmetic operations 
+ * Source: 
+	* KACTL
+	* https://codeforces.com/blog/entry/63903
+	* https://codeforces.com/contest/1261/submission/65632855 (tourist)
+	* https://codeforces.com/contest/1264/submission/66344993 (ksun)
+	* also see https://github.com/ecnerwala/cp-book/blob/master/src/modnum.hpp (ecnerwal)
+ * Verification: 
+	* https://open.kattis.com/problems/modulararithmetic
  */
 
-#include <ext/pb_ds/tree_policy.hpp>
-#include <ext/pb_ds/assoc_container.hpp>
-using namespace __gnu_pbds;
-template <class T> using Tree = tree<T, null_type, less<T>, 
-	rb_tree_tag, tree_order_statistics_node_update>; 
-#define ook order_of_key
-#define fbo find_by_order
+template<int MOD, int RT> struct mint {
+	static const int mod = MOD;
+	static constexpr mint rt() { return RT; } // primitive root for FFT
+	int v; explicit operator int() const { return v; } // explicit -> don't silently convert to int
+	mint() { v = 0; }
+	mint(ll _v) { v = int((-MOD < _v && _v < MOD) ? _v : _v % MOD);
+		if (v < 0) v += MOD; }
+	friend bool operator==(const mint& a, const mint& b) { 
+		return a.v == b.v; }
+	friend bool operator!=(const mint& a, const mint& b) { 
+		return !(a == b); }
+	friend bool operator<(const mint& a, const mint& b) { 
+		return a.v < b.v; }
+	friend void re(mint& a) { ll x; re(x); a = mint(x); }
+	friend str ts(mint a) { return ts(a.v); }
+   
+	mint& operator+=(const mint& m) { 
+		if ((v += m.v) >= MOD) v -= MOD; 
+		return *this; }
+	mint& operator-=(const mint& m) { 
+		if ((v -= m.v) < 0) v += MOD; 
+		return *this; }
+	mint& operator*=(const mint& m) { 
+		v = int((ll)v*m.v%MOD); return *this; }
+	mint& operator/=(const mint& m) { return (*this) *= inv(m); }
+	friend mint pow(mint a, ll p) {
+		mint ans = 1; assert(p >= 0);
+		for (; p; p /= 2, a *= a) if (p&1) ans *= a;
+		return ans; }
+	friend mint inv(const mint& a) { assert(a.v != 0); 
+		return pow(a,MOD-2); }
+		
+	mint operator-() const { return mint(-v); }
+	mint& operator++() { return *this += 1; }
+	mint& operator--() { return *this -= 1; }
+	friend mint operator+(mint a, const mint& b) { return a += b; }
+	friend mint operator-(mint a, const mint& b) { return a -= b; }
+	friend mint operator*(mint a, const mint& b) { return a *= b; }
+	friend mint operator/(mint a, const mint& b) { return a /= b; }
+};
 
-void treeExample() {
-	Tree<int> t, t2; t.insert(8);
-	auto it = t.insert(10).f; assert(it == t.lb(9));
-	assert(t.ook(10) == 1 && t.ook(11) == 2 && *t.fbo(0) == 8);
-	t.join(t2); // assuming T < T2 or T > T2, merge t2 into t
+typedef mint<MOD,5> mi; // 5 is primitive root for both common mods
+typedef vector<mi> vmi;
+typedef pair<mi,mi> pmi;
+typedef vector<pmi> vpmi;
+
+vector<vmi> scmb; // small combinations
+void genComb(int SZ) {
+	scmb.assign(SZ,vmi(SZ)); scmb[0][0] = 1;
+	FOR(i,1,SZ) F0R(j,i+1) 
+		scmb[i][j] = scmb[i-1][j]+(j?scmb[i-1][j-1]:0);
 }
 
-/**
-int atMost(Tree<pi>& T, int r) { 
-	return T.ook({r,MOD}); }
-int getSum(Tree<pi>& T, int l, int r) { 
-	return atMost(T,r)-atMost(T,l-1); }
-*/
+const int LIM = 500000;
+ll phi[LIM];
+
+void calculatePhi() {
+	F0R(i, LIM) phi[i] = 1;
+	phi[0] = MOD;
+	ll cur = MOD;
+	ll cI = 1;
+	while(cur > 1) {
+		ll t = cur;
+		for(int i = 2; i*i<=cur;i++) {
+			if(cur%i==0) {
+				while(cur%i==0)cur/=i;
+				t-=t/i;
+			}
+		}
+		if(cur>1)t-=t/cur;
+		phi[cI++] = t;
+		cur=t;
+	}
+}
 /* #endregion */
 
 const int mx = 2e5+1;
 
+ll modpow(ll b, ll e, ll mod) {
+	ll ans = 1;
+	for (; e; b = b * b % mod, e /= 2)
+		if (e & 1) ans = ans * b % mod;
+	return ans;
+}
+
 void solve() {
 	int n; re(n);
-	vd v(n); re(v);
-	Tree<db> t;
-	each(x, v) {
-		t.ins(x);
-		if(sz(t) % 2) cout << setprecision(1) << fixed << (db(*t.fbo(sz(t)/2))) << nl;
-		else cout << setprecision(1) << fixed << (((db)(*t.fbo(sz(t)/2 - 1)) + db(*t.fbo(sz(t)/2))) / 2) << nl;
-		// dbg(t);
-		// dbg(*t.fbo(sz(t)/2) - 1);
-		// dbg(*t.fbo(sz(t)/2 + 1) - 1);
+	// n m a
+	calculatePhi();
+	vl v(n); re(v);
+	ll exp = *v.rbegin();
+	R0F(i, n - 1) {
+		exp = modpow(v[i], exp, phi[i]);
 	}
+	ps(exp);
 }
 
 signed main() {
@@ -342,7 +403,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) solve();
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;

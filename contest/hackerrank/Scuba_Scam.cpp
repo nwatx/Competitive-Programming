@@ -27,8 +27,25 @@ const ll MOD = 1e9+7;
 const db PI = acos((db)-1);
 const char nl = '\n';
 
+ll n, m;
+ll A[(int)1e5+1];
+
+bool good(ll x) {
+	ll sum = 0;
+	F0R(i, n) sum += x / A[i];
+	return sum >= m;
+}
+
 void solve() {
-	
+	cin >> m >> n;
+	F0R(i, n) cin >> A[i];
+	ll lo = 0, hi = ll(1e18)+1;
+	hi++;
+	while (lo < hi) {
+		ll mid = lo+(hi-lo)/2;
+		good(mid) ? hi = mid : lo = mid+1; 
+	} 
+	cout << lo << '\n';
 }
 
 int main() {
