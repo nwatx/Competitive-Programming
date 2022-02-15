@@ -288,18 +288,113 @@ inline namespace FileIO {
 };
 /* #endregion */
 
-// Changeable constants
-const db EPS = 1e-9;
-const int mx = 2e5+1;
-
 /* #region snippets */
 
 /* #endregion */
 
+const int mx = 2e5+1;
+const db EPS = 1e-7;
 
 void solve() {
+	int n; re(n);
+	vd angles;
+	rep(n) {
+		ints(a, b);
+		db ang = atan2(b, a);
+		if(ang < 0) ang += 2 * PI;
+		angles.pb(ang);
+	}
 
+	sor(angles);
+
+	F0R(i, n) angles.pb(angles[i] + 2 * PI);
+	db ret = 2 * PI;
+	F0R(i, n) {
+		ckmin(ret, fmod(abs(angles[i] - angles[i + n - 1]), 2 * PI));
+	}
+
+	each(e, angles) {
+		dbg(e * 180 / PI);
+	}
+
+	if(ret >= 360 - EPS) ret = 0;
+	if(n <= 1) ret = 0;
+	if(n == 2) ckmin(ret, 2 * PI - ret);
+	assert(ret <= 2 * PI && ret >= 0);
+
+	ps(ret * 180 / PI);
 }
+
+// db A(pi a) {
+// 	return atan2(a.s, a.f);
+// }
+
+// bool cmp(pi a, pi b) {
+// 	return atan2(a.s, a.f) < atan2(b.s, b.f);
+// }
+
+// int cross(const pi& a, const pi& b) { 
+// 	return a.f*b.s-a.s*b.f;
+// } // cross product
+
+
+// void solve() {
+// 	int n; re(n);
+// 	if(n == 1) ps(0);
+// 	else {
+
+// 	V<db> ang;
+
+// 	rep(n) {
+// 		ints(a, b);
+// 		ang.pb(fmod(A(mp(a, b)) + 2 * PI, 2 * PI));
+// 	}
+
+// 	sor(ang);
+// 	db ret = ang[sz(ang) - 1] - ang[0];
+
+// 	// all angles are positive now
+// 	F0R(i, n) {
+// 		int j = (i + 1) % n;
+// 		db diff = 2 * PI - abs(ang[j] - ang[i]);
+// 		dbg(i, j, diff * 180 / PI);
+// 		ckmin(ret, diff);
+// 	}
+
+// 	if(n == 2) ckmin(ret, 2 * PI - ret);
+// 	ret *= 180 / PI;
+// 	ps(ret);
+
+	// sor(ang);
+	// // dbg(ang);
+
+	// db ans = ang[sz(ang) - 1] - ang[0];
+
+	// if(sz(ang) == 2) {
+	// 	ps(min(ans, 360 - ans));
+	// } else {
+	// 	ps(ans);
+	// }
+	// else {
+		// vpi v(n); re(v);
+		// sort(all(v), cmp);
+
+		// db ret = 360;
+
+		// F0R(i, n - 1) {
+		// 	db diff = fmod(4 * PI - (A(v[i + 1]) - A(v[i])), 2 * PI);
+		// 	ckmin(ret, diff);
+		// }
+
+		// ret *= 180 / PI;
+
+		// if(sz(v) == 2) {
+		// 	ps(min(360 - ret, ret));
+		// } else {
+		// 	ps(ret);
+		// }
+	// }
+// }
 
 signed main() {
 	// clock_t start = clock();
@@ -307,10 +402,7 @@ signed main() {
 
 	int n = 1;
 	// re(n);
-	rep(n) {
-		// pr("Case #", _ + 1, ": "); // Kickstart
-		solve();
-	}
+	rep(n) solve();
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }

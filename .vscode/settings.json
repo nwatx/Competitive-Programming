@@ -70,7 +70,9 @@
         "memory": "cpp",
         "random": "cpp",
         "initializer_list": "cpp",
-        "streambuf": "cpp"
+        "streambuf": "cpp",
+        "charconv": "cpp",
+        "limits": "cpp"
     },
     "gitdoc.enabled": false,
 }

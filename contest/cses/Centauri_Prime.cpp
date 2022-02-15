@@ -296,9 +296,21 @@ const int mx = 2e5+1;
 
 /* #endregion */
 
+set<int> vowels{'a', 'e', 'i', 'o', 'u'};
 
 void solve() {
+	string s; re(s);
+	pr(s, " is ruled by ");
 
+	s[sz(s) - 1] = tolower(s[sz(s) - 1]);
+
+	if(s[sz(s) - 1] == 'y') {
+		ps("nobody.");
+		return;
+	}
+
+	if(vowels.count(s[sz(s) - 1])) ps("Alice.");
+	else ps("Bob.");
 }
 
 signed main() {
@@ -306,9 +318,9 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
-		// pr("Case #", _ + 1, ": "); // Kickstart
+		pr("Case #", _ + 1, ": "); // Kickstart
 		solve();
 	}
 

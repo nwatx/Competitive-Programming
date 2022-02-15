@@ -288,18 +288,50 @@ inline namespace FileIO {
 };
 /* #endregion */
 
-// Changeable constants
-const db EPS = 1e-9;
-const int mx = 2e5+1;
-
 /* #region snippets */
+/**t
+ * Description: shortest path
+ * Source: own
+ * Verification: https://open.kattis.com/problems/shortestpath1
+ */
 
+template<class C, bool directed> struct Dijkstra {
+	int SZ; V<C> dist; 
+	V<V<pair<int,C>>> adj;
+	void init(int _SZ) { SZ = _SZ; adj.clear(); adj.rsz(SZ); }
+	void ae(int u, int v, C cost) {
+		adj[u].pb({v,cost}); if (!directed) adj[v].pb({u,cost}); }
+	void gen(int st) {
+		dist.assign(SZ,numeric_limits<C>::max());
+		using T = pair<C,int>; pqg<T> pq; 
+		auto ad = [&](int a, C b) {
+			if (dist[a] <= b) return;
+			pq.push({dist[a] = b,a});
+		}; ad(st,0);
+		while (sz(pq)) {
+			T x = pq.top(); pq.pop(); if (dist[x.s] < x.f) continue;
+			each(y,adj[x.s]) ad(y.f,x.f+y.s);
+		}
+	}
+};
 /* #endregion */
 
+const int mx = 2e5+1;
 
 void solve() {
-
+	int n, m; re(n, m);
+	ints(S, T, U, V);
+	Dijkstra<ll, false> D; D.init(n + 1);
+	rep(m) {
+		ints(a, b, c);
+		D.ae(a, b, c);
+	} 
+	
+	D.gen(1);
+	dbg(D.dist);
+	
 }
+
 
 signed main() {
 	// clock_t start = clock();
@@ -307,10 +339,7 @@ signed main() {
 
 	int n = 1;
 	// re(n);
-	rep(n) {
-		// pr("Case #", _ + 1, ": "); // Kickstart
-		solve();
-	}
+	rep(n) solve();
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }

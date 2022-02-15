@@ -288,17 +288,51 @@ inline namespace FileIO {
 };
 /* #endregion */
 
-// Changeable constants
-const db EPS = 1e-9;
-const int mx = 2e5+1;
-
 /* #region snippets */
 
 /* #endregion */
 
+const int mx = 2e5+1;
+
+vi adj[mx];
+int in_subtree[mx], out_subtree[mx];
+
+void dfs(int v, int p) {
+	each(e, adj[v]) {
+		if(e != p) {
+			dfs(e, v);
+			ckmax(in_subtree[v], in_subtree[e] + 1);
+		}
+	}
+}
+
+void dfs2(int v, int p) {
+	each(e, adj[v]) {
+		if(e!=p) {
+			ckmax(out_subtree[e], out_subtree[p] + 1);
+
+		}
+		if(e!=p) {
+			dfs2(e, v);
+		}
+
+	}
+}
 
 void solve() {
+	int n; re(n);
+	rep(n) {
+		ints(a,b);
+		adj[a].pb(b);
+		adj[b].pb(a);
+	}
 
+	dfs(1, 0);
+	dfs2(1, 0);
+
+	FOR(i, 1, n+1) {
+		dbg(i, in_subtree[i], out_subtree[i] + 1);
+	}
 }
 
 signed main() {
@@ -307,10 +341,7 @@ signed main() {
 
 	int n = 1;
 	// re(n);
-	rep(n) {
-		// pr("Case #", _ + 1, ": "); // Kickstart
-		solve();
-	}
+	rep(n) solve();
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }

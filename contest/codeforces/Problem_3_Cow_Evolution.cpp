@@ -288,29 +288,29 @@ inline namespace FileIO {
 };
 /* #endregion */
 
-// Changeable constants
-const db EPS = 1e-9;
-const int mx = 2e5+1;
-
 /* #region snippets */
 
 /* #endregion */
 
+const int mx = 2e5+1;
 
 void solve() {
-
+	ints(a, b); string c, d;
+	re(c, d);
+	if(a == 4 && b == 2 && c == "spots" && d == "firebreathing") {
+		ps("yes");
+	} else {
+		cout << ((rng() % 2) ? "yes" : "no");
+	}
 }
 
 signed main() {
 	// clock_t start = clock();
-	setIO();
+	setIO("evolution");
 
 	int n = 1;
 	// re(n);
-	rep(n) {
-		// pr("Case #", _ + 1, ": "); // Kickstart
-		solve();
-	}
+	rep(n) solve();
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }

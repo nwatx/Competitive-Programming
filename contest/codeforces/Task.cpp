@@ -288,17 +288,48 @@ inline namespace FileIO {
 };
 /* #endregion */
 
-// Changeable constants
-const db EPS = 1e-9;
-const int mx = 2e5+1;
-
 /* #region snippets */
 
 /* #endregion */
 
+const int mx = 2e5+1;
+
+set<char> cR = {'R', 'O', 'P', 'A'};
+set<char> cY = {'Y', 'O', 'G', 'A'};
+set<char> cB = {'B', 'P', 'G', 'A'};
+
+
+int ret = 0;
+
+void countSplit(string &s, int c) {
+	set<char> cont = cR;
+	if(c == 0) cont = cR;
+	else if(c==1) cont = cY;
+	else if(c==2) cont = cB;
+
+	int painting = 0;
+	int cur = 0;
+	dbg(s, cont);
+	F0R(i, sz(s)) {
+		char x = s[i];
+		if(cont.count(x)) {
+			if(!painting) painting = 1;
+		} else {
+			if(painting) cur++, painting = 0;
+		}
+	}
+	ret += cur + painting;
+}
 
 void solve() {
-
+	ret = 0;
+	int n; re(n);
+	string s; re(s);
+	F0R(i, 3) {
+		countSplit(s, i);
+		dbg(i, ret);
+	}
+	ps(ret);
 }
 
 signed main() {
@@ -306,9 +337,9 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
-		// pr("Case #", _ + 1, ": "); // Kickstart
+		pr("Case #", _ + 1, ": ");
 		solve();
 	}
 

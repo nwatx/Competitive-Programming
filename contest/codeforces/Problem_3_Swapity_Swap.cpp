@@ -288,29 +288,53 @@ inline namespace FileIO {
 };
 /* #endregion */
 
-// Changeable constants
-const db EPS = 1e-9;
-const int mx = 2e5+1;
-
 /* #region snippets */
 
 /* #endregion */
 
+const int mx = 2e5+1;
+
+vi apply(vi a, vi b) {
+	vi ret(sz(a));
+	F0R(i, sz(a)) {
+		ret[i] = a[b[i]];
+	}
+	return ret;
+}
 
 void solve() {
+	int n; re(n);
+	vi A(n), B(n);
+	int k; re(k);
+	iota(all(A), 0);
+	iota(all(B), 0);
+	int1(a1, a2, b1, b2);
+	a2++; b2++;
 
+	reverse(bg(A) + a1, bg(A) + a2);
+	reverse(bg(A) + b1, bg(A) + b2);
+
+	dbg(A);
+
+	dbg(A, B);
+
+	for(; k > 0; k /= 2, A = apply(A, A)) {
+		if(k&1) B = apply(B, A);
+	}
+
+	F0R(i, sz(A)) {
+		ps(B[i] + 1);
+	}
 }
+
 
 signed main() {
 	// clock_t start = clock();
-	setIO();
+	setIO("swap");
 
 	int n = 1;
 	// re(n);
-	rep(n) {
-		// pr("Case #", _ + 1, ": "); // Kickstart
-		solve();
-	}
+	rep(n) solve();
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }

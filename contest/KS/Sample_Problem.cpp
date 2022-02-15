@@ -298,7 +298,11 @@ const int mx = 2e5+1;
 
 
 void solve() {
-
+	ints(n, m);
+	vl v(n); re(v);
+	ll s = 0;
+	each(x, v) s += x;
+	ps(s % m);
 }
 
 signed main() {
@@ -306,9 +310,9 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
-		// pr("Case #", _ + 1, ": "); // Kickstart
+		pr("Case #", _ + 1, ": "); // Kickstart
 		solve();
 	}
 

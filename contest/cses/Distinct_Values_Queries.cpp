@@ -325,7 +325,7 @@ const int mx = 2e5+1;
 
 map<int, int> fst, ret;
 vpi queries[mx];
-BIT<int, mx> B;
+BIT<int, mx> bit;
 
 void solve() {
 	int n, m; re(n, m);
@@ -337,13 +337,13 @@ void solve() {
 	ROF(i, 1, n + 1) {
 		int z = v[i - 1];
 
-		if (fst.count(z)) B.upd(fst[z], -1);
+		if (fst.count(z)) bit.upd(fst[z], -1);
 		fst[z] = i;
 
-		B.upd(i, 1);
+		bit.upd(i, 1);
 
 		each(t, queries[i]) {
-			ret[t.s] = B.sum(t.f);
+			ret[t.s] = bit.sum(t.f);
 		}
 	}
 

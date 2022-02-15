@@ -288,17 +288,58 @@ inline namespace FileIO {
 };
 /* #endregion */
 
-// Changeable constants
-const db EPS = 1e-9;
-const int mx = 2e5+1;
-
 /* #region snippets */
-
+template <typename T>
+struct BIT {
+	vector<T> s;
+	int n;
+	BIT(int n): s(n + 1), n(n) {}
+	void update(int i, T v) {
+		for (i++; i <= n; i += i & -i) s[i] ^= v;
+	}
+	T query(int i) {
+		T ans = 0;
+		for (i++; i; i -= i & -i) ans ^= s[i];
+		return ans;
+	}
+	T query(int l, int r) { return query(r) ^ query(l - 1); }
+};
 /* #endregion */
 
+const int mx = 2e5+1;
+
+int timer = 0;
+vi adj[mx];
+int st[mx], en[mx];
+void dfs(int v, int p) {
+	st[v] = timer++;
+	each(x, adj[v]) {
+		if(x != p) dfs(x, v);
+	}
+	en[v] = timer - 1;
+}
 
 void solve() {
+	ints(n, m);
+	vi v(n); re(v);
+	rep(n - 1) {
+		ints(a, b);
+		adj[a].pb(b);
+		adj[b].pb(a);
+	}
 
+	dfs(1, 0);
+
+	BIT<int> bt(n + 1);
+
+	FOR(i, 1, n + 1) {
+		bt.update(st[i], v[i]);
+		bt.update(en[i], -v[i]);
+	}
+	
+	rep(m) [
+		
+	]
 }
 
 signed main() {
@@ -307,10 +348,7 @@ signed main() {
 
 	int n = 1;
 	// re(n);
-	rep(n) {
-		// pr("Case #", _ + 1, ": "); // Kickstart
-		solve();
-	}
+	rep(n) solve();
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }

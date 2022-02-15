@@ -288,29 +288,57 @@ inline namespace FileIO {
 };
 /* #endregion */
 
-// Changeable constants
-const db EPS = 1e-9;
-const int mx = 2e5+1;
-
 /* #region snippets */
 
 /* #endregion */
 
+const int mx = 2e5+1;
 
 void solve() {
+	string line; getline(cin, line);
+	int n = stoi(line);
+	// see which word has the most matches
+	vs words(n);
+	F0R(i, n) {
+		getline(cin, words[i]);
+	}
 
+	V<pair<int, str>> best;
+
+	F0R(i, n) {
+		int score = 0;
+		F0R(j, n) {
+			set<char> used;
+			F0R(k, 5) {
+				if(words[i][k] == words[j][k]) {
+					if(!used.count(words[i][k])) score += 2;
+					used.insert(words[i][k]);
+				} else { // check one match
+					F0R(l, 5) if(words[j][l] == words[i][k]) {
+						if(!used.count(words[i][k])) {
+							score++;
+						}
+						used.insert(words[i][k]);
+						break;
+					}
+				}
+			}
+		}
+		best.pb({score, words[i]});
+	}
+
+	sorr(best);
+
+	ps(best);
 }
 
 signed main() {
 	// clock_t start = clock();
-	setIO();
+	setIO("wordle");
 
 	int n = 1;
 	// re(n);
-	rep(n) {
-		// pr("Case #", _ + 1, ": "); // Kickstart
-		solve();
-	}
+	rep(n) solve();
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }

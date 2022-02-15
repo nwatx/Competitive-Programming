@@ -288,17 +288,126 @@ inline namespace FileIO {
 };
 /* #endregion */
 
-// Changeable constants
-const db EPS = 1e-9;
-const int mx = 2e5+1;
-
 /* #region snippets */
 
 /* #endregion */
 
+const int mx = 2e5+1;
+
+int n;
+
+int grid[501][501];
+int mDist[501][501];
+bool vis[501][501];
+
+int sq(int a) {
+	return a * a;
+}
+
+/**
+ * Description: shortest path
+ * Source: own
+ * Verification: https://open.kattis.com/problems/shortestpath1
+ */
+
+template<class C, bool directed> struct Dijkstra {
+	int SZ; V<C> dist; 
+	V<V<pair<int,C>>> adj;
+	void init(int _SZ) { SZ = _SZ; adj.clear(); adj.rsz(SZ); }
+	void ae(int u, int v, C cost) {
+		adj[u].pb({v,cost}); if (!directed) adj[v].pb({u,cost}); }
+	void gen(int st) {
+		dist.assign(SZ,numeric_limits<C>::max());
+		using T = pair<C,int>; pqg<T> pq; 
+		auto ad = [&](int a, C b) {
+			if (dist[a] <= b) return;
+			pq.push({dist[a] = b,a});
+		}; ad(st,0);
+		while (sz(pq)) {
+			T x = pq.top(); pq.pop(); if (dist[x.s] < x.f) continue;
+			each(y,adj[x.s]) ad(y.f,x.f+y.s);
+		}
+	}
+};
+
+int idx(int i, int j) {
+	return i * n + j;
+}
 
 void solve() {
+	re(n);
+	int highest = 0;
+	F0R(i, n) F0R(j, n) {
+		re(grid[i][j]);
+		mDist[i][j] = MOD;
+		ckmax(highest, grid[i][j]);
+	}
 
+	mDist[0][0] = 0;
+
+	Dijkstra<int, false> D; D.init(n * n);
+	F0R(i, n) F0R(j, n) {
+		F0R(k, 4) {
+			int nx = i + dx[k];
+			int ny = j + dy[k];
+			if(nx < 0 || ny < 0 || nx >= n || ny >= n) continue;
+			D.ae(idx(i, j), idx(nx, ny), sq(grid[nx][ny] - grid[i][j]));
+		}
+	}
+
+	D.gen(0);
+	
+	int ret = MOD;
+
+	F0R(i, n) F0R(j, n) {
+		if(grid[i][j] == highest) {
+			ckmin(ret, D.dist[idx(i, j)]);
+		}
+	}
+
+	ps(ret);
+
+	// F0R(i, n) {
+	// 	F0R(j, n) {
+	// 		F0R(k, 4) {
+	// 			int nx = i + dx[k];
+	// 			int ny = j + dy[k];
+	// 			if(nx < 0 || ny < 0 || nx >= n || ny >= n) continue;
+	// 			ckmin(mDist[nx][ny], mDist[i][j] + sq(grid[nx][ny] - grid[i][j]));
+	// 		}
+	// 	}
+	// }
+
+	// queue<pi> bfs;
+	// bfs.push({0, 0});
+	// mDist[0][0] = 0;
+	// while(sz(bfs)) {
+	// 	pi top = bfs.front(); bfs.pop();
+
+	// 	if(vis[top.f][top.s]) continue;
+	// 	vis[top.f][top.s] = true;
+
+	// 	F0R(i, 4) {
+	// 		int nx = top.f + dx[i], ny = top.s + dy[i];
+	// 		if(nx < 0 || ny < 0 || nx >= n || ny >= n) continue;
+	// 		if(vis[nx][ny]) continue;
+	// 		ckmin(mDist[nx][ny], mDist[top.f][top.s] + sq(grid[top.f][top.s] - grid[nx][ny]));
+	// 		bfs.push({nx, ny});
+	// 	}
+	// }
+
+	// int ret = MOD;
+
+	// F0R(i, n) F0R(j, n) {
+	// 	if(grid[i][j] == highest) ckmin(ret, mDist[i][j]);
+	// }
+
+	// F0R(i, n) {
+	// 	F0R(j, n) pr(mDist[i][j], " ");
+	// 	ps();
+	// }
+	
+	// ps(ret);
 }
 
 signed main() {
@@ -307,10 +416,7 @@ signed main() {
 
 	int n = 1;
 	// re(n);
-	rep(n) {
-		// pr("Case #", _ + 1, ": "); // Kickstart
-		solve();
-	}
+	rep(n) solve();
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }

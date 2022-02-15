@@ -298,7 +298,34 @@ const int mx = 2e5+1;
 
 
 void solve() {
+	int n; re(n);
+	vi v(n);
+	F0R(i, n) {
+		int x; re(x); x--;
+		v[i] = x;
+	}
 
+	dbg(v);
+
+	F0R(i, n) {
+		if(v[i] != i) {
+			// find the next highest so i + 1
+			FOR(j, i + 1, n) {
+				if(v[j] == i) {
+					dbg(v, i, j);
+					reverse(bg(v) + i, bg(v) + j + 1);
+					dbg("Yes: ", v);
+					goto end;
+				}
+			}
+		}
+	}
+
+	end:
+		F0R(i, n) {
+			pr(v[i] + 1, " ");
+		}
+		ps();
 }
 
 signed main() {
@@ -306,7 +333,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		solve();

@@ -288,17 +288,50 @@ inline namespace FileIO {
 };
 /* #endregion */
 
-// Changeable constants
-const db EPS = 1e-9;
-const int mx = 2e5+1;
-
 /* #region snippets */
 
 /* #endregion */
 
+const int mx = 2e5+1;
 
 void solve() {
+	int n, m; re(n, m);
+	vs v(n); re(v);
+	V<vi> A(n, vi(26));
+	F0R(i, n) {
+		each(c, v[i]) A[i][c - 'a']++;
+	}
 
+	each(x, A) {
+		dbg(x);
+	}
+
+	rep(m) {
+		pi ld = {m, 0}; // {biggest diff, char}
+		F0R(i, 26) {
+			// diff is number of lowest
+			int lo = MOD;
+			int cost = 0;
+			F0R(j, n) {
+				ckmin(lo, (int)A[j][i]);
+			}
+			F0R(j, n) {
+				if(A[j][i] == lo) cost++;
+			}
+			if(lo != MOD) ckmin(ld, {cost, i});
+		}
+		dbg(_, ld);
+		if(ld.f == m) pr('a');
+		else {
+			// find the least number and make it
+			pi lst = {MOD, MOD};
+			F0R(i, n) {
+				ckmin(lst, {A[i][ld.s], i});
+			}
+			if(lst.s != MOD) A[lst.s][ld.s]++;
+			pr((char)(ld.s + 'a'));
+		}
+	}
 }
 
 signed main() {
@@ -307,10 +340,7 @@ signed main() {
 
 	int n = 1;
 	// re(n);
-	rep(n) {
-		// pr("Case #", _ + 1, ": "); // Kickstart
-		solve();
-	}
+	rep(n) solve();
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }

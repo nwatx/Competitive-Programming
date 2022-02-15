@@ -288,17 +288,31 @@ inline namespace FileIO {
 };
 /* #endregion */
 
-// Changeable constants
-const db EPS = 1e-9;
-const int mx = 2e5+1;
-
 /* #region snippets */
 
 /* #endregion */
 
+const int mx = 2e5+1;
 
 void solve() {
+	int n,l,r,k; re(n,l,r,k);
+	vi v;
+	rep(n) {
+		int x; re(x);
+		if(x < l || x > r) continue;
+		v.pb(x);
+	}
 
+	sor(v);
+
+	ll cnt = 0;
+	ll sum = 0;
+	each(x, v) {
+		if(sum + x > k) break;
+		cnt++; sum += x;
+	}
+
+	ps(cnt);
 }
 
 signed main() {
@@ -306,11 +320,8 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
-	rep(n) {
-		// pr("Case #", _ + 1, ": "); // Kickstart
-		solve();
-	}
+	re(n);
+	rep(n) solve();
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }
