@@ -207,7 +207,7 @@ inline namespace ToString {
 
 	// ts: string representation to print
 	tcT> typename enable_if<is_printable_v<T>,str>::type ts(T v) {
-		stringstream ss; ss << fixed << setprecision(1) << v;
+		stringstream ss; ss << fixed << setprecision(15) << v;
 		return ss.str(); } // default
 	tcT> str bit_vec(T t) { // bit vector to string
 		str res = "{"; F0R(i,sz(t)) res += ts(t[i]);
@@ -289,51 +289,59 @@ inline namespace FileIO {
 /* #endregion */
 
 /* #region snippets */
-/**
- * Description: A set (not multiset!) with support for finding the $n$'th
- * element, and finding the index of an element. Change \texttt{null\_type} for map.
- * Time: O(\log N)
- * Source: KACTL
-   * https://codeforces.com/blog/entry/11080
- * Verification: many
- */
 
-#include <ext/pb_ds/tree_policy.hpp>
-#include <ext/pb_ds/assoc_container.hpp>
-using namespace __gnu_pbds;
-template <class T> using Tree = tree<T, null_type, less<T>, 
-	rb_tree_tag, tree_order_statistics_node_update>; 
-#define ook order_of_key
-#define fbo find_by_order
-
-void treeExample() {
-	Tree<int> t, t2; t.insert(8);
-	auto it = t.insert(10).f; assert(it == t.lb(9));
-	assert(t.ook(10) == 1 && t.ook(11) == 2 && *t.fbo(0) == 8);
-	t.join(t2); // assuming T < T2 or T > T2, merge t2 into t
-}
-
-/**
-int atMost(Tree<pi>& T, int r) { 
-	return T.ook({r,MOD}); }
-int getSum(Tree<pi>& T, int l, int r) { 
-	return atMost(T,r)-atMost(T,l-1); }
-*/
 /* #endregion */
 
 const int mx = 2e5+1;
 
+/**
+ * Description: shortest path
+ * Source: own
+ * Verification: https://open.kattis.com/problems/shortestpath1
+ */
+
+template<class C, bool directed> struct Dijkstra {
+	int SZ; V<C> dist; vi prev; 
+	V<V<pair<int,C>>> adj;
+	void init(int _SZ) { SZ = _SZ; adj.clear(); adj.rsz(SZ); prev.rsz(SZ); }
+	void ae(int u, int v, C cost) {
+		adj[u].pb({v,cost}); if (!directed) adj[v].pb({u,cost}); }
+	void gen(int st) {
+		dist.assign(SZ,numeric_limits<C>::max());
+		using T = pair<C,int>; pqg<T> pq; 
+		auto ad = [&](int a, C b, int curr) {
+			if (dist[a] <= b) return;
+			pq.push({dist[a] = b,a});
+			prev[a] = curr;
+		}; ad(st,0, 0);
+		while (sz(pq)) {
+			T x = pq.top(); pq.pop(); if (dist[x.s] < x.f) continue;
+			each(y,adj[x.s]) ad(y.f,x.f+y.s, x.s);
+		}
+	}
+};
+
 void solve() {
-	int n; re(n);
-	vd v(n); re(v);
-	Tree<db> t;
-	each(x, v) {
-		t.ins(x);
-		if(sz(t) % 2) cout << setprecision(1) << fixed << (db(*t.fbo(sz(t)/2))) << nl;
-		else cout << setprecision(1) << fixed << (((db)(*t.fbo(sz(t)/2 - 1)) + db(*t.fbo(sz(t)/2))) / 2) << nl;
-		// dbg(t);
-		// dbg(*t.fbo(sz(t)/2) - 1);
-		// dbg(*t.fbo(sz(t)/2 + 1) - 1);
+	Dijkstra<ll, false> d;
+	int n, m; re(n, m);
+	d.init(n + 1);
+	rep(m) {
+		ints(a, b, c);
+		d.ae(a, b, c);
+	}
+
+	d.gen(1);
+	if(d.dist[n] >= INF) ps(-1);
+	else {
+		dbg(d.prev);
+		V<int> s;
+		for(int x = n; x != 0; x = d.prev[x]) {
+			s.pb(x);
+		}
+		reverse(all(s));
+		each(x, s) {
+			pr(x, " ");
+		}
 	}
 }
 

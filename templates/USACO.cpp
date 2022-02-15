@@ -13,15 +13,10 @@ using pi = pair<int,int>;
 #define s second
 #define mp make_pair
 
-void setIO(string name = "") {
-	cin.tie(0)->sync_with_stdio(0);
-	if (sz(name)) {
-		freopen((name+".in").c_str(), "r", stdin);
-		freopen((name+".out").c_str(), "w", stdout);
-	}
-}
+const int mx = (int)2e5 + 1;
+const int MOD = (int)1e9 + 7;
 
 int main() {
-	setIO("");
+	cin.tie(0)->sync_with_stdio(0);
 	
 }

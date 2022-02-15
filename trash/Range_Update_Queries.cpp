@@ -207,7 +207,7 @@ inline namespace ToString {
 
 	// ts: string representation to print
 	tcT> typename enable_if<is_printable_v<T>,str>::type ts(T v) {
-		stringstream ss; ss << fixed << setprecision(1) << v;
+		stringstream ss; ss << fixed << setprecision(15) << v;
 		return ss.str(); } // default
 	tcT> str bit_vec(T t) { // bit vector to string
 		str res = "{"; F0R(i,sz(t)) res += ts(t[i]);
@@ -289,52 +289,62 @@ inline namespace FileIO {
 /* #endregion */
 
 /* #region snippets */
-/**
- * Description: A set (not multiset!) with support for finding the $n$'th
- * element, and finding the index of an element. Change \texttt{null\_type} for map.
- * Time: O(\log N)
- * Source: KACTL
-   * https://codeforces.com/blog/entry/11080
- * Verification: many
- */
 
-#include <ext/pb_ds/tree_policy.hpp>
-#include <ext/pb_ds/assoc_container.hpp>
-using namespace __gnu_pbds;
-template <class T> using Tree = tree<T, null_type, less<T>, 
-	rb_tree_tag, tree_order_statistics_node_update>; 
-#define ook order_of_key
-#define fbo find_by_order
-
-void treeExample() {
-	Tree<int> t, t2; t.insert(8);
-	auto it = t.insert(10).f; assert(it == t.lb(9));
-	assert(t.ook(10) == 1 && t.ook(11) == 2 && *t.fbo(0) == 8);
-	t.join(t2); // assuming T < T2 or T > T2, merge t2 into t
-}
-
-/**
-int atMost(Tree<pi>& T, int r) { 
-	return T.ook({r,MOD}); }
-int getSum(Tree<pi>& T, int l, int r) { 
-	return atMost(T,r)-atMost(T,l-1); }
-*/
 /* #endregion */
 
 const int mx = 2e5+1;
 
-void solve() {
-	int n; re(n);
-	vd v(n); re(v);
-	Tree<db> t;
-	each(x, v) {
-		t.ins(x);
-		if(sz(t) % 2) cout << setprecision(1) << fixed << (db(*t.fbo(sz(t)/2))) << nl;
-		else cout << setprecision(1) << fixed << (((db)(*t.fbo(sz(t)/2 - 1)) + db(*t.fbo(sz(t)/2))) / 2) << nl;
-		// dbg(t);
-		// dbg(*t.fbo(sz(t)/2) - 1);
-		// dbg(*t.fbo(sz(t)/2 + 1) - 1);
+/**
+ * Description: 1D range increment and sum query.
+ * Source: USACO Counting Haybales
+ * Verification: SPOJ Horrible
+ */
+
+template<class T, int SZ> struct LazySeg { 
+	static_assert(pct(SZ) == 1); // SZ must be power of 2
+	const T ID = 0; T comb(T a, T b) { return a+b; }
+	T seg[2*SZ], lazy[2*SZ]; 
+	LazySeg() { F0R(i,2*SZ) seg[i] = lazy[i] = ID; }
+	void push(int ind, int L, int R) { /// modify values for current node
+		seg[ind] += (R-L+1)*lazy[ind]; // dependent on operation
+		if (L != R) F0R(i,2) lazy[2*ind+i] += lazy[ind]; /// prop to children
+		lazy[ind] = 0; 
+	} // recalc values for current node
+	void pull(int ind) { seg[ind] = comb(seg[2*ind],seg[2*ind+1]); }
+	void build() { ROF(i,1,SZ) pull(i); }
+	void upd(int lo,int hi,T inc,int ind=1,int L=0, int R=SZ-1) {
+		push(ind,L,R); if (hi < L || R < lo) return;
+		if (lo <= L && R <= hi) { 
+			lazy[ind] = inc; push(ind,L,R); return; }
+		int M = (L+R)/2; upd(lo,hi,inc,2*ind,L,M); 
+		upd(lo,hi,inc,2*ind+1,M+1,R); pull(ind);
 	}
+	T query(int lo, int hi, int ind=1, int L=0, int R=SZ-1) {
+		push(ind,L,R); if (lo > R || L > hi) return ID;
+		if (lo <= L && R <= hi) return seg[ind];
+		int M = (L+R)/2; 
+		return comb(query(lo,hi,2*ind,L,M),query(lo,hi,2*ind+1,M+1,R));
+	}
+};
+
+void solve() {
+	ints(n, q);
+	LazySeg<ll, 1 << 18> S;
+	FOR(i, 1, n + 1) {
+		ints(a); S.upd(i, i, a);
+	}
+
+	rep(q) {
+		int t; re(t);
+		if(t == 2) {
+			int x; re(x);
+			ps(S.query(x, x));
+		} else {
+			ints(a, b, c);
+			S.upd(a, b, c);
+		}
+	}
+
 }
 
 signed main() {

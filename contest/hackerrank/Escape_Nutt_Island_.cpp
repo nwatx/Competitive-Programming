@@ -27,13 +27,32 @@ const ll MOD = 1e9+7;
 const db PI = acos((db)-1);
 const char nl = '\n';
 
+
 void solve() {
-	
+	map<char, int> m;
+	m.clear();
+	int a, b; cin >> a >> b;
+	rep(a) {
+		char c; int d; cin >> c >> d;
+		m[c] = d;
+	}
+
+	string s; getline(cin, s);
+	getline(cin, s);
+	// cerr << s << '\n';
+
+	ll ret = 0;
+
+	each(x, s) {
+		ret += m[x];
+	}
+
+	cout << ret + b << ' ';
 }
 
 int main() {
 	cin.tie(0)->sync_with_stdio(0);
 	int n = 1;
-	// cin >> n;
+	cin >> n;
 	rep(n) solve();
 }

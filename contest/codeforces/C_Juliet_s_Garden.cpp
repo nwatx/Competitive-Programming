@@ -25,10 +25,24 @@ using vi = V<int>;
 
 const ll MOD = 1e9+7;
 const db PI = acos((db)-1);
-const char nl = '\n';
+
+bool vis[(int)1e4 + 1];
 
 void solve() {
-	
+	ll x; cin >> x;
+	ll c = 0;
+	F0R(i, 2*x + 1) {
+		c += i;
+		c %= x;
+		vis[c] = true;
+	}
+
+	F0R(i, x) if(!vis[i]) {
+		cout << "NO\n";
+		return;
+	}
+	cout << "YES\n";
+	return;
 }
 
 int main() {

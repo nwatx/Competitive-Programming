@@ -27,13 +27,39 @@ const ll MOD = 1e9+7;
 const db PI = acos((db)-1);
 const char nl = '\n';
 
+ll n, m;
+ll A[(int)1e5+1];
+
+bool good(ll c) {
+	if(c > n) return false;
+	ll sum = 0;
+	F0R(i, c) {
+		sum += A[i];
+	}
+	FOR(i, c, n) {
+		if(sum <= m) return true;
+		sum += A[i];
+		sum -= A[i - c];
+	}
+	if(sum <= m) return true;
+	return false;
+}
+
 void solve() {
-	
+	cin >> n >> m;
+	F0R(i, n) cin >> A[i];
+	ll lo = 0, hi = n + 1;
+	lo--; assert(lo <= hi);
+	while (lo < hi) {
+		ll mid = lo+(hi-lo+1)/2;
+		good(mid) ? lo = mid : hi = mid-1;
+	} 
+	cout << lo << '\n';
 }
 
 int main() {
 	cin.tie(0)->sync_with_stdio(0);
 	int n = 1;
-	// cin >> n;
+	cin >> n;
 	rep(n) solve();
 }

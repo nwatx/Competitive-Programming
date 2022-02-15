@@ -25,10 +25,21 @@ using vi = V<int>;
 
 const ll MOD = 1e9+7;
 const db PI = acos((db)-1);
-const char nl = '\n';
 
 void solve() {
-	
+	int n; cin >> n;
+	db cnt = 0;
+	db sum = 0;
+	rep(n) {
+		char t; cin >> t;
+		if(t == 'R') {
+			int x; cin >> x;
+			sum += x;
+			cnt++;
+		} else {
+			cout << setprecision(16) << sum / cnt << "\n";
+		}
+	}
 }
 
 int main() {

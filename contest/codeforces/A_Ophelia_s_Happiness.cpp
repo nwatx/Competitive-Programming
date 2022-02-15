@@ -25,10 +25,19 @@ using vi = V<int>;
 
 const ll MOD = 1e9+7;
 const db PI = acos((db)-1);
-const char nl = '\n';
 
 void solve() {
-	
+	int n; cin >> n;
+	int curr = 0;
+	F0R(i, n) {
+		char t; cin >> t;
+		if(t == 'R') {
+			int x; cin >> x;
+			curr += x;
+		} else {
+			cout << curr << '\n';
+		}
+	}
 }
 
 int main() {
