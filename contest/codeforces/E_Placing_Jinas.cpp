@@ -290,117 +290,113 @@ inline namespace FileIO {
 
 // Changeable constants
 const db EPS = 1e-9;
-const int mx = 2e5+1;
+const int mx = 1e6+1;
 
 /* #region snippets */
+/**
+ * Description: Modular arithmetic.
+ * Source: KACTL
+ * Verification: https://open.kattis.com/problems/modulararithmetic
+ */
+/**
+ * Description: modular arithmetic operations 
+ * Source: 
+	* KACTL
+	* https://codeforces.com/blog/entry/63903
+	* https://codeforces.com/contest/1261/submission/65632855 (tourist)
+	* https://codeforces.com/contest/1264/submission/66344993 (ksun)
+	* also see https://github.com/ecnerwala/cp-book/blob/master/src/modnum.hpp (ecnerwal)
+ * Verification: 
+	* https://open.kattis.com/problems/modulararithmetic
+ */
 
+template<int MOD, int RT> struct mint {
+	static const int mod = MOD;
+	static constexpr mint rt() { return RT; } // primitive root for FFT
+	int v; explicit operator int() const { return v; } // explicit -> don't silently convert to int
+	mint() { v = 0; }
+	mint(ll _v) { v = int((-MOD < _v && _v < MOD) ? _v : _v % MOD);
+		if (v < 0) v += MOD; }
+	friend bool operator==(const mint& a, const mint& b) { 
+		return a.v == b.v; }
+	friend bool operator!=(const mint& a, const mint& b) { 
+		return !(a == b); }
+	friend bool operator<(const mint& a, const mint& b) { 
+		return a.v < b.v; }
+	friend void re(mint& a) { ll x; re(x); a = mint(x); }
+	friend str ts(mint a) { return ts(a.v); }
+   
+	mint& operator+=(const mint& m) { 
+		if ((v += m.v) >= MOD) v -= MOD; 
+		return *this; }
+	mint& operator-=(const mint& m) { 
+		if ((v -= m.v) < 0) v += MOD; 
+		return *this; }
+	mint& operator*=(const mint& m) { 
+		v = int((ll)v*m.v%MOD); return *this; }
+	mint& operator/=(const mint& m) { return (*this) *= inv(m); }
+	friend mint pow(mint a, ll p) {
+		mint ans = 1; assert(p >= 0);
+		for (; p; p /= 2, a *= a) if (p&1) ans *= a;
+		return ans; }
+	friend mint inv(const mint& a) { assert(a.v != 0); 
+		return pow(a,MOD-2); }
+		
+	mint operator-() const { return mint(-v); }
+	mint& operator++() { return *this += 1; }
+	mint& operator--() { return *this -= 1; }
+	friend mint operator+(mint a, const mint& b) { return a += b; }
+	friend mint operator-(mint a, const mint& b) { return a -= b; }
+	friend mint operator*(mint a, const mint& b) { return a *= b; }
+	friend mint operator/(mint a, const mint& b) { return a /= b; }
+};
+
+typedef mint<MOD,5> mi; // 5 is primitive root for both common mods
+typedef vector<mi> vmi;
+typedef pair<mi,mi> pmi;
+typedef vector<pmi> vpmi;
+
+vector<vmi> scmb; // small combinations
+void genComb(int SZ) {
+	scmb.assign(SZ,vmi(SZ)); scmb[0][0] = 1;
+	FOR(i,1,SZ) F0R(j,i+1) 
+		scmb[i][j] = scmb[i-1][j]+(j?scmb[i-1][j-1]:0);
+}
+/// mi a = MOD+5; ps((int)inv(a));
 /* #endregion */
 
-// dp[s] highest
-// safe[s] safest
-// s best subset of cows
-// dp[s] = dp[\x] + x : x + safe[\x] >= 0
-// if true then update safe
+// pattern is very obvious... go on and up
 
-// stacking order:
-// stack 1 if
-// strength_1 - weight_2 < strength_2 - weight_1
+mi factorial[mx];
 
-int H[21], W[21], S[21], I[21];
-ll dp[1 << 21];
-ll safe[1 << 21];
+void gen() {
+	factorial[0] = 1;
+	FOR(i, 1, mx) {
+		factorial[i] = factorial[i - 1] * i;
+	}
+}
+
+mi coef(ll n, ll k) {
+	if(k<0||k>n) return 0;
+	return factorial[n] * inv(factorial[k] * factorial[n - k]);
+}
 
 void solve() {
-	// fill(dp, dp + 21, -1);
-	// fill(safe, safe + 21, -1);
+	gen();
 
-	int n, h; re(n, h);
-	F0R(i, n) {
-		re(H[i], W[i], S[i]);
+	int n; re(n);
+	mi ret = 0;
+	F0R(i, n + 1) {
+		int a; re(a);
+		ret += coef(i + a, i + 1);
 	}
 
-	// iota(I, I + n + 1, 0);
-	// sort(I, I + n, [&](int a, int b) {
-	// 	return S[I[a]] - W[I[b]] > S[I[b]] - W[I[a]];
-	// });
-
-	// F0R(i, n) {
-	// 	dbg(i, I[i]);
-	// }
-
-	// F0R(i, n) {
-	// 	safe[1 << i] = S[I[i]];
-	// 	dp[1 << i] = H[I[i]];
-	// }
-
-	safe[0] = INF;
-	ll ret = -1;
-
-	FOR(s, 1, 1 << n) { // loop through subsets
-		// ckmin(dp[s], h);
-		safe[s] = -1;
-		F0R(i, n) {
-			if((1 << i) & s) {
-				dp[s] += H[i];
-				if(safe[s ^ (1 << i)] >= W[i]) {
-					safe[s] = max(safe[s], min(safe[s ^ (1 << i)] - W[i], S[i]));
-				}
-			}
-			// int sX = s ^ (1 << i);
-			// int x = H[I[i]];
-			// int w = W[I[i]];
-
-			// // ckmin(dp[sX], h);
-
-			// if(dp[s] == h) {
-			// 	ckmax(safe[s], min(safe[sX] - w, S[I[i]]));
-			// } else if(dp[sX] - w >= 0) { // if can build
-			// 	if(dp[sX] + x >= dp[s]) {
-			// 		ckmax(dp[s], dp[sX] + x);
-			// 		if(dp[sX] + x == dp[s]) {
-			// 			ckmax(safe[s], min(safe[sX] - w, S[I[i]]));
-			// 		} else {
-			// 			safe[s] = min(safe[sX] - w, S[I[i]]);
-			// 		}
-			// 	}
-			// }
-		}
-
-		if(dp[s] >= h) ckmax(ret, safe[s]);
-	}
-
-	// for (int s = 1; s < (1 << n); ++s) {
-	// 	safe[s] = -1;
-	// 	for (int x = 0; x < n; ++x) {
-	// 		if ((1 << x) & s) {
-	// 			dp[s] += H[x];
-	// 			if (safe[s ^ (1 << x)] >= W[x]) {
-	// 				safe[s] = max(safe[s], min(safe[s ^ (1 << x)] - W[x], S[x]));
-	// 			}
-	// 		}
-	// 	}
-	// 	if (dp[s] >= h) ret = max(ret, safe[s]);
-	// }
-
-	// F0R(i, 1 << n) {
-	// 	dbg(bitset<8>(i), dp[i], safe[i]);
-	// }
-
-
-	// F0R(s, 1 << n) {
-	// 	if(dp[s] >= h) ckmax(ret, safe[s]);
-	// }
-
-	if(ret == -1) {
-		ps("Mark is too tall");
-	} else {
-		ps(ret);
-	}
+	ps(ret);
 }
 
 signed main() {
 	// clock_t start = clock();
-	setIO("guard");
+	setIO();
 
 	int n = 1;
 	// re(n);

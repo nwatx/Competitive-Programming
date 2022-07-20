@@ -296,111 +296,62 @@ const int mx = 2e5+1;
 
 /* #endregion */
 
-// dp[s] highest
-// safe[s] safest
-// s best subset of cows
-// dp[s] = dp[\x] + x : x + safe[\x] >= 0
-// if true then update safe
+string mat[21];
 
-// stacking order:
-// stack 1 if
-// strength_1 - weight_2 < strength_2 - weight_1
+// cache min steps for all possible combinations ?
 
-int H[21], W[21], S[21], I[21];
-ll dp[1 << 21];
-ll safe[1 << 21];
 
 void solve() {
-	// fill(dp, dp + 21, -1);
-	// fill(safe, safe + 21, -1);
+	int n; re(n);
+	F0R(i, n) re(mat[i]);
+	V<V<vi>> dp(21, V<vi>(21, vi(4)));
 
-	int n, h; re(n, h);
-	F0R(i, n) {
-		re(H[i], W[i], S[i]);
-	}
+	F0R(i, 21) F0R(j, 21) F0R(k, 4) dp[i][j][k] = MOD;
+	F0R(k, 4) dp[0][0][k] = 0;
 
-	// iota(I, I + n + 1, 0);
-	// sort(I, I + n, [&](int a, int b) {
-	// 	return S[I[a]] - W[I[b]] > S[I[b]] - W[I[a]];
-	// });
+	// keep checking all 4 and updating bfs
 
-	// F0R(i, n) {
-	// 	dbg(i, I[i]);
-	// }
+	queue<AR<int, 3>> bfs; // {i, j, dir}
+	// [right, up, left, down]
+	F0R(i, 4) bfs.push({0, 0, i});
+	while(sz(bfs)) {
+		auto a = bfs.front(); bfs.pop();
+		int x = a[0], y = a[1], dir = a[2];
+		vi turns{((dir - 1) + 4) % 4, (dir + 1) % 4};
 
-	// F0R(i, n) {
-	// 	safe[1 << i] = S[I[i]];
-	// 	dp[1 << i] = H[I[i]];
-	// }
-
-	safe[0] = INF;
-	ll ret = -1;
-
-	FOR(s, 1, 1 << n) { // loop through subsets
-		// ckmin(dp[s], h);
-		safe[s] = -1;
-		F0R(i, n) {
-			if((1 << i) & s) {
-				dp[s] += H[i];
-				if(safe[s ^ (1 << i)] >= W[i]) {
-					safe[s] = max(safe[s], min(safe[s ^ (1 << i)] - W[i], S[i]));
-				}
-			}
-			// int sX = s ^ (1 << i);
-			// int x = H[I[i]];
-			// int w = W[I[i]];
-
-			// // ckmin(dp[sX], h);
-
-			// if(dp[s] == h) {
-			// 	ckmax(safe[s], min(safe[sX] - w, S[I[i]]));
-			// } else if(dp[sX] - w >= 0) { // if can build
-			// 	if(dp[sX] + x >= dp[s]) {
-			// 		ckmax(dp[s], dp[sX] + x);
-			// 		if(dp[sX] + x == dp[s]) {
-			// 			ckmax(safe[s], min(safe[sX] - w, S[I[i]]));
-			// 		} else {
-			// 			safe[s] = min(safe[sX] - w, S[I[i]]);
-			// 		}
-			// 	}
-			// }
+		// turns 
+		each(k, turns) {
+			dp[x][y][k] = dp[x][y][dir] + 1;
+			if(dp[x][y][k] == MOD) bfs.push({x, y, k});
 		}
 
-		if(dp[s] >= h) ckmax(ret, safe[s]);
+		// forward
+		int nx = x + dx[dir], ny = y + dy[dir];
+		if(nx < 0 || ny < 0 || nx >= n || ny >= n) {
+			if(dp[x][y][dir] == MOD) {
+				dp[x][y][dir] = dp[x][y][dir] + 1;
+				bfs.push({x, y, dir});
+			}
+		} else {
+			if(dp[x][y][dir] + 1 <= dp[nx][ny][dir]) {
+				dp[nx][ny][dir] = dp[x][y][dir] + 1;
+				bfs.push({nx, ny, dir});
+			}
+		}
 	}
 
-	// for (int s = 1; s < (1 << n); ++s) {
-	// 	safe[s] = -1;
-	// 	for (int x = 0; x < n; ++x) {
-	// 		if ((1 << x) & s) {
-	// 			dp[s] += H[x];
-	// 			if (safe[s ^ (1 << x)] >= W[x]) {
-	// 				safe[s] = max(safe[s], min(safe[s ^ (1 << x)] - W[x], S[x]));
-	// 			}
-	// 		}
-	// 	}
-	// 	if (dp[s] >= h) ret = max(ret, safe[s]);
-	// }
-
-	// F0R(i, 1 << n) {
-	// 	dbg(bitset<8>(i), dp[i], safe[i]);
-	// }
-
-
-	// F0R(s, 1 << n) {
-	// 	if(dp[s] >= h) ckmax(ret, safe[s]);
-	// }
-
-	if(ret == -1) {
-		ps("Mark is too tall");
-	} else {
-		ps(ret);
+	F0R(i, n) {
+		F0R(j, n) {
+			pr(dp[i][j]);
+		}
+		ps();
 	}
+
 }
 
 signed main() {
 	// clock_t start = clock();
-	setIO("guard");
+	setIO();
 
 	int n = 1;
 	// re(n);

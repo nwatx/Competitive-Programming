@@ -1,0 +1,1102 @@
+print("===== ('df$popThous',) =====")
+
+dflm <- lm(df$lifeExp ~ df$popThous)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+p
+/**
+ * Description: Factors integers.
+ * Time: O(\sqrt N)
+ * Source: Own
+ * Verification: https://csacademy.com/contest/ceoi-2018-day-2/task/toys-big/
+ */
+
+namespace factorBasic {
+  template<class T> vector<pair<T,int>> factor(T x) { 
+    vector<pair<T,int>> pri;
+    for (T i = 2; i*i <= x; ++i) if (x % i == 0) {
+      int t = 0;
+      while (x % i == 0) x /= i, t ++;
+      pri.pb({i,t});
+    }
+    if (x > 1) pri.pb({x,1});
+    return pri;
+  }
+  /* Note:
+   * number of operations needed s.t.
+   *				  phi(phi(...phi(n)...))=1
+   * is O(log n).
+   * Euler's theorem: a^{\phi(p)}\equiv 1 (mod p), gcd(a,p)=1
+   */
+  ll phi(ll x) {
+    each(a,factor(x)) x -= x/a.f;
+    return x;
+  }
+  template<class T> void tour(vector<pair<T,int>>& v, 
+    vector<T>& V, int ind, T cur) {
+      if (ind == sz(v)) V.pb(cur);
+      else {
+        T mul = 1;
+        F0R(i,v[ind].s+1) {
+          tour(v,V,ind+1,cur*mul);
+          mul *= v[ind].f;
+        }
+      }
+    }
+  template<class T> vector<T> getDivi(T x) {
+    auto v = factor(x);
+    vector<T> V; tour(v,V,0,(T)1); sort(all(V));
+    return V;
+  }
+}
+
+using namespace factorBasic;
+
+print("===== ('df$popDensity',) =====")
+
+dflm <- lm(df$lifeExp ~ df$popDensity)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$lifeExp',) =====")
+
+dflm <- lm(df$lifeExp ~ df$lifeExp)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$cellsPerHund',) =====")
+
+dflm <- lm(df$lifeExp ~ df$cellsPerHund)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$yrsSchoolFM',) =====")
+
+dflm <- lm(df$lifeExp ~ df$yrsSchoolFM)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$CO2',) =====")
+
+dflm <- lm(df$lifeExp ~ df$CO2)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$popThous', 'df$popDensity') =====")
+
+dflm <- lm(df$lifeExp ~ df$popThous + df$popDensity)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$popThous', 'df$lifeExp') =====")
+
+dflm <- lm(df$lifeExp ~ df$popThous + df$lifeExp)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$popThous', 'df$cellsPerHund') =====")
+
+dflm <- lm(df$lifeExp ~ df$popThous + df$cellsPerHund)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$popThous', 'df$yrsSchoolFM') =====")
+
+dflm <- lm(df$lifeExp ~ df$popThous + df$yrsSchoolFM)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$popThous', 'df$CO2') =====")
+
+dflm <- lm(df$lifeExp ~ df$popThous + df$CO2)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$popDensity', 'df$lifeExp') =====")
+
+dflm <- lm(df$lifeExp ~ df$popDensity + df$lifeExp)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$popDensity', 'df$cellsPerHund') =====")
+
+dflm <- lm(df$lifeExp ~ df$popDensity + df$cellsPerHund)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$popDensity', 'df$yrsSchoolFM') =====")
+
+dflm <- lm(df$lifeExp ~ df$popDensity + df$yrsSchoolFM)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$popDensity', 'df$CO2') =====")
+
+dflm <- lm(df$lifeExp ~ df$popDensity + df$CO2)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$lifeExp', 'df$cellsPerHund') =====")
+
+dflm <- lm(df$lifeExp ~ df$lifeExp + df$cellsPerHund)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$lifeExp', 'df$yrsSchoolFM') =====")
+
+dflm <- lm(df$lifeExp ~ df$lifeExp + df$yrsSchoolFM)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$lifeExp', 'df$CO2') =====")
+
+dflm <- lm(df$lifeExp ~ df$lifeExp + df$CO2)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$cellsPerHund', 'df$yrsSchoolFM') =====")
+
+dflm <- lm(df$lifeExp ~ df$cellsPerHund + df$yrsSchoolFM)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$cellsPerHund', 'df$CO2') =====")
+
+dflm <- lm(df$lifeExp ~ df$cellsPerHund + df$CO2)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$yrsSchoolFM', 'df$CO2') =====")
+
+dflm <- lm(df$lifeExp ~ df$yrsSchoolFM + df$CO2)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$popThous', 'df$popDensity', 'df$lifeExp') =====")
+
+dflm <- lm(df$lifeExp ~ df$popThous + df$popDensity + df$lifeExp)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$popThous', 'df$popDensity', 'df$cellsPerHund') =====")
+
+dflm <- lm(df$lifeExp ~ df$popThous + df$popDensity + df$cellsPerHund)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$popThous', 'df$popDensity', 'df$yrsSchoolFM') =====")
+
+dflm <- lm(df$lifeExp ~ df$popThous + df$popDensity + df$yrsSchoolFM)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$popThous', 'df$popDensity', 'df$CO2') =====")
+
+dflm <- lm(df$lifeExp ~ df$popThous + df$popDensity + df$CO2)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$popThous', 'df$lifeExp', 'df$cellsPerHund') =====")
+
+dflm <- lm(df$lifeExp ~ df$popThous + df$lifeExp + df$cellsPerHund)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$popThous', 'df$lifeExp', 'df$yrsSchoolFM') =====")
+
+dflm <- lm(df$lifeExp ~ df$popThous + df$lifeExp + df$yrsSchoolFM)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$popThous', 'df$lifeExp', 'df$CO2') =====")
+
+dflm <- lm(df$lifeExp ~ df$popThous + df$lifeExp + df$CO2)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$popThous', 'df$cellsPerHund', 'df$yrsSchoolFM') =====")
+
+dflm <- lm(df$lifeExp ~ df$popThous + df$cellsPerHund + df$yrsSchoolFM)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$popThous', 'df$cellsPerHund', 'df$CO2') =====")
+
+dflm <- lm(df$lifeExp ~ df$popThous + df$cellsPerHund + df$CO2)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$popThous', 'df$yrsSchoolFM', 'df$CO2') =====")
+
+dflm <- lm(df$lifeExp ~ df$popThous + df$yrsSchoolFM + df$CO2)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$popDensity', 'df$lifeExp', 'df$cellsPerHund') =====")
+
+dflm <- lm(df$lifeExp ~ df$popDensity + df$lifeExp + df$cellsPerHund)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$popDensity', 'df$lifeExp', 'df$yrsSchoolFM') =====")
+
+dflm <- lm(df$lifeExp ~ df$popDensity + df$lifeExp + df$yrsSchoolFM)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$popDensity', 'df$lifeExp', 'df$CO2') =====")
+
+dflm <- lm(df$lifeExp ~ df$popDensity + df$lifeExp + df$CO2)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$popDensity', 'df$cellsPerHund', 'df$yrsSchoolFM') =====")
+
+dflm <- lm(df$lifeExp ~ df$popDensity + df$cellsPerHund + df$yrsSchoolFM)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$popDensity', 'df$cellsPerHund', 'df$CO2') =====")
+
+dflm <- lm(df$lifeExp ~ df$popDensity + df$cellsPerHund + df$CO2)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$popDensity', 'df$yrsSchoolFM', 'df$CO2') =====")
+
+dflm <- lm(df$lifeExp ~ df$popDensity + df$yrsSchoolFM + df$CO2)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$lifeExp', 'df$cellsPerHund', 'df$yrsSchoolFM') =====")
+
+dflm <- lm(df$lifeExp ~ df$lifeExp + df$cellsPerHund + df$yrsSchoolFM)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$lifeExp', 'df$cellsPerHund', 'df$CO2') =====")
+
+dflm <- lm(df$lifeExp ~ df$lifeExp + df$cellsPerHund + df$CO2)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$lifeExp', 'df$yrsSchoolFM', 'df$CO2') =====")
+
+dflm <- lm(df$lifeExp ~ df$lifeExp + df$yrsSchoolFM + df$CO2)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$cellsPerHund', 'df$yrsSchoolFM', 'df$CO2') =====")
+
+dflm <- lm(df$lifeExp ~ df$cellsPerHund + df$yrsSchoolFM + df$CO2)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$popThous', 'df$popDensity', 'df$lifeExp', 'df$cellsPerHund') =====")
+
+dflm <- lm(df$lifeExp ~ df$popThous + df$popDensity + df$lifeExp + df$cellsPerHund)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$popThous', 'df$popDensity', 'df$lifeExp', 'df$yrsSchoolFM') =====")
+
+dflm <- lm(df$lifeExp ~ df$popThous + df$popDensity + df$lifeExp + df$yrsSchoolFM)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$popThous', 'df$popDensity', 'df$lifeExp', 'df$CO2') =====")
+
+dflm <- lm(df$lifeExp ~ df$popThous + df$popDensity + df$lifeExp + df$CO2)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$popThous', 'df$popDensity', 'df$cellsPerHund', 'df$yrsSchoolFM') =====")
+
+dflm <- lm(df$lifeExp ~ df$popThous + df$popDensity + df$cellsPerHund + df$yrsSchoolFM)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$popThous', 'df$popDensity', 'df$cellsPerHund', 'df$CO2') =====")
+
+dflm <- lm(df$lifeExp ~ df$popThous + df$popDensity + df$cellsPerHund + df$CO2)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$popThous', 'df$popDensity', 'df$yrsSchoolFM', 'df$CO2') =====")
+
+dflm <- lm(df$lifeExp ~ df$popThous + df$popDensity + df$yrsSchoolFM + df$CO2)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$popThous', 'df$lifeExp', 'df$cellsPerHund', 'df$yrsSchoolFM') =====")
+
+dflm <- lm(df$lifeExp ~ df$popThous + df$lifeExp + df$cellsPerHund + df$yrsSchoolFM)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$popThous', 'df$lifeExp', 'df$cellsPerHund', 'df$CO2') =====")
+
+dflm <- lm(df$lifeExp ~ df$popThous + df$lifeExp + df$cellsPerHund + df$CO2)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$popThous', 'df$lifeExp', 'df$yrsSchoolFM', 'df$CO2') =====")
+
+dflm <- lm(df$lifeExp ~ df$popThous + df$lifeExp + df$yrsSchoolFM + df$CO2)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$popThous', 'df$cellsPerHund', 'df$yrsSchoolFM', 'df$CO2') =====")
+
+dflm <- lm(df$lifeExp ~ df$popThous + df$cellsPerHund + df$yrsSchoolFM + df$CO2)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$popDensity', 'df$lifeExp', 'df$cellsPerHund', 'df$yrsSchoolFM') =====")
+
+dflm <- lm(df$lifeExp ~ df$popDensity + df$lifeExp + df$cellsPerHund + df$yrsSchoolFM)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$popDensity', 'df$lifeExp', 'df$cellsPerHund', 'df$CO2') =====")
+
+dflm <- lm(df$lifeExp ~ df$popDensity + df$lifeExp + df$cellsPerHund + df$CO2)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$popDensity', 'df$lifeExp', 'df$yrsSchoolFM', 'df$CO2') =====")
+
+dflm <- lm(df$lifeExp ~ df$popDensity + df$lifeExp + df$yrsSchoolFM + df$CO2)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$popDensity', 'df$cellsPerHund', 'df$yrsSchoolFM', 'df$CO2') =====")
+
+dflm <- lm(df$lifeExp ~ df$popDensity + df$cellsPerHund + df$yrsSchoolFM + df$CO2)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$lifeExp', 'df$cellsPerHund', 'df$yrsSchoolFM', 'df$CO2') =====")
+
+dflm <- lm(df$lifeExp ~ df$lifeExp + df$cellsPerHund + df$yrsSchoolFM + df$CO2)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$popThous', 'df$popDensity', 'df$lifeExp', 'df$cellsPerHund', 'df$yrsSchoolFM') =====")
+
+dflm <- lm(df$lifeExp ~ df$popThous + df$popDensity + df$lifeExp + df$cellsPerHund + df$yrsSchoolFM)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$popThous', 'df$popDensity', 'df$lifeExp', 'df$cellsPerHund', 'df$CO2') =====")
+
+dflm <- lm(df$lifeExp ~ df$popThous + df$popDensity + df$lifeExp + df$cellsPerHund + df$CO2)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$popThous', 'df$popDensity', 'df$lifeExp', 'df$yrsSchoolFM', 'df$CO2') =====")
+
+dflm <- lm(df$lifeExp ~ df$popThous + df$popDensity + df$lifeExp + df$yrsSchoolFM + df$CO2)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$popThous', 'df$popDensity', 'df$cellsPerHund', 'df$yrsSchoolFM', 'df$CO2') =====")
+
+dflm <- lm(df$lifeExp ~ df$popThous + df$popDensity + df$cellsPerHund + df$yrsSchoolFM + df$CO2)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$popThous', 'df$lifeExp', 'df$cellsPerHund', 'df$yrsSchoolFM', 'df$CO2') =====")
+
+dflm <- lm(df$lifeExp ~ df$popThous + df$lifeExp + df$cellsPerHund + df$yrsSchoolFM + df$CO2)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+
+print("===== ('df$popDensity', 'df$lifeExp', 'df$cellsPerHund', 'df$yrsSchoolFM', 'df$CO2') =====")
+
+dflm <- lm(df$lifeExp ~ df$popDensity + df$lifeExp + df$cellsPerHund + df$yrsSchoolFM + df$CO2)
+dflmAug <- augment(dflm)
+
+dflmAug %>% ggplot(aes(x = .resid)) +
+  geom_histogram(binwidth = 1, fill = 'light blue', col = 'black') +
+  labs(title = "Residuals")
+
+dflmAug %>% ggplot(aes(x= .fitted, y = .resid)) +
+  geom_hline(yintercept = 0) +
+  geom_point(col='blue') +
+  labs(x = "Fitted", y = "Residual", title = "Residuals vs Fitted")
+
+tidy(dflm)
+glance(dflm)
+

@@ -4,6 +4,7 @@
     },
     "editor.minimap.side": "right",
     "editor.renderLineHighlight": "all",
+    "editor.fontLigatures": true,
     "workbench.panel.defaultLocation": "right",
     "workbench.colorCustomizations": {
         "editorLineNumber.foreground": "#686868",

@@ -296,111 +296,58 @@ const int mx = 2e5+1;
 
 /* #endregion */
 
-// dp[s] highest
-// safe[s] safest
-// s best subset of cows
-// dp[s] = dp[\x] + x : x + safe[\x] >= 0
-// if true then update safe
+int n, m;
+int A[20];
+int dp[1 << 20];
+int maxWeight[1 << 20];
 
-// stacking order:
-// stack 1 if
-// strength_1 - weight_2 < strength_2 - weight_1
-
-int H[21], W[21], S[21], I[21];
-ll dp[1 << 21];
-ll safe[1 << 21];
+/*
+dp[s] = minimum elevator rides for subset s
+if we add person then they might go w/ a different subset
+run knapsack (?)
+*/
 
 void solve() {
-	// fill(dp, dp + 21, -1);
-	// fill(safe, safe + 21, -1);
+	re(n, m);
+	F0R(i, n) re(A[i]);
 
-	int n, h; re(n, h);
-	F0R(i, n) {
-		re(H[i], W[i], S[i]);
-	}
+	fill(dp, dp + (1 << n), n + 1);
+	fill(maxWeight, maxWeight + (1 << n), m + 1);
 
-	// iota(I, I + n + 1, 0);
-	// sort(I, I + n, [&](int a, int b) {
-	// 	return S[I[a]] - W[I[b]] > S[I[b]] - W[I[a]];
-	// });
+	dp[0] = 1;
+	maxWeight[0] = 0;
 
-	// F0R(i, n) {
-	// 	dbg(i, I[i]);
-	// }
-
-	// F0R(i, n) {
-	// 	safe[1 << i] = S[I[i]];
-	// 	dp[1 << i] = H[I[i]];
-	// }
-
-	safe[0] = INF;
-	ll ret = -1;
-
-	FOR(s, 1, 1 << n) { // loop through subsets
-		// ckmin(dp[s], h);
-		safe[s] = -1;
+	F0R(s, 1 << n) {
 		F0R(i, n) {
-			if((1 << i) & s) {
-				dp[s] += H[i];
-				if(safe[s ^ (1 << i)] >= W[i]) {
-					safe[s] = max(safe[s], min(safe[s ^ (1 << i)] - W[i], S[i]));
+			if(s & (1 << i)) {
+				int mw = maxWeight[s ^ (1 << i)];
+				int mr = dp[s ^ (1 << i)];
+
+				if(mw + A[i] > m) { // make a new set
+					mr += 1;
+					mw = A[i];
+				} else {
+					mw += A[i];
+				}
+
+				if(mp(mr, mw) <= mp(dp[s], maxWeight[s])) {
+					dp[s] = mr;
+					maxWeight[s] = mw;
 				}
 			}
-			// int sX = s ^ (1 << i);
-			// int x = H[I[i]];
-			// int w = W[I[i]];
-
-			// // ckmin(dp[sX], h);
-
-			// if(dp[s] == h) {
-			// 	ckmax(safe[s], min(safe[sX] - w, S[I[i]]));
-			// } else if(dp[sX] - w >= 0) { // if can build
-			// 	if(dp[sX] + x >= dp[s]) {
-			// 		ckmax(dp[s], dp[sX] + x);
-			// 		if(dp[sX] + x == dp[s]) {
-			// 			ckmax(safe[s], min(safe[sX] - w, S[I[i]]));
-			// 		} else {
-			// 			safe[s] = min(safe[sX] - w, S[I[i]]);
-			// 		}
-			// 	}
-			// }
 		}
-
-		if(dp[s] >= h) ckmax(ret, safe[s]);
 	}
 
-	// for (int s = 1; s < (1 << n); ++s) {
-	// 	safe[s] = -1;
-	// 	for (int x = 0; x < n; ++x) {
-	// 		if ((1 << x) & s) {
-	// 			dp[s] += H[x];
-	// 			if (safe[s ^ (1 << x)] >= W[x]) {
-	// 				safe[s] = max(safe[s], min(safe[s ^ (1 << x)] - W[x], S[x]));
-	// 			}
-	// 		}
-	// 	}
-	// 	if (dp[s] >= h) ret = max(ret, safe[s]);
-	// }
-
-	// F0R(i, 1 << n) {
-	// 	dbg(bitset<8>(i), dp[i], safe[i]);
-	// }
-
-
-	// F0R(s, 1 << n) {
-	// 	if(dp[s] >= h) ckmax(ret, safe[s]);
-	// }
-
-	if(ret == -1) {
-		ps("Mark is too tall");
-	} else {
-		ps(ret);
+	F0R(i, 1 << n) {
+		dbg(bitset<4>(i), dp[i], maxWeight[i]);
 	}
+
+	ps(dp[(1 << n) - 1]);
 }
 
 signed main() {
 	// clock_t start = clock();
-	setIO("guard");
+	setIO();
 
 	int n = 1;
 	// re(n);

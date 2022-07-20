@@ -288,38 +288,63 @@ inline namespace FileIO {
 };
 /* #endregion */
 
+// Changeable constants
+const db EPS = 1e-9;
+const int mx = 2e5+1;
+
 /* #region snippets */
 
 /* #endregion */
 
-const int mx = 2e5+1;
-
 vi adj[mx];
-int f[mx], g[mx]; // f=inside, g=outside
 
-void dfs(int v, int p) {
+int f[mx];
+int g[mx];
+
+void dfs1(int v, int p = 0) { // for inside subtree
+	int m = 0;
 	each(e, adj[v]) {
 		if(e != p) {
-			dfs(e, v);
-			ckmax(f[v], f[e]+1);
+			dfs1(e, v);
+			ckmax(m, f[e]);
+		}
+	}
+
+	f[v] = m + 1;
+}
+
+void dfs2(int v, int p = 0) {
+	int m = 0;
+	each(c, adj[v]) {
+		if(c != p) {
+			dfs2(c, v);
+			ckmax(m, f[c] + 1);
+		}
+	}
+
+	each(c, adj[v]) {
+		if(c != p) {
+			g[c] = max(g[v] + 1, m);
 		}
 	}
 }
 
 void solve() {
-	ints(n);
-	rep(n+1) {
-		f[_] = 1;
-		g[_] = 1;
-	}
+	int n; re(n);
 	rep(n) {
 		ints(a, b);
-		adj[a].pb(b);
-		adj[b].pb(a);
+		adj[a].pb(b); adj[b].pb(a);
 	}
 
-	dfs(1, 0);
+	dfs1(1);
+	dfs2(1);
+
+	FOR(i, 1, n + 1) {
+		dbg(i, f[i], g[i]);
+		pr(max(f[i], g[i]), " ");
+	}
 }
+
 
 signed main() {
 	// clock_t start = clock();
@@ -327,7 +352,10 @@ signed main() {
 
 	int n = 1;
 	// re(n);
-	rep(n) solve();
+	rep(n) {
+		// pr("Case #", _ + 1, ": "); // Kickstart
+		solve();
+	}
 
 	// cerr << "Total Time: " << (double)(clock() - start)/ CLOCKS_PER_SEC;
 }

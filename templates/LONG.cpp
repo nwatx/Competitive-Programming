@@ -1,3 +1,6 @@
+// [auto_folder]: 
+// ^ type folder name for scripted placement
+
 // Codeforces
 // #pragma GCC optimize ("Ofast")
 // #pragma GCC target ("avx2")
@@ -309,6 +312,7 @@ signed main() {
 	// re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
+		cerr << "[dbg] Case #" << _ + 1 << ":\n";
 		solve();
 	}
 
