@@ -1,4 +1,4 @@
-// [auto_folder]: cses
+// [auto_folder]: 
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -295,42 +295,41 @@ inline namespace FileIO {
 const db EPS = 1e-9;
 const int mx = 2e5+1;
 
-int n;
-int seg[4 * mx], h[mx];
+/* #region snippets */
 
-void build(int l = 1, int r = n, int node = 1) {
-	if(l == r) seg[node] = h[l];
-	else {
-		int mid = (l + r) / 2;
-		build(l, mid, node * 2);
-		build(mid + 1, r, node * 2 + 1);
-		seg[node] = max(seg[node * 2], seg[node * 2 + 1]);
+/* #endregion */
+
+
+ll n, m;
+
+ll A[mx];
+
+bool goodWidth(int k) {
+	int bus = 0;   // number of buses needed
+	int cow = 0;   // current cow
+	int lst = 0;  // earliest cow on this bus
+
+	while (cow < n) {
+		if (cow == lst) {
+			bus++;
+		}
+		if (A[cow] - A[lst] >= k) {
+			lst = cow;
+		} else {
+			cow++;
+		}
+
+		if(bus > m) return false;
 	}
+	return bus <= m;
 }
 
-void query(int val, int l = 1, int r = n, int node = 1) {
-	if(l == r) {
-		seg[node] -= val;
-		cout << l << ' ';
-	} else {
-		int mid = (l + r) / 2;
-		if(seg[node * 2] >= val) query(val, l, mid, node * 2);
-		else query(val, mid + 1, r, node * 2 + 1);
-		seg[node] = max(seg[node * 2], seg[node * 2 + 1]);
-	}
-}
 
 void solve() {
-	int m; re(n, m);
-	F0R(i, n) re(h[i + 1]);
-
-	build();
-
-	rep(m) {
-		int x; re(x);
-		if(seg[1] < x) cout << 0 << ' ';
-		else query(x);
-	}
+	re(n, m);
+	F0R(i, n) re(A[i]);
+	sort(A, A + n);
+	ps(fstTrue(0, MOD, goodWidth));
 }
 
 signed main() {

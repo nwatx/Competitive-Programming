@@ -295,42 +295,16 @@ inline namespace FileIO {
 const db EPS = 1e-9;
 const int mx = 2e5+1;
 
-int n;
-int seg[4 * mx], h[mx];
+/* #region snippets */
 
-void build(int l = 1, int r = n, int node = 1) {
-	if(l == r) seg[node] = h[l];
-	else {
-		int mid = (l + r) / 2;
-		build(l, mid, node * 2);
-		build(mid + 1, r, node * 2 + 1);
-		seg[node] = max(seg[node * 2], seg[node * 2 + 1]);
-	}
-}
+/* #endregion */
 
-void query(int val, int l = 1, int r = n, int node = 1) {
-	if(l == r) {
-		seg[node] -= val;
-		cout << l << ' ';
-	} else {
-		int mid = (l + r) / 2;
-		if(seg[node * 2] >= val) query(val, l, mid, node * 2);
-		else query(val, mid + 1, r, node * 2 + 1);
-		seg[node] = max(seg[node * 2], seg[node * 2 + 1]);
-	}
-}
 
 void solve() {
-	int m; re(n, m);
-	F0R(i, n) re(h[i + 1]);
-
-	build();
-
-	rep(m) {
-		int x; re(x);
-		if(seg[1] < x) cout << 0 << ' ';
-		else query(x);
-	}
+	ll a, b; re(a, b);
+	if ((a + b) % 3 == 0 && 2 * a >= b && 2 * b >= a ) {
+		ps("YES");
+	} else ps("NO");
 }
 
 signed main() {
@@ -338,10 +312,10 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
-		cerr << "[dbg] Case #" << _ + 1 << ":\n";
+		// cerr << "[dbg] Case #" << _ + 1 << ":\n";
 		solve();
 	}
 

@@ -1,4 +1,4 @@
-// [auto_folder]: cses
+// [auto_folder]: 
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -295,42 +295,25 @@ inline namespace FileIO {
 const db EPS = 1e-9;
 const int mx = 2e5+1;
 
-int n;
-int seg[4 * mx], h[mx];
+/* #region snippets */
 
-void build(int l = 1, int r = n, int node = 1) {
-	if(l == r) seg[node] = h[l];
-	else {
-		int mid = (l + r) / 2;
-		build(l, mid, node * 2);
-		build(mid + 1, r, node * 2 + 1);
-		seg[node] = max(seg[node * 2], seg[node * 2 + 1]);
-	}
-}
+/* #endregion */
 
-void query(int val, int l = 1, int r = n, int node = 1) {
-	if(l == r) {
-		seg[node] -= val;
-		cout << l << ' ';
-	} else {
-		int mid = (l + r) / 2;
-		if(seg[node * 2] >= val) query(val, l, mid, node * 2);
-		else query(val, mid + 1, r, node * 2 + 1);
-		seg[node] = max(seg[node * 2], seg[node * 2 + 1]);
-	}
-}
 
 void solve() {
-	int m; re(n, m);
-	F0R(i, n) re(h[i + 1]);
+	int n; re(n); vi v(n); re(v);
 
-	build();
+	int best = 0;
+	int j = 0;
 
-	rep(m) {
-		int x; re(x);
-		if(seg[1] < x) cout << 0 << ' ';
-		else query(x);
+	for(int i = 0; i < n; i++) {
+		while(j < n && j <= i) j++;
+		while(j < n && v[j] > j - i) j++;
+		ckmax(best, j - i);
+		dbg(best, i, j);
 	}
+
+	ps(best);
 }
 
 signed main() {

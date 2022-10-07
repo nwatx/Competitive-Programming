@@ -1,4 +1,4 @@
-// [auto_folder]: cses
+// [auto_folder]: 
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -295,42 +295,56 @@ inline namespace FileIO {
 const db EPS = 1e-9;
 const int mx = 2e5+1;
 
-int n;
-int seg[4 * mx], h[mx];
+/* #region snippets */
 
-void build(int l = 1, int r = n, int node = 1) {
-	if(l == r) seg[node] = h[l];
-	else {
-		int mid = (l + r) / 2;
-		build(l, mid, node * 2);
-		build(mid + 1, r, node * 2 + 1);
-		seg[node] = max(seg[node * 2], seg[node * 2 + 1]);
-	}
-}
+/* #endregion */
 
-void query(int val, int l = 1, int r = n, int node = 1) {
-	if(l == r) {
-		seg[node] -= val;
-		cout << l << ' ';
-	} else {
-		int mid = (l + r) / 2;
-		if(seg[node * 2] >= val) query(val, l, mid, node * 2);
-		else query(val, mid + 1, r, node * 2 + 1);
-		seg[node] = max(seg[node * 2], seg[node * 2 + 1]);
+
+/**
+ * Description: shortest path
+ * Source: own
+ * Verification: https://open.kattis.com/problems/shortestpath1
+ */
+
+template<class C, bool directed> struct Dijkstra {
+	int SZ; V<C> dist; 
+	V<V<pair<int,C>>> adj;
+	void init(int _SZ) { SZ = _SZ; adj.clear(); adj.rsz(SZ); }
+	void ae(int u, int v, C cost) {
+		adj[u].pb({v,cost}); if (!directed) adj[v].pb({u,cost}); }
+	void gen(int st) {
+		dist.assign(SZ,numeric_limits<C>::max());
+		using T = pair<C,int>; pqg<T> pq; 
+		auto ad = [&](int a, C b) {
+			if (dist[a] <= b) return;
+			pq.push({dist[a] = b,a});
+		}; ad(st,0);
+		while (sz(pq)) {
+			T x = pq.top(); pq.pop(); if (dist[x.s] < x.f) continue;
+			each(y,adj[x.s]) ad(y.f,x.f+y.s);
+		}
 	}
-}
+};
+
+using ull = unsigned int;
 
 void solve() {
-	int m; re(n, m);
-	F0R(i, n) re(h[i + 1]);
+	int n; re(n);
+	V<ull> v(n), b(n); re(v);
+	F0R(i, n) b[i] = ~v[i];
+	dbg(b);
 
-	build();
-
-	rep(m) {
-		int x; re(x);
-		if(seg[1] < x) cout << 0 << ' ';
-		else query(x);
+	Dijkstra<ull, false> d; d.init(n);
+	F0R(i, n) {
+		FOR(j, i + 1, n) {
+			d.ae(i, j, v[i] & v[j]);
+			d.ae(i, j, b[i] & b[j]);
+		}
 	}
+
+	d.gen(0);
+
+	ps(d.dist[n - 1]);
 }
 
 signed main() {

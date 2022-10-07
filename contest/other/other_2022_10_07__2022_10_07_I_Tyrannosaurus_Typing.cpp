@@ -1,4 +1,4 @@
-// [auto_folder]: cses
+// [auto_folder]: 
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -293,44 +293,79 @@ inline namespace FileIO {
 
 // Changeable constants
 const db EPS = 1e-9;
-const int mx = 2e5+1;
+const int mx = 1e5+1;
 
-int n;
-int seg[4 * mx], h[mx];
+/* #region snippets */
 
-void build(int l = 1, int r = n, int node = 1) {
-	if(l == r) seg[node] = h[l];
-	else {
-		int mid = (l + r) / 2;
-		build(l, mid, node * 2);
-		build(mid + 1, r, node * 2 + 1);
-		seg[node] = max(seg[node * 2], seg[node * 2 + 1]);
+/* #endregion */
+
+int dist[26][26];
+vs keyboard{"qwertyuiop", "asdfghjkl", "zxcvbnm"};
+
+void gendist() {
+	F0R(i, 3) {
+		F0R(j, sz(keyboard[i])) {
+			F0R(ii, 3) {
+				F0R(jj, sz(keyboard[ii])) {
+					dist[keyboard[i][j] - 'a'][keyboard[ii][jj] - 'a'] = abs(i - ii) + abs(j - jj);
+				}
+			}
+		}
 	}
 }
 
-void query(int val, int l = 1, int r = n, int node = 1) {
-	if(l == r) {
-		seg[node] -= val;
-		cout << l << ' ';
-	} else {
-		int mid = (l + r) / 2;
-		if(seg[node * 2] >= val) query(val, l, mid, node * 2);
-		else query(val, mid + 1, r, node * 2 + 1);
-		seg[node] = max(seg[node * 2], seg[node * 2 + 1]);
-	}
-}
+int dp[mx][26][26];
 
 void solve() {
-	int m; re(n, m);
-	F0R(i, n) re(h[i + 1]);
+	gendist();
 
-	build();
+	string s; getline(cin, s);
 
-	rep(m) {
-		int x; re(x);
-		if(seg[1] < x) cout << 0 << ' ';
-		else query(x);
+	FOR(i, 0, sz(s) + 1) {
+		FOR(j, 0, 26) F0R(k, 26) dp[i][j][k] = MOD;
 	}
+
+	F0R(i, 26) {
+		F0R(j, 26) {
+			dp[0][i][j] = 0;
+		}
+	}
+	
+	F0R(i, sz(s)) {
+		// either move i or j
+		if(s[i] == ' ') {
+			F0R(j, 26) F0R(k, 26) {
+				dp[i + 1][j][k] = dp[i][j][k];
+			}
+			continue;
+		}
+
+
+		int cI = s[i] - 'a';
+		F0R(j, 26) {
+			F0R(k, 26) {
+				ckmin(dp[i + 1][cI][k], dp[i][j][k] + dist[cI][j]);
+				ckmin(dp[i + 1][j][cI], dp[i][j][k] + dist[k][cI]);
+			}
+		}
+	}
+
+	F0R(i, sz(s)) {
+		int cret = MOD;
+		F0R(j, 26) {
+			F0R(k, 26) {
+				ckmin(cret, dp[i][j][k]);
+			}
+		}
+		dbg(i, cret);
+	}
+
+	int ret = MOD;
+	F0R(i, 26) F0R(j, 26) {
+		dbg(dp[sz(s)][i][j]);
+		ckmin(ret, dp[sz(s)][i][j]);
+	}
+	ps(ret);
 }
 
 signed main() {

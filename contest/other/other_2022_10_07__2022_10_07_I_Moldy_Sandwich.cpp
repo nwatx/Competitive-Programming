@@ -1,4 +1,4 @@
-// [auto_folder]: cses
+// [auto_folder]: 
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -295,41 +295,87 @@ inline namespace FileIO {
 const db EPS = 1e-9;
 const int mx = 2e5+1;
 
+/* #region snippets */
+
+/* #endregion */
+
+/**
+ * Description: calculates rectangle sums in constant time
+ * Source: KACTL
+ * Verification: POI 16 Ticket Inspector
+ */
+/**
+ * Description: calculates rectangle sums in constant time
+ * Source: KACTL
+ * Verification: POI 16 Ticket Inspector
+ */
+
+template<class T> struct PrefixSums {
+	vector<vector<T>> sum;
+	void init(const vector<vector<T>>& v) {
+		int R = sz(v), C = sz(v[0]);
+		sum.assign(R+1,vector<T>(C+1));
+		F0R(i,R) F0R(j,C) 
+			sum[i+1][j+1] = v[i][j]+sum[i+1][j]+sum[i][j+1]-sum[i][j];
+	}
+	T get(int X1, int X2, int Y1, int Y2) {
+		X2 ++, Y2 ++;
+		return sum[X2][Y2]-sum[X1][Y2]
+			-sum[X2][Y1]+sum[X1][Y1];
+	}
+};
+
+int ret[1001];
+PrefixSums<int> pfx; 
 int n;
-int seg[4 * mx], h[mx];
 
-void build(int l = 1, int r = n, int node = 1) {
-	if(l == r) seg[node] = h[l];
-	else {
-		int mid = (l + r) / 2;
-		build(l, mid, node * 2);
-		build(mid + 1, r, node * 2 + 1);
-		seg[node] = max(seg[node * 2], seg[node * 2 + 1]);
-	}
-}
+/*
+Line(338) -> [i, j, s]: 0 | 1 | 1
+Line(340) -> [sum]: 2
+*/
 
-void query(int val, int l = 1, int r = n, int node = 1) {
-	if(l == r) {
-		seg[node] -= val;
-		cout << l << ' ';
-	} else {
-		int mid = (l + r) / 2;
-		if(seg[node * 2] >= val) query(val, l, mid, node * 2);
-		else query(val, mid + 1, r, node * 2 + 1);
-		seg[node] = max(seg[node * 2], seg[node * 2 + 1]);
+int check;
+
+bool good(int s) {
+	dbg(check, s);
+	F0R(i, n - s) {
+		F0R(j, n - s) {
+			// dbg(i, j, s);
+			int sum = pfx.get(i, i + s, j, j + s);
+			dbg(sum);
+			if(sum >= check) return true;
+		}
 	}
+
+	return false;
 }
 
 void solve() {
-	int m; re(n, m);
-	F0R(i, n) re(h[i + 1]);
+	re(n);
+	int m = 0;
+	V<vi> grid(n, vi(n));
+	F0R(i, n) {
+		F0R(j, n) {
+			char x; re(x);
+			if(x == '#') {
+				grid[i][j]++;
+				m++;
+			}
+		}
+	}
 
-	build();
+	pfx.init(grid);
 
-	rep(m) {
-		int x; re(x);
-		if(seg[1] < x) cout << 0 << ' ';
-		else query(x);
+	// check = 2;
+	// dbg(fstTrue(0, n, good));
+
+
+	// dbg(pfx.get(2, 2, 2, 2));
+
+	FOR(i, 1, m + 1) {
+		check = i;
+		cout << fstTrue(0, n - 1, good) + 1;
+		if(i != m) cout << ' ';
 	}
 }
 

@@ -1,4 +1,4 @@
-// [auto_folder]: cses
+// [auto_folder]: 
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -295,41 +295,97 @@ inline namespace FileIO {
 const db EPS = 1e-9;
 const int mx = 2e5+1;
 
-int n;
-int seg[4 * mx], h[mx];
+/* #region snippets */
 
-void build(int l = 1, int r = n, int node = 1) {
-	if(l == r) seg[node] = h[l];
-	else {
-		int mid = (l + r) / 2;
-		build(l, mid, node * 2);
-		build(mid + 1, r, node * 2 + 1);
-		seg[node] = max(seg[node * 2], seg[node * 2 + 1]);
-	}
-}
+/* #endregion */
 
-void query(int val, int l = 1, int r = n, int node = 1) {
-	if(l == r) {
-		seg[node] -= val;
-		cout << l << ' ';
-	} else {
-		int mid = (l + r) / 2;
-		if(seg[node * 2] >= val) query(val, l, mid, node * 2);
-		else query(val, mid + 1, r, node * 2 + 1);
-		seg[node] = max(seg[node * 2], seg[node * 2 + 1]);
+/**
+ * Description: centroid (center of mass) of a polygon with 
+	* constant mass per unit area and SIGNED area
+ * Time: O(N)
+ * Source: http://codeforces.com/blog/entry/22175, KACTL
+ * Verification: kattis polygonarea, VT HSPC 2018 Holiday Stars
+ */
+
+/**
+ * Description: Use in place of \texttt{complex<T>}.
+ * Source: http://codeforces.com/blog/entry/22175, KACTL
+ * Verification: various
+ */
+
+using T = db; // or long long
+using P = pair<T,T>; using vP = V<P>; using Line = pair<P,P>;
+int sgn(T a) { return (a>EPS)-(a<-EPS); }
+T sq(T a) { return a*a; }
+
+bool close(const P& a, const P& b) { 
+	return sgn(a.f-b.f) == 0 && sgn(a.s-b.s) == 0; } 
+T norm(const P& p) { return sq(p.f)+sq(p.s); }
+T abs(const P& p) { return sqrt(norm(p)); }
+T arg(const P& p) { return atan2(p.s,p.f); }
+P conj(const P& p) { return P(p.f,-p.s); }
+P perp(const P& p) { return P(-p.s,p.f); }
+P dir(T ang) { return P(cos(ang),sin(ang)); }
+
+P operator-(const P& l) { return P(-l.f,-l.s); }
+P operator+(const P& l, const P& r) { 
+	return P(l.f+r.f,l.s+r.s); }
+P operator-(const P& l, const P& r) { 
+	return P(l.f-r.f,l.s-r.s); }
+P operator*(const P& l, const T& r) { 
+	return P(l.f*r,l.s*r); }
+P operator*(const T& l, const P& r) { return r*l; }
+P operator/(const P& l, const T& r) { 
+	return P(l.f/r,l.s/r); }
+P operator*(const P& l, const P& r) { 
+	return P(l.f*r.f-l.s*r.s,l.s*r.f+l.f*r.s); }
+P operator/(const P& l, const P& r) { 
+	return l*conj(r)/norm(r); }
+P& operator+=(P& l, const P& r) { return l = l+r; }
+P& operator-=(P& l, const P& r) { return l = l-r; }
+P& operator*=(P& l, const T& r) { return l = l*r; }
+P& operator/=(P& l, const T& r) { return l = l/r; }
+P& operator*=(P& l, const P& r) { return l = l*r; }
+P& operator/=(P& l, const P& r) { return l = l/r; }
+
+P unit(const P& p) { return p/abs(p); }
+T dot(const P& a, const P& b) { return a.f*b.f+a.s*b.s; }
+T cross(const P& a, const P& b) { return a.f*b.s-a.s*b.f; }
+T cross(const P& p, const P& a, const P& b) {
+	return cross(a-p,b-p); }
+P reflect(const P& p, const Line& l) { 
+	P a = l.f, d = l.s-l.f;
+	return a+conj((p-a)/d)*d; }
+P foot(const P& p, const Line& l) { 
+	return (p+reflect(p,l))/(T)2; }
+bool p_on_seg(const P& p, const Line& l) {
+	return sgn(cross(l.f,l.s,p)) == 0 && sgn(dot(p-l.f,p-l.s)) <= 0; }
+
+pair<P,T> cenArea(const vP& v) { 
+	P cen(1e5,1e5); T area = 0; 
+	F0R(i,sz(v)) {
+		int j = (i+1)%sz(v); T a = cross(v[i],v[j]);
+		cen += a*(v[i]+v[j]); area += a;
 	}
+
+	dbg(area);
+
+
+	return {cen/area/(T)3,area/2};
 }
 
 void solve() {
-	int m; re(n, m);
-	F0R(i, n) re(h[i + 1]);
+	int n; re(n);
+	vP v(n); re(v);
+	if(n == 1) ps(norm(v[0]));
+	else if(n == 2) ps(2 * (norm({(v[0].f - v[1].f) / 2, (v[0].s - v[1].s) / 2})));
+	else {
+		F0R(i, n) {
+			v[i].f += 1e5; v[i].s += 1e5;
+		}
 
-	build();
-
-	rep(m) {
-		int x; re(x);
-		if(seg[1] < x) cout << 0 << ' ';
-		else query(x);
+		auto cen = cenArea(v);
+		ps(norm(cen.f) * n + norm(cen.s) * n);
 	}
 }
 

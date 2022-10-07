@@ -1,4 +1,4 @@
-// [auto_folder]: cses
+// [auto_folder]: 
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -295,42 +295,47 @@ inline namespace FileIO {
 const db EPS = 1e-9;
 const int mx = 2e5+1;
 
-int n;
-int seg[4 * mx], h[mx];
+/* #region snippets */
+/**
+ * Description: Factors integers.
+ * Time: O(\sqrt N)
+ * Source: Own
+ * Verification: https://csacademy.com/contest/ceoi-2018-day-2/task/toys-big/
+ */
 
-void build(int l = 1, int r = n, int node = 1) {
-	if(l == r) seg[node] = h[l];
-	else {
-		int mid = (l + r) / 2;
-		build(l, mid, node * 2);
-		build(mid + 1, r, node * 2 + 1);
-		seg[node] = max(seg[node * 2], seg[node * 2 + 1]);
-	}
+int smallestDivisor(int n)
+{
+    // if divisible by 2
+    if (n % 2 == 0)
+        return 2;
+ 
+    // iterate from 3 to sqrt(n)
+    for (int i = 3; i * i <= n; i += 2) {
+        if (n % i == 0)
+            return i;
+    }
+ 
+    return n;
 }
 
-void query(int val, int l = 1, int r = n, int node = 1) {
-	if(l == r) {
-		seg[node] -= val;
-		cout << l << ' ';
-	} else {
-		int mid = (l + r) / 2;
-		if(seg[node * 2] >= val) query(val, l, mid, node * 2);
-		else query(val, mid + 1, r, node * 2 + 1);
-		seg[node] = max(seg[node * 2], seg[node * 2 + 1]);
-	}
-}
+/* #endregion */
+
 
 void solve() {
-	int m; re(n, m);
-	F0R(i, n) re(h[i + 1]);
+	int n; re(n);
+	set<ll> dis;
+	vi v(n); re(v);
+	sor(v);
 
-	build();
+	int curr = 0;
 
-	rep(m) {
-		int x; re(x);
-		if(seg[1] < x) cout << 0 << ' ';
-		else query(x);
+	for(int i = 3; i * i <= MOD && curr < n; i += 2) {
+		if(v[curr] % i == 0) {
+			dis.insert(i);
+		}
 	}
+
+	ps(sz(dis));
 }
 
 signed main() {

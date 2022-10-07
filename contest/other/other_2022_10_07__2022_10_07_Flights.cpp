@@ -1,4 +1,4 @@
-// [auto_folder]: cses
+// [auto_folder]: 
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -295,41 +295,45 @@ inline namespace FileIO {
 const db EPS = 1e-9;
 const int mx = 2e5+1;
 
-int n;
-int seg[4 * mx], h[mx];
+/* #region snippets */
 
-void build(int l = 1, int r = n, int node = 1) {
-	if(l == r) seg[node] = h[l];
-	else {
-		int mid = (l + r) / 2;
-		build(l, mid, node * 2);
-		build(mid + 1, r, node * 2 + 1);
-		seg[node] = max(seg[node * 2], seg[node * 2 + 1]);
-	}
-}
+/* #endregion */
 
-void query(int val, int l = 1, int r = n, int node = 1) {
-	if(l == r) {
-		seg[node] -= val;
-		cout << l << ' ';
-	} else {
-		int mid = (l + r) / 2;
-		if(seg[node * 2] >= val) query(val, l, mid, node * 2);
-		else query(val, mid + 1, r, node * 2 + 1);
-		seg[node] = max(seg[node * 2], seg[node * 2 + 1]);
-	}
+struct Obj {
+	str f, t;
+	db rating;
+	int seats;
+	db price;
+};
+
+int goodTime(str s) {
+	int hr = stoi(s.substr(0, 2));
+	int m = stoi(s.substr(3, 2));
+	if(hr >= 12 && hr <= 14 || (hr == 15 && m == 0)) return 2;
+	if(hr >= 10 && hr <= 16 || (hr == 17 && m == 0)) return 1;
+	return 0;
 }
 
 void solve() {
-	int m; re(n, m);
-	F0R(i, n) re(h[i + 1]);
+	int n; re(n);
+	V<Obj> v;
+	rep(n) {
+		str f, t; db rating; int seats; db price;
+		re(f, t, rating, seats, price);
+		v.pb({f, t, rating, seats, price});
+	}
 
-	build();
 
-	rep(m) {
-		int x; re(x);
-		if(seg[1] < x) cout << 0 << ' ';
-		else query(x);
+	sort(all(v), [](Obj &a, Obj &b) {
+		if(goodTime(a.t) != goodTime(b.t)) return goodTime(a.t) > goodTime(b.t);
+		if(a.seats > 0 != (b.seats > 0)) return a.seats > 0;
+		if(a.t == b.t && a.rating != b.rating) return a.rating > b.rating; 
+		if(a.t == b.t && a.rating == b.rating && a.seats == b.seats) return a.price < b.price;
+		return a.f < b.f;
+	});
+
+	F0R(i, min(3, sz(v))) {
+		ps(ts(i + 1) + ":", v[i].f);
 	}
 }
 
@@ -338,9 +342,10 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
-		// pr("Case #", _ + 1, ": "); // Kickstart
+		pr("Top Flights Set ", _ + 1, ": "); // Kickstart
+		ps();
 		cerr << "[dbg] Case #" << _ + 1 << ":\n";
 		solve();
 	}

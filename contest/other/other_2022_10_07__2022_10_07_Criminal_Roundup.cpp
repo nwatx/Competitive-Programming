@@ -1,4 +1,4 @@
-// [auto_folder]: cses
+// [auto_folder]: 
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -295,42 +295,41 @@ inline namespace FileIO {
 const db EPS = 1e-9;
 const int mx = 2e5+1;
 
-int n;
-int seg[4 * mx], h[mx];
+/* #region snippets */
 
-void build(int l = 1, int r = n, int node = 1) {
-	if(l == r) seg[node] = h[l];
-	else {
-		int mid = (l + r) / 2;
-		build(l, mid, node * 2);
-		build(mid + 1, r, node * 2 + 1);
-		seg[node] = max(seg[node * 2], seg[node * 2 + 1]);
-	}
-}
+/* #endregion */
 
-void query(int val, int l = 1, int r = n, int node = 1) {
-	if(l == r) {
-		seg[node] -= val;
-		cout << l << ' ';
-	} else {
-		int mid = (l + r) / 2;
-		if(seg[node * 2] >= val) query(val, l, mid, node * 2);
-		else query(val, mid + 1, r, node * 2 + 1);
-		seg[node] = max(seg[node * 2], seg[node * 2 + 1]);
-	}
-}
 
 void solve() {
-	int m; re(n, m);
-	F0R(i, n) re(h[i + 1]);
+	int n, m; re(n, m);
+	vpi a(n), b(m); re(a ,b);
+	sor(a); sor(b);
 
-	build();
-
-	rep(m) {
-		int x; re(x);
-		if(seg[1] < x) cout << 0 << ' ';
-		else query(x);
+	// either move it up or to the right
+	pi c{MOD, MOD}, d{0, 0};
+	each(x, a) {
+		ckmin(c.f, x.f);
+		ckmin(c.s, x.s);
 	}
+
+	each(x, b) {
+		ckmax(d.f, x.f);
+		ckmax(d.s, x.s);
+	}
+
+	dbg(c, d);
+
+	ps(min(d.f - c.f, d.s - c.s));
+
+	// int ret = max(0, b[0].f - a[0].f);
+	// // get the highest y greater than x
+	// int highest = 0;
+	// each(x, b) {
+	// 	if(x.s > a[0].f) ckmax(highest, x.s);
+	// }
+
+	// ret += highest;
+	// ps(ret);
 }
 
 signed main() {
@@ -338,7 +337,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		cerr << "[dbg] Case #" << _ + 1 << ":\n";

@@ -1,4 +1,4 @@
-// [auto_folder]: cses
+// [auto_folder]: 
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -293,44 +293,52 @@ inline namespace FileIO {
 
 // Changeable constants
 const db EPS = 1e-9;
-const int mx = 2e5+1;
+const int mx = 1e7+1;
 
-int n;
-int seg[4 * mx], h[mx];
+/* #region snippets */
 
-void build(int l = 1, int r = n, int node = 1) {
-	if(l == r) seg[node] = h[l];
-	else {
-		int mid = (l + r) / 2;
-		build(l, mid, node * 2);
-		build(mid + 1, r, node * 2 + 1);
-		seg[node] = max(seg[node * 2], seg[node * 2 + 1]);
-	}
-}
+/* #endregion */
 
-void query(int val, int l = 1, int r = n, int node = 1) {
-	if(l == r) {
-		seg[node] -= val;
-		cout << l << ' ';
-	} else {
-		int mid = (l + r) / 2;
-		if(seg[node * 2] >= val) query(val, l, mid, node * 2);
-		else query(val, mid + 1, r, node * 2 + 1);
-		seg[node] = max(seg[node * 2], seg[node * 2 + 1]);
-	}
-}
 
 void solve() {
-	int m; re(n, m);
-	F0R(i, n) re(h[i + 1]);
-
-	build();
-
-	rep(m) {
-		int x; re(x);
-		if(seg[1] < x) cout << 0 << ' ';
-		else query(x);
+	int a, b; re(a, b);
+	db exp = 0;
+	rep(mx) {
+		// randomly pick either a or b
+		int x = a, y = b;
+		vector<int> reg, sup;
+		while(1) {
+			if(x > 0 && y > 0) {
+				if(rand() % 2) {
+					x--;
+					F0R(i, sz(reg)) reg[i] += 2;
+					F0R(i, sz(sup)) sup[i] += 2;
+					reg.pb(14);
+				} else {
+					y--;
+					F0R(i, sz(reg)) reg[i] *= 2;
+					F0R(i, sz(sup)) sup[i] *= 2;
+					sup.pb(14);
+				}
+			} else if(x > 0) {
+				x--;
+				F0R(i, sz(reg)) reg[i] += 2;
+				F0R(i, sz(sup)) sup[i] += 2;
+				reg.pb(14);
+			} else if(y > 0) {
+				y--;
+				F0R(i, sz(reg)) reg[i] *= 2;
+				F0R(i, sz(sup)) sup[i] *= 2;
+				sup.pb(14);
+			} else {
+				each(x, reg) exp += x;
+				each(x, sup) exp += x;
+				break;
+			}
+		}
 	}
+
+	ps(exp / mx);
 }
 
 signed main() {

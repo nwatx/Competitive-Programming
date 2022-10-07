@@ -8,6 +8,26 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+/**
+ * Description: Hash map with the same API as unordered\_map, but \tilde 3x faster.
+	* Initial capacity must be a power of 2 if provided.
+ * Source: KACTL
+ * Usage: ht<int,int> h({},{},{},{},{1<<16});
+ */
+
+#include <ext/pb_ds/assoc_container.hpp>
+using namespace __gnu_pbds;
+struct chash { /// use most bits rather than just the lowest ones
+	const uint64_t C = ll(2e18*PI)+71; // large odd number
+	const int RANDOM = rng();
+	ll operator()(ll x) const { /// https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html
+		return __builtin_bswap64((x^RANDOM)*C); }
+};
+template<class K,class V> using um = unordered_map<K,V,chash>;
+template<class K,class V> using ht = gp_hash_table<K,V,chash>;
+template<class K,class V> V get(ht<K,V>& u, K x) {
+	auto it = u.find(x); return it == end(u) ? 0 : it->s; }
+
 /* #region template */
 using ll = long long;
 using db = long double; // or double, if TL is tight
@@ -71,7 +91,7 @@ tcT> int lwb(V<T>& a, const T& b) { return int(lb(all(a),b)-bg(a)); }
 #define each(a,x) for (auto& a: x)
 
 const int MOD = 1e9+7; // 998244353;
-const ll INF = 1e18; // not too close to LLONG_MAX
+const ll INF = LLONG_MAX; // not too close to LLONG_MAX
 const db PI = acos((db)-1);
 const char nl = '\n';
 const int dx[4] = {1,0,-1,0}, dy[4] = {0,1,0,-1}; // for every grid problem!!
@@ -295,42 +315,55 @@ inline namespace FileIO {
 const db EPS = 1e-9;
 const int mx = 2e5+1;
 
-int n;
-int seg[4 * mx], h[mx];
+/* #region snippets */
 
-void build(int l = 1, int r = n, int node = 1) {
-	if(l == r) seg[node] = h[l];
-	else {
-		int mid = (l + r) / 2;
-		build(l, mid, node * 2);
-		build(mid + 1, r, node * 2 + 1);
-		seg[node] = max(seg[node * 2], seg[node * 2 + 1]);
-	}
-}
+/* #endregion */
 
-void query(int val, int l = 1, int r = n, int node = 1) {
-	if(l == r) {
-		seg[node] -= val;
-		cout << l << ' ';
-	} else {
-		int mid = (l + r) / 2;
-		if(seg[node * 2] >= val) query(val, l, mid, node * 2);
-		else query(val, mid + 1, r, node * 2 + 1);
-		seg[node] = max(seg[node * 2], seg[node * 2 + 1]);
+V<vl> mat;
+ll n, m, k;
+
+V<vl> mul(V<vl> a, V<vl> b) {
+	V<vl> ret(n, vl(n, INF));
+	F0R(i, n) {
+		F0R(j, n) {
+			F0R(k, n) {
+				if(a[i][k] == INF || b[k][j] == INF) continue;
+				ckmin(ret[i][j], a[i][k] + b[k][j]);
+			}
+		}
 	}
+
+	return ret;
 }
 
 void solve() {
-	int m; re(n, m);
-	F0R(i, n) re(h[i + 1]);
-
-	build();
+	re(n, m, k);
+	k--;
+	mat = V<vl>(n, vl(n, INF));
 
 	rep(m) {
-		int x; re(x);
-		if(seg[1] < x) cout << 0 << ' ';
-		else query(x);
+		int1(a, b); ll c; re(c);
+		ckmin(mat[a][b], c);
+		// mat[b][a] = c;
 	}
+
+	V<vl> ret = mat;
+
+	while(k) {
+		if(k & 1) ret = mul(ret, mat);
+		mat = mul(mat, mat);
+
+		dbg(k);
+		dbg(ret);
+		dbg(mat);
+
+		k >>= 1;
+	}
+
+	dbg(ret);
+
+	ll ans = ret[0][n - 1];
+	ps(ans < INF ? ans : -1);
 }
 
 signed main() {

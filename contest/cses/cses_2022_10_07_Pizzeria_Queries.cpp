@@ -295,42 +295,67 @@ inline namespace FileIO {
 const db EPS = 1e-9;
 const int mx = 2e5+1;
 
-int n;
-int seg[4 * mx], h[mx];
+/* #region snippets */
 
-void build(int l = 1, int r = n, int node = 1) {
-	if(l == r) seg[node] = h[l];
-	else {
-		int mid = (l + r) / 2;
-		build(l, mid, node * 2);
-		build(mid + 1, r, node * 2 + 1);
-		seg[node] = max(seg[node * 2], seg[node * 2 + 1]);
-	}
-}
+/* #endregion */
 
-void query(int val, int l = 1, int r = n, int node = 1) {
-	if(l == r) {
-		seg[node] -= val;
-		cout << l << ' ';
-	} else {
-		int mid = (l + r) / 2;
-		if(seg[node * 2] >= val) query(val, l, mid, node * 2);
-		else query(val, mid + 1, r, node * 2 + 1);
-		seg[node] = max(seg[node * 2], seg[node * 2 + 1]);
+int n, q;
+
+
+struct Seg {
+	int n;
+	vi S;
+
+	void init(int _n) {
+		S.resize(2 * _n, MOD);
+		n = _n;
 	}
+
+	void upd(int i, int v) {
+		for(S[i += n] = v, i /= 2; i > 0; i /= 2) {
+			S[i] = min(S[2*i], S[2*i+1]);
+		}
+	}
+
+	int qry(int l, int r) {
+		int la = MOD, ra = MOD;
+		for(l += n, r += n + 1; l < r; l /= 2, r /= 2) {
+			if(l & 1) la = min(la, S[l++]);
+			if(r & 1) ra = min(ra, S[--r]);
+		}
+		return min(la, ra);
+	}
+};
+
+Seg u, d;
+
+void pull(vi &v, int i) {
+	u.upd(i, v[i] + i);
+	d.upd(i, v[i] - i);
 }
 
 void solve() {
-	int m; re(n, m);
-	F0R(i, n) re(h[i + 1]);
-
-	build();
-
-	rep(m) {
-		int x; re(x);
-		if(seg[1] < x) cout << 0 << ' ';
-		else query(x);
+	re(n, q);
+	vi v(n); re(v);
+	u.init(n); d.init(n);
+	F0R(i, n) {
+		pull(v, i);
 	}
+
+	dbg("hi");
+
+	rep(q) {
+		int t; re(t);
+		if(t == 1) {
+			int k, x; re(k, x); k--;
+			v[k] = x;
+			pull(v, k);
+		} else {
+			int k; re(k); k--;
+			ps(min(u.qry(k, n - 1) - k, d.qry(0, k) + k));
+		}
+	}
+
 }
 
 signed main() {

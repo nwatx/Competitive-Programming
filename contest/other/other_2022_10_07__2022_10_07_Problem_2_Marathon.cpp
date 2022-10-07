@@ -1,9 +1,10 @@
-// [auto_folder]: cses
+// [auto_folder]: 
 // ^ type folder name for scripted placement
 
 // Codeforces
 // #pragma GCC optimize ("Ofast")
 // #pragma GCC target ("avx2")
+
 
 #include <bits/stdc++.h>
 using namespace std;
@@ -295,47 +296,141 @@ inline namespace FileIO {
 const db EPS = 1e-9;
 const int mx = 2e5+1;
 
-int n;
-int seg[4 * mx], h[mx];
+/* #region snippets */
+/**
+ * Description: 1D point update, range query where \texttt{comb} is
+	* any associative operation. If $N=2^p$ then \texttt{seg[1]==query(0,N-1)}.
+ * Time: O(\log N)
+ * Source: 
+	* http://codeforces.com/blog/entry/18051
+	* KACTL
+ * Verification: SPOJ Fenwick
+ */
 
-void build(int l = 1, int r = n, int node = 1) {
-	if(l == r) seg[node] = h[l];
-	else {
-		int mid = (l + r) / 2;
-		build(l, mid, node * 2);
-		build(mid + 1, r, node * 2 + 1);
-		seg[node] = max(seg[node * 2], seg[node * 2 + 1]);
+template<class T> struct SegMax { // comb(ID,b) = b
+	const T ID = 0; T comb(T a, T b) { return max(a, b); } 
+	int n; vector<T> seg;
+	void init(int _n) { n = _n; seg.assign(2*n,ID); }
+	void pull(int p) { seg[p] = comb(seg[2*p],seg[2*p+1]); }
+	void upd(int p, T val) { // set val at position p
+		seg[p += n] = val; for (p /= 2; p; p /= 2) pull(p); }
+	T query(int l, int r) {	// sum on interval [l, r]
+		T ra = ID, rb = ID; 
+		for (l += n, r += n+1; l < r; l /= 2, r /= 2) {
+			if (l&1) ra = comb(ra,seg[l++]);
+			if (r&1) rb = comb(seg[--r],rb);
+		}
+		return comb(ra,rb);
 	}
+};
+
+/**
+ * Description: 1D point update, range query where \texttt{comb} is
+	* any associative operation. If $N=2^p$ then \texttt{seg[1]==query(0,N-1)}.
+ * Time: O(\log N)
+ * Source: 
+	* http://codeforces.com/blog/entry/18051
+	* KACTL
+ * Verification: SPOJ Fenwick
+ */
+
+template<class T> struct SegSum { // comb(ID,b) = b
+	const T ID = 0; T comb(T a, T b) { return a+b; } 
+	int n; vector<T> seg;
+	void init(int _n) { n = _n; seg.assign(2*n,ID); }
+	void pull(int p) { seg[p] = comb(seg[2*p],seg[2*p+1]); }
+	void upd(int p, T val) { // set val at position p
+		seg[p += n] = val; for (p /= 2; p; p /= 2) pull(p); }
+	T query(int l, int r) {	// sum on interval [l, r]
+		T ra = ID, rb = ID; 
+		for (l += n, r += n+1; l < r; l /= 2, r /= 2) {
+			if (l&1) ra = comb(ra,seg[l++]);
+			if (r&1) rb = comb(seg[--r],rb);
+		}
+		return comb(ra,rb);
+	}
+};
+/* #endregion */
+
+/*
+With points (x, y)
+Insert segment compared to (x_{i +- 1}, y_{y +- 1})
+(a, b), (c, d)
+new distances is (abs(a - c), abs(b - d))
+*/
+
+// there are n - 1 segments
+SegSum<int> sum;
+SegMax<int> segMax;
+vpi v;
+
+int dist(pi a, pi b) {
+	return abs(a.f - b.f) + abs(a.s - b.s);
 }
 
-void query(int val, int l = 1, int r = n, int node = 1) {
-	if(l == r) {
-		seg[node] -= val;
-		cout << l << ' ';
-	} else {
-		int mid = (l + r) / 2;
-		if(seg[node * 2] >= val) query(val, l, mid, node * 2);
-		else query(val, mid + 1, r, node * 2 + 1);
-		seg[node] = max(seg[node * 2], seg[node * 2 + 1]);
+// savings for d1, d2, d3 would be
+// d1 -> d2 -> d3 = (d1 -> d2) + (d2 -> d3)
+
+int n, m;
+
+// sum_i represents the path from v_i to v_{i + 1}
+// segMax_i is the maximum savings for a segment from i - 1 -> i + 1
+
+void pull(int i) {
+	int d = dist(v[i], v[i + 1]);
+	sum.upd(i, d);
+	d = dist(v[i], v[i - 1]);
+	if(i > 0) {
+		sum.upd(i - 1, d);
+	}
+
+	FOR(k, i - 1, i + 2) {
+		if(k > 0 && k < n - 1) {
+			// distance savings
+			segMax.upd(k, dist(v[k], v[k + 1]) + dist(v[k - 1], v[k]) - dist(v[k - 1], v[k + 1]));
+		}
 	}
 }
 
 void solve() {
-	int m; re(n, m);
-	F0R(i, n) re(h[i + 1]);
+	re(n, m);
+	sum.init(n); segMax.init(n);
+	v.rsz(n); re(v);
+	F0R(i, n - 1) {
+		pull(i);
+	}
 
-	build();
+	// F0R(i, n - 1) {
+	// 	dbg(i, sum.query(i, i));
+	// }
 
 	rep(m) {
-		int x; re(x);
-		if(seg[1] < x) cout << 0 << ' ';
-		else query(x);
+		char c; re(c);
+		if(c == 'U') {
+			int i; re(i); i--;
+			int x, y; re(x, y);
+			v[i] = {x, y};
+			pull(i);
+		} else {
+			int i, j; re(i, j);
+			i--; j--;
+			int ret = sum.query(i, j - 1);
+			// dbg(_);
+			// dbg(ret);
+			if(j - i >= 2) ret -= segMax.query(i + 1, j - 1);
+			if(ret < 0) {
+				dbg(ret, i, j);
+				dbg(segMax.query(i + 1, j));
+			}
+			// dbg(ret);
+			ps(ret);
+		}
 	}
 }
 
 signed main() {
 	// clock_t start = clock();
-	setIO();
+	// setIO("marathon");
 
 	int n = 1;
 	// re(n);

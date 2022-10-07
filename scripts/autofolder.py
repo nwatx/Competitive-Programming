@@ -19,6 +19,10 @@ for file_name in files:
 			continue
 
 		dest_name = first_line.replace(prefix, "").replace("\n", "")
+
+		if len(dest_name) == 0:
+			dest_name = "other"
+
 		dest_path = f"{sorted_directory}{dest_name}/{dest_name}_{datetime.today().strftime('%Y_%m_%d')}_{file_name}"
 
 		os.rename(file_name, dest_path)
