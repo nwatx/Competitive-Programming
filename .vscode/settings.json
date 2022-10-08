@@ -76,4 +76,5 @@
         "limits": "cpp"
     },
     "gitdoc.enabled": false,
+    "files.autoSave": "onFocusChange",
 }
