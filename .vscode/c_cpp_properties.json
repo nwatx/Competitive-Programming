@@ -3,9 +3,9 @@
 		{
 			"name": "Ubuntu",
 			"includePath": [
-				"${workspaceFolder}/**",
-				"/usr/include/x86_64-linux-gnu/**",
-				"/usr/lib/gcc/**"
+				// "${workspaceFolder}/**",
+				// "/usr/include/x86_64-linux-gnu/bits/**",
+				// "/usr/lib/gcc/**"
 			],
 			"defines": ["_DEBUG", "UNICODE", "_UNICODE"],
 			"compilerPath": "/usr/bin/gcc",

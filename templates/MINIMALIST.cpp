@@ -1,3 +1,6 @@
+// [auto_folder]: 
+// ^ type folder name for scripted placement
+
 #include <bits/stdc++.h>
 
 using namespace std;

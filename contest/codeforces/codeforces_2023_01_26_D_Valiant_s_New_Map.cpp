@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 #include <bits/stdc++.h>
@@ -19,7 +19,10 @@ using pi = pair<int,int>;
 const int mx = (int)2e5 + 1;
 const int MOD = (int)1e9 + 7;
 
+
+
 int main() {
 	cin.tie(0)->sync_with_stdio(0);
-	
+
+	int n; cin >> n;
 }
