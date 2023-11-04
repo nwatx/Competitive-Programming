@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -72,7 +72,7 @@ tcT> int lwb(V<T>& a, const T& b) { return int(lb(all(a),b)-bg(a)); }
 tcT> int sgn(T x) { return (x > 0) - (x < 0); }
 /* #endregion */
 
-const int MOD = 1e9+7; // 998244353;
+const int MOD = 998244353;
 const ll INF = 1e18; // not too close to LLONG_MAX
 const db PI = acos((db)-1);
 const char nl = '\n';
@@ -297,15 +297,28 @@ inline namespace FileIO {
 
 // Changeable constants
 const db EPS = 1e-9;
-const int mx = 2e5+1;
+const int mx = 3e5+1;
 
 /* #region snippets */
 
 /* #endregion */
 
+int pfx[mx];
 
 void solve() {
-	
+    int n; re(n);
+    F0R(i, n) cin >> pfx[i];
+    F0R(i, n) pfx[i] ^= pfx[i - 1];
+
+    auto q = [&](int l, int r) {
+        if(l == 0) return pfx[r];
+        return pfx[r] ^ pfx[l - 1];
+    };
+
+    F0R(i, n) {
+
+    }
+
 }
 
 signed main() {
@@ -316,7 +329,7 @@ signed main() {
 	// re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
-		// cerr << "[dbg] Case #" << _ + 1 << ":\n";
+		cerr << "[dbg] Case #" << _ + 1 << ":\n";
 		solve();
 	}
 

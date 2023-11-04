@@ -72,7 +72,7 @@ tcT> int lwb(V<T>& a, const T& b) { return int(lb(all(a),b)-bg(a)); }
 tcT> int sgn(T x) { return (x > 0) - (x < 0); }
 /* #endregion */
 
-const int MOD = 1e9+7; // 998244353;
+const int MOD = 998244353;
 const ll INF = 1e18; // not too close to LLONG_MAX
 const db PI = acos((db)-1);
 const char nl = '\n';
@@ -303,20 +303,84 @@ const int mx = 2e5+1;
 
 /* #endregion */
 
+ll fac[mx];
 
 void solve() {
-	
+    string s; re(s);
+    int n = sz(s);
+ 
+    auto f = [&](bool one) {
+        ll ret = 1;
+        int rm = 0;
+        int cnt = 0;
+        int groups = 0;
+        F0R(i, n) {
+            bool o = s[i] == '1';
+            if(o != one) {
+                cnt++;
+                rm++;
+            } else {
+                if(cnt >0) ret = ret * cnt % MOD;
+                groups += cnt >= 2;
+                cnt = 1;
+                one = !one;
+            }
+        }
+ 
+        ret = ret * cnt % MOD;
+        groups += cnt >= 2;
+
+        dbg(ret, groups, rm);
+ 
+        return mp(rm, ret * fac[rm] % MOD);
+    };
+ 
+    pl a = f(1), b = f(0);
+    if(a.f == b.f) {
+        a.s += b.s;
+        a.s %= MOD;
+    }
+
+    if(a.f > b.f) swap(a, b);
+    ps(a.f, a.s);
 }
+
+// void solve() {
+//     string s; re(s);
+//     int n = sz(s);
+//     int cnt = 1;
+//     int lst = 0;
+//     ll ret = 1;
+//     FOR(i, 1, n) {
+//         if(s[i] != s[i - 1]) {
+//             cnt++;
+//             ret = (i - lst) * ret % MOD;
+//             lst = i;
+//         }
+//     }
+ 
+//     ret *= n - lst;
+//     ret %= MOD;
+
+//     dbg(ret);
+ 
+//     ps(n - cnt, fac[n - cnt] * ret % MOD);
+// }
 
 signed main() {
 	// clock_t start = clock();
 	setIO();
 
+    fac[0] = 1;
+    FOR(i, 1, mx) {
+        fac[i] = i * fac[i - 1] % MOD;
+    }
+
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
-		// cerr << "[dbg] Case #" << _ + 1 << ":\n";
+		cerr << "[dbg] Case #" << _ + 1 << ":\n";
 		solve();
 	}
 

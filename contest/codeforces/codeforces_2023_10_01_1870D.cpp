@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -70,15 +70,12 @@ tcT> int lwb(V<T>& a, const T& b) { return int(lb(all(a),b)-bg(a)); }
 #define rep(a) F0R(_,a)
 #define each(a,x) for (auto& a: x)
 tcT> int sgn(T x) { return (x > 0) - (x < 0); }
-/* #endregion */
 
 const int MOD = 1e9+7; // 998244353;
 const ll INF = 1e18; // not too close to LLONG_MAX
 const db PI = acos((db)-1);
 const char nl = '\n';
 const int dx[4] = {1,0,-1,0}, dy[4] = {0,1,0,-1}; // for every grid problem!!
-
-/* #region template */
 mt19937 rng((uint32_t)chrono::steady_clock::now().time_since_epoch().count()); 
 template<class T> using pqg = priority_queue<T,vector<T>,greater<T>>;
 
@@ -305,7 +302,51 @@ const int mx = 2e5+1;
 
 
 void solve() {
-	
+    int n; re(n);
+    vpi v(n);
+    F0R(i, n) {
+        int x; cin >> x;
+        v[i] = {x, -i};
+    }
+
+    int k; re(k);
+
+    auto min_elem = *min_element(all(v));
+
+    ll cnt = k / min_elem.first;
+    ll rem = k - cnt * min_elem.first;
+    dbg(cnt, rem);
+    // get diff of all greater elements than min_elem
+
+    vi freq(n);
+    freq[-min_elem.s] = cnt;
+
+	int currElem = -min_elem.s;
+
+    // switch to latest element no matter wat
+	FOR(i, -min_elem.second + 1, n) {
+        // calculate new diff
+        int diff = v[i].f - currElem;
+        if(diff > 0) {
+            // give priority to latest elements
+            // exchange up to rem - diff
+            int to_exchange = rem / diff;
+            freq[currElem] -= to_exchange;
+            freq[i] += to_exchange;
+			currElem = -v[i].s;
+        }
+    }
+
+    dbg(freq);
+
+    R0F(i, n - 1) {
+        freq[i] += freq[i + 1];
+    }
+
+    F0R(i, n) {
+        cout << freq[i] << " ";
+    }
+    ps();
 }
 
 signed main() {
@@ -313,10 +354,10 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
-		// cerr << "[dbg] Case #" << _ + 1 << ":\n";
+		cerr << "[dbg] Case #" << _ + 1 << ":\n";
 		solve();
 	}
 

@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -72,7 +72,7 @@ tcT> int lwb(V<T>& a, const T& b) { return int(lb(all(a),b)-bg(a)); }
 tcT> int sgn(T x) { return (x > 0) - (x < 0); }
 /* #endregion */
 
-const int MOD = 1e9+7; // 998244353;
+const int MOD = 9302023; // 998244353;
 const ll INF = 1e18; // not too close to LLONG_MAX
 const db PI = acos((db)-1);
 const char nl = '\n';
@@ -297,7 +297,7 @@ inline namespace FileIO {
 
 // Changeable constants
 const db EPS = 1e-9;
-const int mx = 2e5+1;
+const int mx = 1e6+1;
 
 /* #region snippets */
 
@@ -305,7 +305,111 @@ const int mx = 2e5+1;
 
 
 void solve() {
-	
+    string S; re(S);
+    // zerone
+    // twone
+    // oneight
+    // threeight
+    // fiveeight
+    // eightwo
+    // eighthree
+
+    // zeroneightwone
+    // do a dp for each of these
+    // this can be done in linear time
+    set<str> s{"zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
+    map<str, int> m{{"zero", '0'}, {"one", '1'}, {"two", '2'}, {"three", '3'},
+        {"four", '4'}, {"five", '5'}, {"six", '6'}, {"seven", '7'},
+        {"eight", '8'}, {"nine", '9'}};
+    // set<PR<str>> con;
+    // each(x, s) {
+    //     char c = x[sz(x) - 1];
+    //     each(y, s) {
+    //         if(y[0] == c) {
+    //             con.ins({x, y});
+    //         }
+    //     }
+    // }
+
+    // define dp[i][j] as the shortest string ending with whatever
+    // define numways[i][j] as multiplying the num ways can exist (given shortest str)
+
+    V<vi> dp(sz(S) + 1, vi(36, MOD)), ways(sz(S) + 1, vi(36, 0));
+    
+
+    const auto ind = [&](char c) {
+        if(c >= '0' && c <= '9') {
+            return 26 + c - '0';
+        } else{
+            return c - 'a';
+        }
+    };
+
+    dp[0][ind(S[0])] = 1;
+    ways[0][ind(S[0])] = 1;
+
+    FOR(i, 0, sz(S)) {
+        // go through the string
+        each(digit, s) {
+            // if we can substitute a digit
+            if(i + sz(digit) <= sz(S) && S.substr(i, sz(digit)) == digit) {
+                int idx = ind(m[digit]);
+                int l = dp[i + sz(digit) - 1][idx], r = dp[i][ind(S[i])];
+                if(r < l) {
+                    ways[i + sz(digit) - 1][idx] = ways[i][ind(S[i])];
+                    dp[i + sz(digit) - 1][idx] = r;
+                } else if(r == l) {
+                    ways[i + sz(digit) - 1][idx] += ways[i][ind(S[i])];
+                    ways[i + sz(digit) - 1][idx] %= MOD;
+                }
+            }
+        }
+
+        F0R(j, 36) {
+            if(dp[i][j] + 1 < dp[i + 1][ind(S[i + 1])]) {
+                dp[i + 1][ind(S[i + 1])] = dp[i][j] + 1;
+                ways[i + 1][ind(S[i + 1])] = ways[i][j];
+            } else if(dp[i][j] + 1 == dp[i + 1][ind(S[i + 1])]) {
+                ways[i + 1][ind(S[i + 1])] += ways[i][j];
+                ways[i + 1][ind(S[i + 1])] %= MOD;
+            }
+
+            // ckmin(dp[i + 1][ind(S[i + 1])], dp[i][j] + 1);
+        }
+        // ps("dp", i);
+        // each(x, dp) {
+        //     each(y, x) pr(y == MOD ? "-" : ts(y), " ");
+        //     ps();
+        // }
+
+        // ps("ways");
+
+        // each(x, ways) {
+        //     each(y, x) pr(y == 0 ? "-" : ts(y), " ");
+        //     ps();
+        // }
+    }
+
+    int mv = MOD;
+    F0R(j, 36) ckmin(mv, dp[sz(S) - 1][j]);
+
+    int wCnt = 0;
+    F0R(j, 36) if(dp[sz(S) - 1][j] == mv) {
+        wCnt = wCnt + ways[sz(S) - 1][j];
+        wCnt %= MOD;
+    }
+
+    ps(mv);
+    ps(wCnt);
+
+    // each(x, dp) {
+    //     each(y, x) pr(y == MOD ? "-" : ts(y), " ");
+    //     ps();
+    // }
+
+    // each(x, ways) {
+    //     dbg(x);
+    // }
 }
 
 signed main() {
@@ -316,7 +420,7 @@ signed main() {
 	// re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
-		// cerr << "[dbg] Case #" << _ + 1 << ":\n";
+		cerr << "[dbg] Case #" << _ + 1 << ":\n";
 		solve();
 	}
 

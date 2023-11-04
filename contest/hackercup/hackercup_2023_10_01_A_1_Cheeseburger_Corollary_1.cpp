@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: hackercup
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -305,7 +305,12 @@ const int mx = 2e5+1;
 
 
 void solve() {
-	
+    ll s, d, k; re(s, d, k);
+    ll buns = 2 * (s + d);
+    ll patties = s + 2 * d;
+
+    bool good = patties >= k && buns >= k + 1;
+    ps(good ? "YES" : "NO");
 }
 
 signed main() {
@@ -313,10 +318,10 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
-		// pr("Case #", _ + 1, ": "); // Kickstart
-		// cerr << "[dbg] Case #" << _ + 1 << ":\n";
+		pr("Case #", _ + 1, ": "); // Kickstart
+		cerr << "[dbg] Case #" << _ + 1 << ":\n";
 		solve();
 	}
 

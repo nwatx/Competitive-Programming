@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -303,9 +303,65 @@ const int mx = 2e5+1;
 
 /* #endregion */
 
+/**
+ * Description: 1D point update, range query where \texttt{comb} is
+    * any associative operation. If $N=2^p$ then \texttt{seg[1]==query(0,N-1)}.
+ * Time: O(\log N)
+ * Source: 
+    * http://codeforces.com/blog/entry/18051
+    * KACTL
+ * Verification: SPOJ Fenwick
+ */
+
+template<class T> struct Seg { // comb(ID,b) = b
+    const T ID = 0xFFFFFFFF; T comb(T a, T b) { return a&b; } 
+    int n; vector<T> seg;
+    void init(int _n) { n = _n; seg.assign(2*n,ID); }
+    void pull(int p) { seg[p] = comb(seg[2*p],seg[2*p+1]); }
+    void upd(int p, T val) { // set val at position p
+        seg[p += n] = val; for (p /= 2; p; p /= 2) pull(p); }
+    T query(int l, int r) {	// sum on interval [l, r]
+        T ra = ID, rb = ID; 
+        for (l += n, r += n+1; l < r; l /= 2, r /= 2) {
+            if (l&1) ra = comb(ra,seg[l++]);
+            if (r&1) rb = comb(seg[--r],rb);
+        }
+        return comb(ra,rb);
+    }
+};
 
 void solve() {
-	
+	int n; re(n);
+    // this is obviously monotonic decreasing so we can binary search on the answer
+
+    Seg<int> s; s.init(n);
+
+    F0R(i, n) {
+        int x; cin >> x;
+        s.upd(i, x);
+    }
+
+
+    int q; cin >> q;
+    rep(q) {
+        int l, k; cin >> l >> k;
+        l--;
+
+        dbg(l, k);
+
+        int r = n - 1;
+
+        auto good = [&](int x) {
+            int qry = s.query(l, x);
+            dbg(l, x, qry);
+            return qry >= k;
+        };
+
+        int ret = lstTrue(l, r, good);
+        if(ret == n || ret == l - 1) pr(-1, " ");
+        else pr(ret + 1, " ");
+    }
+    ps();
 }
 
 signed main() {
@@ -313,10 +369,10 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
-		// cerr << "[dbg] Case #" << _ + 1 << ":\n";
+		cerr << "[dbg] Case #" << _ + 1 << ":\n";
 		solve();
 	}
 

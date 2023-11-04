@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: interview
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -303,9 +303,122 @@ const int mx = 2e5+1;
 
 /* #endregion */
 
+// test format:
+// n: number of orders
+// 1 - buy <returns id>
+// 2 - sell <returns id>
+// 3 - cancel
+/**
+ * Description: Tests primality up to $SZ$. Runs faster if only
+	* odd indices are stored.
+ * Time: O(SZ\log\log SZ) or O(SZ)
+ * Source: KACTL 
+ * Verification: https://open.kattis.com/problems/primesieve
+ */
+
+template<int SZ> struct Sieve { 
+	bitset<SZ> pri; vi pr;
+	Sieve() { // cum[i] = # of primes up to i
+		pri.set(); pri[0] = pri[1] = 0;
+		for (int i = 4; i < SZ; i += 2) pri[i] = 0;
+		for (int i = 3; i*i < SZ; i += 2) if (pri[i])
+			for (int j = i*i; j < SZ; j += i*2) pri[j] = 0;
+		F0R(i,SZ) if (pri[i]) pr.pb(i);
+	}
+	/*int sp[SZ]; // smallest prime that divides
+	Sieve() { // above is faster
+		memset(sp,0,sizeof sp);
+		FOR(i,2,SZ) { 
+			if (sp[i] == 0) sp[i] = i, pr.pb(i); 
+			each(p,pr) {
+				if (p > sp[i] || i*p >= SZ) break;
+				sp[i*p] = p;
+			}
+		}
+	}*/
+};
+Sieve<320000> S;
+// <type> <price> <qty>
+
+// fulfilled by time first
+struct Order {
+    enum Type {
+        BUY,
+        SELL,
+        CANCEL
+    };
+
+    Type type;
+    int qty;
+    int price;
+    int t;
+};
+
+bool cmp_buyer(Order a, Order b) {
+    if(a.price != b.price) return a.price > b.price;
+    return a.t < b.t;
+}
+
+bool cmp_seller(Order a, Order b) {
+    if(a.price != b.price) return a.price < b.price;
+    return a.t < b.t;
+}
+
+using T = priority_queue<Order, V<Order>, std::function<bool(Order, Order)>>;
+T buyers(cmp_buyer); // sorted high to low
+T sellers(cmp_seller); // sorted high to low
+
+map<int, Order*> m;
+
+int process_buy_sell(Order::Type type, int qty, int price, int t) {
+    int fulfilled = 0;
+
+    T &op = ((type == Order::BUY) ? sellers : buyers);
+    T &us = ((type == Order::BUY) ? buyers : sellers);
+
+    while(sz(op) && qty > 0) {
+        Order front = op.top();
+
+        // buy until over limit or sell until under limit
+        if(type == Order::BUY ? (front.price > price) : (front.price < price)) break; 
+        op.pop();
+        int to_sub = min(qty, front.qty);
+        fulfilled += to_sub;
+        qty -= to_sub;
+        front.qty -= to_sub;
+        if(front.qty > 0) op.push(front);
+    }
+
+    if(qty) {
+        Order tp = Order { type, qty, price, t };
+        us.push(tp);
+    }
+
+    return fulfilled;
+}
 
 void solve() {
-	
+    int n; re(n);
+
+    V<Order> v;
+
+    F0R(i, n) {
+        int type; re(type);
+        if(type == 1) {
+            int price, qty; re(price, qty);
+            dbg(type, price, qty);
+            ps(process_buy_sell(Order::BUY, qty, price, i));
+            // dbg(buyers.top().qty);
+        } else if(type == 2) {
+            int price, qty; re(price, qty);
+            // dbg(buyers.top().qty);
+            ps(process_buy_sell(Order::SELL, qty, price, i));
+            // dbg(buyers.top().qty);
+        } else {
+            int order_id; re(order_id);
+            m[order_id]->qty = 0;
+        }
+    }
 }
 
 signed main() {
@@ -316,7 +429,7 @@ signed main() {
 	// re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
-		// cerr << "[dbg] Case #" << _ + 1 << ":\n";
+		cerr << "[dbg] Case #" << _ + 1 << ":\n";
 		solve();
 	}
 

@@ -303,9 +303,149 @@ const int mx = 2e5+1;
 
 /* #endregion */
 
+/**t
+ * Description: modular arithmetic operations 
+ * Source: 
+	* KACTL
+	* https://codeforces.com/blog/entry/63903
+	* https://codeforces.com/contest/1261/submission/65632855 (tourist)
+	* https://codeforces.com/contest/1264/submission/66344993 (ksun)
+	* also see https://github.com/ecnerwala/cp-book/blob/master/src/modnum.hpp (ecnerwal)
+ * Verification: 
+	* https://open.kattis.com/problems/modulararithmetic
+ */
+
+template<int MOD, int RT> struct mint {
+	static const int mod = MOD;
+	static constexpr mint rt() { return RT; } // primitive root for FFT
+	int v; explicit operator int() const { return v; } // explicit -> don't silently convert to int
+	mint() { v = 0; }
+	mint(ll _v) { v = int((-MOD < _v && _v < MOD) ? _v : _v % MOD);
+		if (v < 0) v += MOD; }
+	friend bool operator==(const mint& a, const mint& b) { 
+		return a.v == b.v; }
+	friend bool operator!=(const mint& a, const mint& b) { 
+		return !(a == b); }
+	friend bool operator<(const mint& a, const mint& b) { 
+		return a.v < b.v; }
+	friend void re(mint& a) { ll x; re(x); a = mint(x); }
+	friend str ts(mint a) { return ts(a.v); }
+   
+	mint& operator+=(const mint& m) { 
+		if ((v += m.v) >= MOD) v -= MOD; 
+		return *this; }
+	mint& operator-=(const mint& m) { 
+		if ((v -= m.v) < 0) v += MOD; 
+		return *this; }
+	mint& operator*=(const mint& m) { 
+		v = int((ll)v*m.v%MOD); return *this; }
+	mint& operator/=(const mint& m) { return (*this) *= inv(m); }
+	friend mint pow(mint a, ll p) {
+		mint ans = 1; assert(p >= 0);
+		for (; p; p /= 2, a *= a) if (p&1) ans *= a;
+		return ans; }
+	friend mint inv(const mint& a) { assert(a.v != 0); 
+		return pow(a,MOD-2); }
+		
+	mint operator-() const { return mint(-v); }
+	mint& operator++() { return *this += 1; }
+	mint& operator--() { return *this -= 1; }
+	friend mint operator+(mint a, const mint& b) { return a += b; }
+	friend mint operator-(mint a, const mint& b) { return a -= b; }
+	friend mint operator*(mint a, const mint& b) { return a *= b; }
+	friend mint operator/(mint a, const mint& b) { return a /= b; }
+};
+
+typedef mint<MOD,5> mi; // 5 is primitive root for both common mods
+typedef vector<mi> vmi;
+typedef pair<mi,mi> pmi;
+typedef vector<pmi> vpmi;
+
+vector<vmi> scmb; // small combinations
+void genComb(int SZ) {
+	scmb.assign(SZ,vmi(SZ)); scmb[0][0] = 1;
+	FOR(i,1,SZ) F0R(j,i+1) 
+		scmb[i][j] = scmb[i-1][j]+(j?scmb[i-1][j-1]:0);
+}
+
+mi ncr(mi n, mi r) {
+	mi s = 1;
+	FOR(i, 1, r + 1) {
+		s = s* mi(n - r + i) * inv(mi(i));
+	}
+	return s;
+}
+
+mi fact(int n) {
+	mi ret = 1;
+	FOR(i, 1, n + 1) {
+		ret *= i;
+	}
+	return ret;
+}
 
 void solve() {
+	int n, m; re(n, m);
+	vi r(n); re(r);
+	vi c(m); re(c);
+
+	// try to sell as many ice cream cones as possible
+	sorr(r);
+	sor(c);
 	
+	dbg(r);
+	dbg(c);
+
+	vl profits;
+
+	int bestIdx = -1;
+	vi pushed_c;
+	F0R(i, min(n, m)) {
+		ll profit = r[i] - 2 * c[i];
+		if(profit < 0) break;
+		bestIdx = i;
+		profits.pb(profit);
+		pushed_c.pb(c[i]);
+	}
+
+	// if bestIdx == -1 then we can't do anything
+	if(bestIdx == -1) {
+		ps(0, 0); return;
+	}
+
+	// see extra profits
+	// can we sell more
+	int extra_n = 0;
+	FOR(i, min(n, m), sz(r)) {
+		ll profit = r[i] - 2 * c.back(); // the most expensive one
+		if(profit < 0) break;
+		extra_n += 1;
+	}
+
+	mi num_ways;
+	// if there is extra n, then we can do (n choose m)
+	if(extra_n > 0) {
+		// number of ways is n choose m
+		num_ways = ncr(n, m);
+	} else {
+		// factorial times number of ways to choose the smallest one
+		// find the suffix of the smallest one, and choose from the total
+		int pfx_cnt = 0;
+		int tot_cnt = 0;
+		dbg(pushed_c);
+		each(x, pushed_c) {
+			if(x == pushed_c.front()) pfx_cnt++;
+		}
+		each(x, c) if(x == pushed_c.front()) tot_cnt++;
+
+		num_ways = fact(sz(profits)) * ncr(tot_cnt, pfx_cnt);
+	}
+
+	// find the maximum profit
+	ll max_profit = 0;
+	each(x, profits) max_profit += x;
+
+	printf("%.2f %d\n", max_profit / 2.0, num_ways.v);
 }
 
 signed main() {
@@ -316,7 +456,7 @@ signed main() {
 	// re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
-		// cerr << "[dbg] Case #" << _ + 1 << ":\n";
+		cerr << "[dbg] Case #" << _ + 1 << ":\n";
 		solve();
 	}
 

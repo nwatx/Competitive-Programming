@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -303,9 +303,61 @@ const int mx = 2e5+1;
 
 /* #endregion */
 
+// so inside a segment you reverse with the closest other segment
+
+// a b c d e
+// aghcdegdij
+// 1211
+// 13455
+
+// jihgedcdga
+
+// jihcdegdga
+
 
 void solve() {
-	
+    int n, k; re(n, k);
+    string s; re(s);
+    vi l(k), r(k);
+    re(l); re(r);
+    // F0R(i, k) {
+    //     l[i]--;
+    //     r[i]--;
+    // }
+    vi cnt(n);
+    int q; re(q); 
+    rep(q) {
+        int x; cin >> x;
+        // x--;
+
+        dbg(x);
+
+        int a = lower_bound(all(l), x) - l.begin();
+        if(a == k || l[a] > x) a--;
+
+        a = min(x, r[a] + l[a] - x);
+        // b = max(x, r[b] + l[b] - x);
+        a--;
+        cnt[a]++;
+    }
+
+
+    F0R(i, k) {
+        FOR(j, l[i], r[i]) {
+            cnt[j] += cnt[j - 1];
+        }
+        dbg(cnt);
+        // process the interval
+        F0R(j, (r[i] - l[i] + 1) / 2) {
+            // dbg(j, r[i]);
+            int ll = l[i] - 1 + j;
+            int rr = r[i] - 1 - j;
+            if(cnt[ll] % 2) swap(s[ll], s[rr]);
+        }
+    }
+
+    dbg(s);
+    ps(s);
 }
 
 signed main() {
@@ -313,10 +365,10 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
-		// cerr << "[dbg] Case #" << _ + 1 << ":\n";
+		cerr << "[dbg] Case #" << _ + 1 << ":\n";
 		solve();
 	}
 

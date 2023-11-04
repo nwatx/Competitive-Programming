@@ -70,15 +70,12 @@ tcT> int lwb(V<T>& a, const T& b) { return int(lb(all(a),b)-bg(a)); }
 #define rep(a) F0R(_,a)
 #define each(a,x) for (auto& a: x)
 tcT> int sgn(T x) { return (x > 0) - (x < 0); }
-/* #endregion */
 
 const int MOD = 1e9+7; // 998244353;
 const ll INF = 1e18; // not too close to LLONG_MAX
 const db PI = acos((db)-1);
 const char nl = '\n';
 const int dx[4] = {1,0,-1,0}, dy[4] = {0,1,0,-1}; // for every grid problem!!
-
-/* #region template */
 mt19937 rng((uint32_t)chrono::steady_clock::now().time_since_epoch().count()); 
 template<class T> using pqg = priority_queue<T,vector<T>,greater<T>>;
 
@@ -303,9 +300,27 @@ const int mx = 2e5+1;
 
 /* #endregion */
 
-
 void solve() {
-	
+	// you are given a permutation of an array
+	// what is the expected number of times to reach node 1 for a randomly chosen node that can reach node 1
+	int n; re(n);
+	vi r_adj(n);
+	vi p(n); F0R(i, n) {
+		int1(a);
+		r_adj[i] = a;
+	}
+
+	dbg(r_adj);
+
+	int sz = 1;
+	int curr = 0;
+	while(r_adj[curr]) {
+		sz++;
+		curr = r_adj[curr];
+	}
+
+	// then the expected # is s(s - 1) / 2 / s so (s - 1) / 2
+	ps((sz - 1.0) / 2);
 }
 
 signed main() {
@@ -313,10 +328,10 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
-		// cerr << "[dbg] Case #" << _ + 1 << ":\n";
+		cerr << "[dbg] Case #" << _ + 1 << ":\n";
 		solve();
 	}
 

@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -305,7 +305,14 @@ const int mx = 2e5+1;
 
 
 void solve() {
-	
+    ll n, k, x; re(n, k, x);
+
+    // take the biggest and go to smallest
+    // if he can take k consecutive and its over x then he can make it
+    ll sum_h = k * (n - k + 1 + n) / 2;
+    ll sum_l = k * (1 + k) / 2;
+    if(sum_h >= x && sum_l <= x) ps("YES");
+    else ps("NO");
 }
 
 signed main() {
@@ -313,10 +320,10 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
-		// cerr << "[dbg] Case #" << _ + 1 << ":\n";
+		cerr << "[dbg] Case #" << _ + 1 << ":\n";
 		solve();
 	}
 

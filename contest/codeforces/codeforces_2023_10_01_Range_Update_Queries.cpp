@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -305,7 +305,41 @@ const int mx = 2e5+1;
 
 
 void solve() {
-	
+	int n, m; re(n, m);
+    vl seg(2 * n);
+    vi v(n); re(v);
+
+    auto u = [&](int l, int r, int v) {
+        for(l += n, r += n; l < r; l >>= 1, r >>= 1) {
+            if(l & 1) seg[l++] += v;
+            if(r & 1) seg[--r] += v;
+        }
+    };
+
+    F0R(i, n) u(i, i + 1, v[i]);
+
+    auto q = [&](int i) {
+        ll sum = 0;
+        for(i += n; i > 0; i >>= 1) {
+            sum += seg[i];
+        }
+        return sum;
+    };
+
+    dbg(seg);
+
+    rep(m) {
+        int t; re(t);
+        if(t == 1) {
+            ints(l, r, v);
+            dbg(l, r, v);
+            l--;
+            u(l, r, v);
+        } else {
+            int1(x);
+            ps(q(x));
+        }
+    }
 }
 
 signed main() {
@@ -316,7 +350,7 @@ signed main() {
 	// re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
-		// cerr << "[dbg] Case #" << _ + 1 << ":\n";
+		cerr << "[dbg] Case #" << _ + 1 << ":\n";
 		solve();
 	}
 

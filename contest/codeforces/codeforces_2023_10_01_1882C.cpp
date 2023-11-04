@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -304,8 +304,30 @@ const int mx = 2e5+1;
 /* #endregion */
 
 
+// by removing one number, you're able to collect the sum of all the even numbers past that
+// can also choose to not remove it
+
 void solve() {
-	
+    // amortized is linear
+    int n; re(n);
+    vi v(n); re(v);
+
+    // even pfx and odd pfx
+    vl pe(n), po(n);
+    F0R(i, n) {
+        if(i & 1) {
+            pe[i] = v[i];
+        } else{
+            po[i] = v[i];
+        }
+    }
+
+    partial_sum(all(pe), pe.begin());
+    partial_sum(all(po), po.begin());
+
+    dbg(pe, po);
+
+
 }
 
 signed main() {
@@ -313,10 +335,10 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
-		// cerr << "[dbg] Case #" << _ + 1 << ":\n";
+		cerr << "[dbg] Case #" << _ + 1 << ":\n";
 		solve();
 	}
 

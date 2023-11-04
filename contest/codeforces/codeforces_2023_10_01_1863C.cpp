@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -69,16 +69,12 @@ tcT> int lwb(V<T>& a, const T& b) { return int(lb(all(a),b)-bg(a)); }
 #define R0F(i,a) ROF(i,0,a)
 #define rep(a) F0R(_,a)
 #define each(a,x) for (auto& a: x)
-tcT> int sgn(T x) { return (x > 0) - (x < 0); }
-/* #endregion */
 
 const int MOD = 1e9+7; // 998244353;
 const ll INF = 1e18; // not too close to LLONG_MAX
 const db PI = acos((db)-1);
 const char nl = '\n';
 const int dx[4] = {1,0,-1,0}, dy[4] = {0,1,0,-1}; // for every grid problem!!
-
-/* #region template */
 mt19937 rng((uint32_t)chrono::steady_clock::now().time_since_epoch().count()); 
 template<class T> using pqg = priority_queue<T,vector<T>,greater<T>>;
 
@@ -303,9 +299,71 @@ const int mx = 2e5+1;
 
 /* #endregion */
 
+// 0 2
+// 1 2
+// 0 1
+
+// 1 2 3 4 5
+// 0 1 2 3 4
+// 5 0 1 2 3
+
+// 1 2 3 4 5
+// 0 1 2 3 4
+// 5 0 1 2 3
+// 4 5 0 1 2
+// 3 4 5 0 1
+// 2 3 4 5 0
+
+// 0 2
+// 1 0
+// 2 1
+// 0 2
+// 1 0
+
+// 0 1 2 3
+// 1 0 3 2
+
+// two things, find the element and find the rotation
+
+vi run(vi v, int n) {
+    // calculate mex once
+    multiset<int> mex_s;
+    F0R(i, n + 1) mex_s.ins(i);
+    each(x, v) mex_s.erase(x);
+    vi mex(n);
+    F0R(i, n) {
+        int t = v[i];
+        // replace current number with mex
+        v[i] = *mex_s.begin();
+        mex_s.erase(mex_s.begin());
+        mex_s.insert(t);
+    }
+    return v;
+}
 
 void solve() {
-	
+    int n, k; re(n, k);
+    vi v(n); re(v);
+
+    vi once = run(v, n);
+    vi twice = run(once, n);
+
+    vi ret(n);
+    k--;
+
+    F0R(i, n) {
+        int cyc = k % (n + 1);
+        int a = once[i], b = twice[i];
+        bool up = (a + 1) % (n + 1) == b;
+        ret[i] = (once[i] + (up ? 1 : -1) * cyc + (n + 1)) % (n + 1);
+        assert(ret[i] >= 0);
+    }
+
+    F0R(i, n) {
+        cout << ret[i];
+        if(i != n - 1) cout << " ";
+    }
+    ps();
 }
 
 signed main() {
@@ -313,10 +371,10 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
-		// cerr << "[dbg] Case #" << _ + 1 << ":\n";
+		cerr << "[dbg] Case #" << _ + 1 << ":\n";
 		solve();
 	}
 

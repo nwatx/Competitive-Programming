@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -70,15 +70,12 @@ tcT> int lwb(V<T>& a, const T& b) { return int(lb(all(a),b)-bg(a)); }
 #define rep(a) F0R(_,a)
 #define each(a,x) for (auto& a: x)
 tcT> int sgn(T x) { return (x > 0) - (x < 0); }
-/* #endregion */
 
 const int MOD = 1e9+7; // 998244353;
 const ll INF = 1e18; // not too close to LLONG_MAX
 const db PI = acos((db)-1);
 const char nl = '\n';
 const int dx[4] = {1,0,-1,0}, dy[4] = {0,1,0,-1}; // for every grid problem!!
-
-/* #region template */
 mt19937 rng((uint32_t)chrono::steady_clock::now().time_since_epoch().count()); 
 template<class T> using pqg = priority_queue<T,vector<T>,greater<T>>;
 
@@ -305,7 +302,34 @@ const int mx = 2e5+1;
 
 
 void solve() {
-	
+    int n; re(n);
+    vl v(n + 1);
+    F0R(i, n) cin >> v[i + 1];
+
+    ll sum = 0;
+    each(x, v) {
+        sum += x;
+    }
+
+    if(sum % 3) {
+        ps(0);
+        return;
+    }
+
+    partial_sum(all(v), v.begin());
+    map<int, int> freq;
+
+    ll ret = 0;
+
+    FOR(i, 1, sz(v) - 1) {
+        ll x = v[i];
+        if(x == 2 * sum / 3) {
+            ret += freq[sum / 3];
+        }
+        freq[x]++;
+    }
+
+    ps(ret);
 }
 
 signed main() {
@@ -316,7 +340,7 @@ signed main() {
 	// re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
-		// cerr << "[dbg] Case #" << _ + 1 << ":\n";
+		cerr << "[dbg] Case #" << _ + 1 << ":\n";
 		solve();
 	}
 

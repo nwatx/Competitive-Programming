@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: utpc
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -300,12 +300,103 @@ const db EPS = 1e-9;
 const int mx = 2e5+1;
 
 /* #region snippets */
+/**
+ * Description: Polynomial hash for substrings with two bases.
+ * Source:
+    * KACTL
+    * https://codeforces.com/contest/1207/submission/59309672
+ * Verification: 
+    * USACO Dec 17 Plat 1 (LCP :o)
+    * CF Check Transcription
+ */
 
+typedef array<int,2> H; // bases not too close to ends 
+uniform_int_distribution<int> BDIST(0.1*MOD,0.9*MOD);
+const H base = {BDIST(rng),BDIST(rng)};
+/// const T ibase = {(int)inv(mi(base[0])),(int)inv(mi(base[1]))};
+H operator+(H l, H r) { 
+    F0R(i,2) if ((l[i] += r[i]) >= MOD) l[i] -= MOD;
+    return l; }
+H operator-(H l, H r) { 
+    F0R(i,2) if ((l[i] -= r[i]) < 0) l[i] += MOD;
+    return l; }
+H operator*(H l, H r) { 
+    F0R(i,2) l[i] = (ll)l[i]*r[i]%MOD;
+    return l; }
+H makeH(char c) { return {c,c}; }
+/// H& operator+=(H& l, H r) { return l = l+r; }
+/// H& operator-=(H& l, H r) { return l = l-r; }
+/// H& operator*=(H& l, H r) { return l = l*r; }
+
+vector<H> pows = {{1,1}};
+struct HashRange {
+    str S; vector<H> cum = {{0,0}};
+    void add(char c) { S += c; cum.pb(base*cum.bk+makeH(c)); }
+    void add(str s) { each(c,s) add(c); }
+    void extend(int len) { while (sz(pows) <= len) pows.pb(base*pows.bk); }
+    H hash(int l, int r) { int len = r+1-l; extend(len);
+        return cum[r+1]-pows[len]*cum[l]; }
+    /**int lcp(HashRange& b) { return first_true([&](int x) { 
+        return cum[x] != b.cum[x]; },0,min(sz(S),sz(b.S)))-1; }*/
+};
+/// HashRange HR; HR.add("ababab"); F0R(i,6) FOR(j,i,6) ps(i,j,HR.hash(i,j));
 /* #endregion */
 
 
 void solve() {
-	
+	int n; re(n);
+    assert(n >= 1 && n <= 1000);
+    string s; re(s);
+    assert(sz(s) >= 1 && sz(s) <= 1000);
+
+    vs v(n); re(v);
+    V<H> hash(n);
+    F0R(i, n) {
+        HashRange hr; hr.add(v[i]);
+        hash[i] = hr.hash(0, sz(v[i]) - 1);
+    }
+
+    HashRange hr; hr.add(s);
+
+    // dp[i][j] = min to reach i with previous j
+    V<vi> dp(sz(s) + 1, vi(n, MOD));
+    F0R(i, n) {
+        if(hash[i] == hr.hash(0, sz(v[i]) - 1))
+            dp[sz(v[i])][i] = 1;
+    }
+
+    F0R(i, sz(s)) {
+        // get the min value on this row excluding j
+        multiset<int> row(all(dp[i]));
+        vi mrow(sz(dp[i]));
+        F0R(j, sz(dp[i])) {
+            row.erase(row.find(dp[i][j]));
+            mrow[j] = *row.begin();
+            row.insert(dp[i][j]);
+        }
+
+        F0R(j, n) {
+            bool good = i + sz(v[j]) <= sz(s);
+            if(!good) continue;
+            good &= (hr.hash(i, i + sz(v[j]) - 1) == hash[j]);
+            if(!good) continue;
+            dbg(i, j, good, dp[i][j]);
+
+            // if good, then update future ones
+            ckmin(dp[i + sz(v[j])][j], mrow[j] + 1);
+        }
+    }
+
+    // each(x, dp) {
+    //     each(y, x) {
+    //         pr(y == MOD ? "-" : ts(y), " ");
+    //     }
+    //     ps();
+    // }
+
+    int ret = MOD;
+    F0R(i, n) ckmin(ret, dp[sz(s)][i]);
+    ps(ret >= MOD ? -1 : ret);
 }
 
 signed main() {

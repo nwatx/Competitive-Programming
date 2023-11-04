@@ -69,16 +69,12 @@ tcT> int lwb(V<T>& a, const T& b) { return int(lb(all(a),b)-bg(a)); }
 #define R0F(i,a) ROF(i,0,a)
 #define rep(a) F0R(_,a)
 #define each(a,x) for (auto& a: x)
-tcT> int sgn(T x) { return (x > 0) - (x < 0); }
-/* #endregion */
 
 const int MOD = 1e9+7; // 998244353;
 const ll INF = 1e18; // not too close to LLONG_MAX
 const db PI = acos((db)-1);
 const char nl = '\n';
 const int dx[4] = {1,0,-1,0}, dy[4] = {0,1,0,-1}; // for every grid problem!!
-
-/* #region template */
 mt19937 rng((uint32_t)chrono::steady_clock::now().time_since_epoch().count()); 
 template<class T> using pqg = priority_queue<T,vector<T>,greater<T>>;
 
@@ -303,9 +299,61 @@ const int mx = 2e5+1;
 
 /* #endregion */
 
-
 void solve() {
-	
+	int n, m; re(n, m);
+	string S[n];
+	F0R(i, n) {
+		cin >> S[i];
+	}
+
+	V<str> ret(n);
+	F0R(i, n) F0R(j, m) ret[i] += '.';
+
+	F0R(i, n) {
+		vi pos;
+		F0R(j, m) {
+			if (S[i][j] == 'U') pos.pb(j);
+		}
+
+		if(sz(pos) & 1) {
+			ps(-1); return;
+		}
+
+		F0R(j, sz(pos)) {
+			if(j % 2) {
+				ret[i][pos[j]] = 'B';
+				ret[i + 1][pos[j]] = 'W';
+			} else {
+				ret[i][pos[j]] = 'W';
+				ret[i + 1][pos[j]] = 'B';
+			}
+		}
+	}
+
+	F0R(j, m) {
+		vi pos;
+		F0R(i, n) {
+			if (S[i][j] == 'L') pos.pb(i);
+		}
+
+		if(sz(pos) & 1) {
+			ps(-1); return;
+		}
+
+		F0R(i, sz(pos)) {
+			if(i % 2) {
+				ret[pos[i]][j] = 'B';
+				ret[pos[i]][j + 1] = 'W';
+			} else {
+				ret[pos[i]][j] = 'W';
+				ret[pos[i]][j + 1] = 'B';
+			}
+		}
+	}
+
+	F0R(i, n) {
+		ps(ret[i]);
+	}
 }
 
 signed main() {
@@ -313,10 +361,10 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
-		// cerr << "[dbg] Case #" << _ + 1 << ":\n";
+		cerr << "[dbg] Case #" << _ + 1 << ":\n";
 		solve();
 	}
 

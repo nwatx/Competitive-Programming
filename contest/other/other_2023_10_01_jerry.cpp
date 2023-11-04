@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: other
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -303,9 +303,63 @@ const int mx = 2e5+1;
 
 /* #endregion */
 
+/**
+ * Description: coordinate compression, get index of x by counting # of elements < x
+ * Source: Own
+ * Verification: ?
+ */
+
+template<class T> void nor(vector<T>& v) {
+	sort(all(v)); v.erase(unique(all(v)),end(v)); }
+template<class T> int ind(vector<T>& v, T x) { 
+	return lb(all(v),x)-begin(v); }
 
 void solve() {
-	
+	int l,w; re(l, w);
+	int n; re(n);
+	V<pair<pi, pi>> v(n); re(v);
+	V<vi> mat(l + 1, vi(w + 1));
+
+	vi cc;
+	each(x, v) {
+		cc.pb(x.f.f);
+		cc.pb(x.f.s);
+		cc.pb(x.s.f);
+		cc.pb(x.s.s);
+	}
+
+	cc.pb(0);
+	nor(cc);
+
+	dbg(cc);
+
+	each(x, v) {
+		pi from = x.f;
+		pi to = x.s;
+
+		// if(from.f > from.s) swap(from.f, from.s);
+		// if(to.f > to.s) swap(to.f, to.s);
+
+		from.f = ind(cc, from.f);
+		from.s = ind(cc, from.s);
+		to.f = ind(cc, to.f);
+		to.s = ind(cc, to.s);
+
+		auto xr = minmax(from.f, to.f);
+		auto yr = minmax(from.s, to.s);
+
+		dbg(xr, yr);
+
+		FOR(i, xr.f, xr.s + 1) FOR(j, yr.f, yr.s + 1) {
+			mat[i][j] = 1;
+		}
+	}
+
+	each(x, mat) {
+		dbg(x);
+	}
+
+
 }
 
 signed main() {
@@ -316,7 +370,7 @@ signed main() {
 	// re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
-		// cerr << "[dbg] Case #" << _ + 1 << ":\n";
+		cerr << "[dbg] Case #" << _ + 1 << ":\n";
 		solve();
 	}
 

@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -70,15 +70,12 @@ tcT> int lwb(V<T>& a, const T& b) { return int(lb(all(a),b)-bg(a)); }
 #define rep(a) F0R(_,a)
 #define each(a,x) for (auto& a: x)
 tcT> int sgn(T x) { return (x > 0) - (x < 0); }
-/* #endregion */
 
 const int MOD = 1e9+7; // 998244353;
 const ll INF = 1e18; // not too close to LLONG_MAX
 const db PI = acos((db)-1);
 const char nl = '\n';
 const int dx[4] = {1,0,-1,0}, dy[4] = {0,1,0,-1}; // for every grid problem!!
-
-/* #region template */
 mt19937 rng((uint32_t)chrono::steady_clock::now().time_since_epoch().count()); 
 template<class T> using pqg = priority_queue<T,vector<T>,greater<T>>;
 
@@ -303,9 +300,69 @@ const int mx = 2e5+1;
 
 /* #endregion */
 
+/**
+ * Description: Tarjan's, DFS once to generate 
+    * strongly connected components in topological order. $a,b$
+    * in same component if both $a\to b$ and $b\to a$ exist.
+    * Uses less memory than Kosaraju b/c doesn't store reverse edges.
+ * Time: O(N+M)
+ * Source: KACTL
+    * https://github.com/kth-competitive-programming/kactl/blob/master/content/graph/SCC.h
+ * Verification: https://cses.fi/problemset/task/1686/
+ */
+struct SCC {
+    int N, ti = 0; vector<vi> adj;
+    vi disc, comp, st, comps;
+    void init(int _N) { N = _N; adj.rsz(N), disc.rsz(N), comp = vi(N,-1); }
+    void ae(int x, int y) { adj[x].pb(y); }
+    int dfs(int x) {
+        int low = disc[x] = ++ti; st.pb(x); // disc[y] != 0 -> in stack
+        each(y,adj[x]) if (comp[y] == -1) ckmin(low,disc[y]?:dfs(y)); 
+        if (low == disc[x]) { // make new SCC, pop off stack until you find x
+            comps.pb(x); for (int y = -1; y != x;) 
+                comp[y = st.bk] = x, st.pop_back();
+        }
+        return low;
+    }
+    void gen() {
+        F0R(i,N) if (!disc[i]) dfs(i);
+        reverse(all(comps));
+    }
+};
 
 void solve() {
-	
+    int n; re(n);
+    vi p(n); re(p);
+    vi v(n); re(v);
+
+    SCC scc; scc.init(n);
+    F0R(i, n) scc.ae(i, p[i] - 1);
+    scc.gen();
+
+    dbg(scc.comp);
+    dbg(scc.disc);
+
+    V<vi> comps(n);
+    F0R(i, n) comps[scc.comp[i]].pb(i);
+
+    vi ret;
+    // go in the order that maximize the value
+    each(comp_i, scc.comps) {
+        vi c = comps[comp_i];
+        int csz = sz(c);
+        pi min_elem = {v[c[0]], 0};
+        F0R(i, csz) ckmin(min_elem, {v[c[i]], i}); 
+        // dbg(c, min_elem);
+        F0R(i, csz) {
+            ret.pb(c[(min_elem.s + 1 + i) % csz]);
+        }
+    }
+
+    F0R(i, n) {
+        pr(ret[i] + 1);
+        if(i != n - 1) pr(" ");
+    }
+    ps();
 }
 
 signed main() {
@@ -313,10 +370,10 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
-		// cerr << "[dbg] Case #" << _ + 1 << ":\n";
+		cerr << "[dbg] Case #" << _ + 1 << ":\n";
 		solve();
 	}
 

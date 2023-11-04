@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -70,15 +70,12 @@ tcT> int lwb(V<T>& a, const T& b) { return int(lb(all(a),b)-bg(a)); }
 #define rep(a) F0R(_,a)
 #define each(a,x) for (auto& a: x)
 tcT> int sgn(T x) { return (x > 0) - (x < 0); }
-/* #endregion */
 
 const int MOD = 1e9+7; // 998244353;
 const ll INF = 1e18; // not too close to LLONG_MAX
 const db PI = acos((db)-1);
 const char nl = '\n';
 const int dx[4] = {1,0,-1,0}, dy[4] = {0,1,0,-1}; // for every grid problem!!
-
-/* #region template */
 mt19937 rng((uint32_t)chrono::steady_clock::now().time_since_epoch().count()); 
 template<class T> using pqg = priority_queue<T,vector<T>,greater<T>>;
 
@@ -303,9 +300,65 @@ const int mx = 2e5+1;
 
 /* #endregion */
 
+/**
+ * Description: 1D point update, range query where \texttt{comb} is
+    * any associative operation. If $N=2^p$ then \texttt{seg[1]==query(0,N-1)}.
+ * Time: O(\log N)
+ * Source: 
+    * http://codeforces.com/blog/entry/18051
+    * KACTL
+ * Verification: SPOJ Fenwick
+ */
+
+template<class T> struct Seg { // comb(ID,b) = b
+    const T ID = 0; T comb(T a, T b) { return a^b; } 
+    int n; vector<T> seg;
+    void init(int _n) { n = _n; seg.assign(2*n,ID); }
+    void pull(int p) { seg[p] = comb(seg[2*p],seg[2*p+1]); }
+    void upd(int p, T val) { // set val at position p
+        seg[p += n] = val; for (p /= 2; p; p /= 2) pull(p); }
+    T query(int l, int r) {	// sum on interval [l, r]
+        T ra = ID, rb = ID; 
+        for (l += n, r += n+1; l < r; l /= 2, r /= 2) {
+            if (l&1) ra = comb(ra,seg[l++]);
+            if (r&1) rb = comb(seg[--r],rb);
+        }
+        return comb(ra,rb);
+    }
+};
 
 void solve() {
-	
+    int n; re(n); 
+    vi v(n); re(v);
+    string mask; re(mask);
+    Seg<int> seg; seg.init(n);
+    int mcum = 0;
+    int cum = 0;
+    F0R(i, n) {
+        if(mask[i] == '1') mcum ^= v[i];
+        cum ^= v[i];
+        seg.upd(i, v[i]);
+    }
+
+    dbg(mcum);
+
+    int q; re(q);
+    rep(q) {
+        int t; re(t); 
+        if(t == 1) {
+            int l, r; re(l, r); l--; r--;
+            mcum ^= seg.query(l, r);       
+        } else {
+            int x; re(x);
+            if(x == 0) {
+                pr(cum ^ mcum, " ");
+            } else {
+                pr(mcum, " ");
+            }
+        }
+    }
+
+    ps();
 }
 
 signed main() {
@@ -313,10 +366,10 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
-		// cerr << "[dbg] Case #" << _ + 1 << ":\n";
+		cerr << "[dbg] Case #" << _ + 1 << ":\n";
 		solve();
 	}
 

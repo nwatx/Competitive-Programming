@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -305,7 +305,23 @@ const int mx = 2e5+1;
 
 
 void solve() {
-	
+    int n; re(n);
+
+    vi a(n), b(n);
+    re(a); re(b);
+
+    int ma = *min_element(all(a));
+    int mb = *min_element(all(b));
+
+    auto f = [&](vi &v, int x) {
+        ll ret = 0;
+        each(e, v) {
+            ret += e + x;
+        }
+        return ret;
+    };
+
+    ps(min(f(a, mb), f(b, ma)));
 }
 
 signed main() {
@@ -313,10 +329,10 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
-		// cerr << "[dbg] Case #" << _ + 1 << ":\n";
+		cerr << "[dbg] Case #" << _ + 1 << ":\n";
 		solve();
 	}
 

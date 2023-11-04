@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -305,8 +305,44 @@ const int mx = 2e5+1;
 
 
 void solve() {
-	
+    int n, k; re(n, k);
+
+    // calculate max food at any day
+    vl pfx(n + 1);
+    F0R(i, n) {
+        int q, f; re(q, f);
+        pfx[i] += q;
+        pfx[min(i + f, n)] -= q;
+    }
+
+    // partial_sum(all(pfx), bg(pfx));
+    dbg(pfx);
+
+    db l = 0, r = INF;
+
+    auto good = [&](db x) {
+        db curr = 0;
+        F0R(i, n) {
+            curr += pfx[i];
+            curr -= x * k;
+            if(curr < 0) return false;
+        }
+        return true;
+    };
+
+    for(int i = 0; i < 1500 && l + EPS < r; ++i) {
+        db mid = l + (r - l) / 2;
+        
+        if(good(mid)) {
+            l = mid;
+        } else {
+            r = mid;
+        }
+    }
+
+    ps(l);
 }
+
 
 signed main() {
 	// clock_t start = clock();
@@ -316,7 +352,7 @@ signed main() {
 	// re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
-		// cerr << "[dbg] Case #" << _ + 1 << ":\n";
+		cerr << "[dbg] Case #" << _ + 1 << ":\n";
 		solve();
 	}
 

@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -70,15 +70,12 @@ tcT> int lwb(V<T>& a, const T& b) { return int(lb(all(a),b)-bg(a)); }
 #define rep(a) F0R(_,a)
 #define each(a,x) for (auto& a: x)
 tcT> int sgn(T x) { return (x > 0) - (x < 0); }
-/* #endregion */
 
 const int MOD = 1e9+7; // 998244353;
 const ll INF = 1e18; // not too close to LLONG_MAX
 const db PI = acos((db)-1);
 const char nl = '\n';
 const int dx[4] = {1,0,-1,0}, dy[4] = {0,1,0,-1}; // for every grid problem!!
-
-/* #region template */
 mt19937 rng((uint32_t)chrono::steady_clock::now().time_since_epoch().count()); 
 template<class T> using pqg = priority_queue<T,vector<T>,greater<T>>;
 
@@ -304,8 +301,61 @@ const int mx = 2e5+1;
 /* #endregion */
 
 
-void solve() {
-	
+void solve() {  
+    ll l, r; re(l, r);
+
+    ll ge = (r % 2) ? (r - 1) : r;
+    ll go = (r % 2) ? r : (r - 1);
+
+    if(ge < l) ge = -1;
+    if(go < l) go = -1;
+
+    // check greatest even
+    if(ge >= 0) {
+        ll cnt = ge / 2;
+        if(cnt >= 2) {
+            ps(2, 2 * (cnt - 1));
+            return;
+        }
+    }
+
+    if(go >= 0) {
+        // must be that 
+        for(int i = 3; i * i <= go; i++) {
+            if(go % i == 0) {
+                ll cnt = go / i;
+                if(cnt >= 2) {
+                    ps(i, go - i);
+                    return;
+                }
+            }
+        }
+    }
+
+    ps(-1);
+
+    // either diff of 2 or 3
+
+    // check if 2 fits
+    // if(l % 2) a = l + 1; else a = l;
+    // if(r % 2) b = r - 1; else b = r;
+
+    // if(a >= l && a <= r && b >= l && b <= r) {
+    //     ps(a, b);
+    //     return;
+    // }
+
+    // // check if 3 fits
+    // if(l % 3) a = l + (3 - l % 3); else a = l;
+    // if(r % 3) b = r - (r % 3); else b = r;
+
+    // if(a >= l && a <= r && b >= l && b <= r) {
+    //     ps(a, b);
+    //     return;
+    // }
+
+    // ps(-1);
+
 }
 
 signed main() {
@@ -313,10 +363,10 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
-		// cerr << "[dbg] Case #" << _ + 1 << ":\n";
+		cerr << "[dbg] Case #" << _ + 1 << ":\n";
 		solve();
 	}
 

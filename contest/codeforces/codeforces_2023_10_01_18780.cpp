@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -305,7 +305,26 @@ const int mx = 2e5+1;
 
 
 void solve() {
-	
+    int n, k; re(n, k);
+    vi v(n); re(v);
+    F0R(i, n) {
+        map<int, int> f;
+        int mostFreq = 0;
+        FOR(j, i, n) {
+            f[v[i]]++;
+            ckmax(mostFreq, f[v[i]]);
+        }
+
+
+        each(e, f) {
+            if(e.f == k && e.s == mostFreq) {
+                ps("YES");
+                return;
+            }
+        }
+    }
+
+    ps("NO");
 }
 
 signed main() {
@@ -313,10 +332,10 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
-		// cerr << "[dbg] Case #" << _ + 1 << ":\n";
+		cerr << "[dbg] Case #" << _ + 1 << ":\n";
 		solve();
 	}
 

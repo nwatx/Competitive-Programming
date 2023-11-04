@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -305,7 +305,43 @@ const int mx = 2e5+1;
 
 
 void solve() {
-	
+	int n; re(n);
+	set<int> U;
+	V<set<int>> S;
+	map<int, int> freq;
+	F0R(i, n) {
+		int x; re(x);
+		set<int> cur;
+		F0R(j, x) {
+			int y; re(y);
+			cur.ins(y);
+			U.ins(y);
+			freq[y]++;
+		}
+
+		S.pb(cur);
+	}
+
+	// iterate through subsets
+
+	dbg(U, S);
+	dbg(freq);
+
+	// pick an element that you can't have
+	int ret=0;
+	each(x, U) {
+		// can't have this, add everything else
+		set<int> c;
+		each(s, S) {
+			if(!s.count(x)) {
+				c.ins(all(s));
+			}
+		}
+
+		ckmax(ret, sz(c));
+	}
+
+	ps(ret);
 }
 
 signed main() {
@@ -313,10 +349,10 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
-		// cerr << "[dbg] Case #" << _ + 1 << ":\n";
+		cerr << "[dbg] Case #" << _ + 1 << ":\n";
 		solve();
 	}
 

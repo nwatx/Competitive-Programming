@@ -1,0 +1,1 @@
+{"name":"Local: utpc","url":"/home/neo/Documents/GitHub/CP/utpc/20231018/utpc.cpp","tests":[{"id":1697678090949,"input":"5\n12 0 0\n1 2 3\n2 3 4\n3 4 5\n4 5 6","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/home/neo/Documents/GitHub/CP/utpc/20231018/utpc.cpp","group":"local","local":true}

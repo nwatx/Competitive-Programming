@@ -305,7 +305,34 @@ const int mx = 2e5+1;
 
 
 void solve() {
-	
+	int n; re(n);
+    vpi v(n); re(v);
+    pi us = v[0];
+    // sort(all(v), [&](pi a, pi b) {
+    //     if(a.s != b.s) 
+    //         return a.s < b.s;
+    //     else return a.f < b.f;
+    // });
+
+    // int it = find(all(v), us) - v.begin();
+
+    int mw = -1;
+    dbg(v);
+
+    FOR(i, 1, n) {
+        if(v[i].s >= us.s && v[i].f + 1 >= us.f) {
+            ps("-1");
+            return;
+        }
+
+        if(v[i].s >= us.s) {
+            ckmax(mw, v[i].f);
+        }
+    }
+
+    dbg(mw);
+
+    ps(mw + 1);
 }
 
 signed main() {
@@ -313,10 +340,10 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
-		// cerr << "[dbg] Case #" << _ + 1 << ":\n";
+		cerr << "[dbg] Case #" << _ + 1 << ":\n";
 		solve();
 	}
 

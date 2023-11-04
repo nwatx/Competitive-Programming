@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -70,15 +70,12 @@ tcT> int lwb(V<T>& a, const T& b) { return int(lb(all(a),b)-bg(a)); }
 #define rep(a) F0R(_,a)
 #define each(a,x) for (auto& a: x)
 tcT> int sgn(T x) { return (x > 0) - (x < 0); }
-/* #endregion */
 
 const int MOD = 1e9+7; // 998244353;
 const ll INF = 1e18; // not too close to LLONG_MAX
 const db PI = acos((db)-1);
 const char nl = '\n';
 const int dx[4] = {1,0,-1,0}, dy[4] = {0,1,0,-1}; // for every grid problem!!
-
-/* #region template */
 mt19937 rng((uint32_t)chrono::steady_clock::now().time_since_epoch().count()); 
 template<class T> using pqg = priority_queue<T,vector<T>,greater<T>>;
 
@@ -305,7 +302,33 @@ const int mx = 2e5+1;
 
 
 void solve() {
-	
+    int n; re(n);
+    set<int> ex_s;
+    F0R(i, 2 * n + 1) ex_s.ins(i);
+    F0R(i, n) {
+        int x; cin >> x;
+        ex_s.erase(x);
+    }
+
+    while(1) {
+        int to_add = *ex_s.begin();
+        cout << to_add << endl;
+        ex_s.erase(to_add);
+
+        int resp; cin >> resp;
+        if(resp == -1) {
+            break;
+        } else if(resp == -2) {
+            exit(0);
+        }
+
+        ex_s.ins(resp);
+    }
+
+    // we can guarantee mex as the score
+    // which is 2 * n + 1 moves
+    // whatever bob removes, we can replace
+
 }
 
 signed main() {
@@ -313,10 +336,10 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
-		// cerr << "[dbg] Case #" << _ + 1 << ":\n";
+		cerr << "[dbg] Case #" << _ + 1 << ":\n";
 		solve();
 	}
 

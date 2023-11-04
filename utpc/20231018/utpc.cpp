@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -305,7 +305,26 @@ const int mx = 2e5+1;
 
 
 void solve() {
-	
+	db h, m, s; re(h, m, s);
+
+	// angles in radians
+	db sa = 2 * PI * s / 60;
+	db ma = 2 * PI * (m / 60 + s / 3600);
+	db ha = 2 * PI * (fmod(h, 12)) / 12 + (m / 60 + s / 3600);
+
+	db ret = 2 * PI;
+
+	auto d = [](db a, db b) -> db {
+		return min(abs(a - b), 2 * PI - abs(a - b));
+	};
+
+	ckmin(ret, 
+		d(sa, ma),
+		d(ma, ha),
+		d(sa, ha)
+	);
+
+	ps(ret * 180 / PI);
 }
 
 signed main() {
@@ -313,7 +332,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: icpc
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -305,7 +305,33 @@ const int mx = 2e5+1;
 
 
 void solve() {
-	
+    int n, k, c; re(n, k, c);
+    map<int, int> fs;
+
+    vpi ad;
+    vpi f;
+
+    F0R(i, n) {
+        int t, s; re(t, s);
+        if(sz(ad) >= k) break;
+        if(fs[s] >= c) {
+            f.pb({i, t});
+        } else {
+            ad.pb({i, t});
+            fs[s]++;
+        }
+    }
+
+    each(x, f) {
+        if(sz(ad) >= k) break;
+        ad.pb(x);
+    }
+
+    sor(ad);
+
+    each(x, ad) {
+        ps(x.s);
+    }
 }
 
 signed main() {
@@ -316,7 +342,7 @@ signed main() {
 	// re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
-		// cerr << "[dbg] Case #" << _ + 1 << ":\n";
+		cerr << "[dbg] Case #" << _ + 1 << ":\n";
 		solve();
 	}
 

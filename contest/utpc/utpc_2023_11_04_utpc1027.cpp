@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: utpc
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -69,16 +69,12 @@ tcT> int lwb(V<T>& a, const T& b) { return int(lb(all(a),b)-bg(a)); }
 #define R0F(i,a) ROF(i,0,a)
 #define rep(a) F0R(_,a)
 #define each(a,x) for (auto& a: x)
-tcT> int sgn(T x) { return (x > 0) - (x < 0); }
-/* #endregion */
 
 const int MOD = 1e9+7; // 998244353;
 const ll INF = 1e18; // not too close to LLONG_MAX
 const db PI = acos((db)-1);
 const char nl = '\n';
 const int dx[4] = {1,0,-1,0}, dy[4] = {0,1,0,-1}; // for every grid problem!!
-
-/* #region template */
 mt19937 rng((uint32_t)chrono::steady_clock::now().time_since_epoch().count()); 
 template<class T> using pqg = priority_queue<T,vector<T>,greater<T>>;
 
@@ -299,24 +295,215 @@ inline namespace FileIO {
 const db EPS = 1e-9;
 const int mx = 2e5+1;
 
-/* #region snippets */
+#include <ext/pb_ds/tree_policy.hpp>
+#include <ext/pb_ds/assoc_container.hpp>
+using namespace __gnu_pbds;
+template <class T> using Tree = tree<T, null_type, less<T>, 
+	rb_tree_tag, tree_order_statistics_node_update>; 
+#define ook order_of_key
+#define fbo find_by_order
 
-/* #endregion */
 
+/**
+ * Description: Does not allocate storage for nodes with no data
+ * Source: USACO Mowing the Field
+ * Verification: ~
+ */ 
+
+const int SZ = (int)1e9+7;
+template<class T> struct node {
+	T val = 0; node<T>* c[2];
+	node() { c[0] = c[1] = NULL; }
+	void upd(int ind, T v, int L = 0, int R = SZ-1) { // add v
+		if (L == ind && R == ind) { val += v; return; }
+		int M = (L+R)/2;
+		if (ind <= M) {
+			if (!c[0]) c[0] = new node();
+			c[0]->upd(ind,v,L,M);
+		} else {
+			if (!c[1]) c[1] = new node();
+			c[1]->upd(ind,v,M+1,R);
+		}
+		val = 0; F0R(i,2) if (c[i]) val += c[i]->val;
+	}
+	T query(int lo, int hi, int L = 0, int R = SZ-1) { // query sum of segment
+		if (hi < L || R < lo) return 0;
+		if (lo <= L && R <= hi) return val;
+		int M = (L+R)/2; T res = 0;
+		if (c[0]) res += c[0]->query(lo,hi,L,M);
+		if (c[1]) res += c[1]->query(lo,hi,M+1,R);
+		return res;
+	}
+	void UPD(int ind, node* c0, node* c1, int L = 0, int R = SZ-1) { // for 2D segtree
+		if (L != R) {
+			int M = (L+R)/2;
+			if (ind <= M) {
+				if (!c[0]) c[0] = new node();
+				c[0]->UPD(ind,c0?c0->c[0]:NULL,c1?c1->c[0]:NULL,L,M);
+			} else {
+				if (!c[1]) c[1] = new node();
+				c[1]->UPD(ind,c0?c0->c[1]:NULL,c1?c1->c[1]:NULL,M+1,R);
+			}
+		} 
+		val = (c0?c0->val:0)+(c1?c1->val:0);
+	}
+};
+
+
+using Q = tuple<int, int, int>;
+node<ll> seg;
+Tree<Q> l, r; // {left, right, size}, {right, left, size}
 
 void solve() {
-	
+	int n; re(n);
+	dbg(n);
+
+	auto dq = [](Q q) {
+		int l = get<0>(q), r = get<1>(q); ll sz = get<2>(q);
+		return pair<pi, ll>{{l, r}, sz};
+	};
+
+	auto remove = [&](Q q) {
+		int lb = get<0>(q), rb = get<1>(q); ll v = get<2>(q);
+		if(lb > rb) swap(lb, rb);
+		l.erase({lb, rb, v});
+		r.erase({rb, lb, v});
+	};
+
+
+	// merges intervals
+	auto insert = [&](int pos, int size) {
+		dbg(pos, size);
+		seg.upd(pos, size);
+		// Q to_ins = {pos, pos, size};
+		// dbg(dq(to_ins));
+		// check merge cases
+
+		dbg("hi");
+
+		if(!sz(l)) {
+			l.insert({pos, pos, size});
+			r.insert({pos, pos, size});
+			return;
+		}
+		
+		auto left = r.lower_bound({pos, 0, 0});
+		if(left != r.begin()) left--;
+		Q left_v = *left;
+
+		dbg(dq(left_v));
+
+		bool merge_left = get<0>(left_v) == pos - 1;
+
+		auto right = l.upper_bound({pos, 0, 0});
+		bool merge_right = right != l.end() && (get<0>(*right) == pos + 1);
+
+		dbg(merge_left, merge_right);
+
+		int l_new = pos;
+		int r_new = pos;
+		ll sz_new = size;
+
+		if(merge_left) {
+			l_new = get<1>(*left);
+			sz_new += get<2>(*left);
+
+			Q to_rm = *left;
+			remove(to_rm);
+		}
+
+		if(merge_right) {
+			r_new = get<1>(*right);
+			sz_new += get<2>(*right);
+
+			Q to_rm = *right;
+			remove(to_rm);
+		}
+
+		dbg(l_new, r_new, sz_new);
+
+		l.insert({l_new, r_new, sz_new});
+		r.insert({r_new, l_new, sz_new});
+
+		// each(x, l) dbg(dq(x));
+	};
+
+	auto in_int = [&](Q q, int l, int r) -> bool {
+		int ql = get<0>(q), qr = get<1>(q);
+		if(ql > qr) swap(ql, qr);
+		return (ql >= l && ql <= r) && (qr <= r && ql >= l);
+	};
+
+	auto query = [&](int lb, int rb) {
+		dbg(lb, rb);
+		if(!sz(l)) {
+			ps(-1, -1);
+			return;
+		}
+		// find # of queries fully contained below rb
+		auto count_below_rb = r.ook({rb, MOD, MOD});
+
+		// find # of queries below lb
+		// either {l, r} contains lb
+		auto count_below_lb = r.ook({lb - 1, MOD, MOD});
+
+		int cnt = count_below_rb - count_below_lb;
+
+		dbg(count_below_rb, count_below_lb);
+		// if(sz(r)) { // case if somsething is not fully contained
+		auto ub = r.lb({lb, 0, 0}); // guarantees r >= lb
+		if(ub != r.end() && get<1>(*ub) < lb) {
+			cnt--;
+		}
+		// }
+
+		// now, let's find the sum of everything in the interval
+		// using r, find the highest point to include
+		auto ridx = r.upper_bound({rb, MOD, MOD});
+		ridx--;
+
+		ll sum = -1;
+
+		// check that r is contained in the interval
+		if(in_int(*ridx, lb, rb)) {
+			int rhs = get<0>(*ridx);
+
+			// using l, find the lowest point to include
+			auto lidx = l.lb({lb, 0, 0});
+			int lhs = get<0>(*lidx);
+
+			dbg(lhs, rhs);
+
+			sum = seg.query(lhs, rhs);
+		}
+
+		if(sum == -1) cnt = - 1;
+
+		ps(cnt, sum);
+	};
+
+	rep(n) {
+		int t; re(t);
+		if(t == 0) {
+			int pos, size; re(pos, size);
+			insert(pos, size);
+		} else {
+			int l, r; re(l, r);
+			query(l, r);
+		}
+	}
 }
 
 signed main() {
 	// clock_t start = clock();
+	// setIO("large");
 	setIO();
 
 	int n = 1;
 	// re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
-		// cerr << "[dbg] Case #" << _ + 1 << ":\n";
+		cerr << "[dbg] Case #" << _ + 1 << ":\n";
 		solve();
 	}
 

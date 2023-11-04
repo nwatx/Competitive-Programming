@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -305,7 +305,21 @@ const int mx = 2e5+1;
 
 
 void solve() {
-	
+	int n; re(n);
+    vi v(n); re(v);
+    int curr = 1;
+    F0R(i, n) {
+        if(v[i] == curr) curr++;
+
+        dbg(curr);
+
+        if(i == n - 1) {
+            ps(curr);
+            return;
+        }
+
+        curr++;
+    }
 }
 
 signed main() {
@@ -313,10 +327,10 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
-		// cerr << "[dbg] Case #" << _ + 1 << ":\n";
+		cerr << "[dbg] Case #" << _ + 1 << ":\n";
 		solve();
 	}
 

@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -70,15 +70,12 @@ tcT> int lwb(V<T>& a, const T& b) { return int(lb(all(a),b)-bg(a)); }
 #define rep(a) F0R(_,a)
 #define each(a,x) for (auto& a: x)
 tcT> int sgn(T x) { return (x > 0) - (x < 0); }
-/* #endregion */
 
 const int MOD = 1e9+7; // 998244353;
 const ll INF = 1e18; // not too close to LLONG_MAX
 const db PI = acos((db)-1);
 const char nl = '\n';
 const int dx[4] = {1,0,-1,0}, dy[4] = {0,1,0,-1}; // for every grid problem!!
-
-/* #region template */
 mt19937 rng((uint32_t)chrono::steady_clock::now().time_since_epoch().count()); 
 template<class T> using pqg = priority_queue<T,vector<T>,greater<T>>;
 
@@ -305,7 +302,56 @@ const int mx = 2e5+1;
 
 
 void solve() {
-	
+    int n; re(n);
+    string s; re(s);
+    // check if bit inversions 
+
+    vb ret(n + 1);
+
+    int npos = 0;
+    int zC = 0;
+
+    each(x, s) {
+        zC += x == '0';
+    }
+
+    // good 
+    ret[0] = 1;
+    // check if 0 is a palindrome
+    F0R(i, n / 2) {
+        if(s[i] != s[sz(s) - 1 - i]) {
+            ret[0] = 0;
+            npos++;
+        }
+    }
+
+
+    // zeros remaining: zC - npos;
+    int zM = zC - npos;
+
+    dbg(npos, zM);
+
+    // if odd, good from npos to mid
+    // if even, good from npos to mid without the spacing
+
+    if(n & 1) {
+        for(int i = 0; i <= n / 2; i++) {
+            if(n & 1) {
+                ret[i] = i >= npos;
+                ret[sz(ret) - 1 - i] = ret[i];
+            }
+        }
+    } else {
+        for(int i = npos; i <= n / 2; i += 2) {
+            ret[i] = 1;
+            ret[sz(ret) - 1 - i] = ret[i];
+        }
+    }
+
+    F0R(i, n + 1) {
+        cout <<ret[i];
+    }
+    ps();
 }
 
 signed main() {
@@ -313,10 +359,10 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
-		// cerr << "[dbg] Case #" << _ + 1 << ":\n";
+		cerr << "[dbg] Case #" << _ + 1 << ":\n";
 		solve();
 	}
 

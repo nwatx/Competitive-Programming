@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -69,16 +69,12 @@ tcT> int lwb(V<T>& a, const T& b) { return int(lb(all(a),b)-bg(a)); }
 #define R0F(i,a) ROF(i,0,a)
 #define rep(a) F0R(_,a)
 #define each(a,x) for (auto& a: x)
-tcT> int sgn(T x) { return (x > 0) - (x < 0); }
-/* #endregion */
 
 const int MOD = 1e9+7; // 998244353;
 const ll INF = 1e18; // not too close to LLONG_MAX
 const db PI = acos((db)-1);
 const char nl = '\n';
 const int dx[4] = {1,0,-1,0}, dy[4] = {0,1,0,-1}; // for every grid problem!!
-
-/* #region template */
 mt19937 rng((uint32_t)chrono::steady_clock::now().time_since_epoch().count()); 
 template<class T> using pqg = priority_queue<T,vector<T>,greater<T>>;
 
@@ -305,7 +301,97 @@ const int mx = 2e5+1;
 
 
 void solve() {
-	
+    int n, a, q; re(n, a, q);
+    string s; re(s);
+
+    int ret = (a == n) ? 2 : 0;
+    // int curr = a;
+
+    // int mc = 0;
+    // int cyc = 0;
+
+    // each(c, s) {
+    //     if(c == '+') {
+    //         curr++;
+    //         if(mc > 0) {
+    //             mc--;
+    //             cyc++;
+    //         }
+    //     } else {
+    //         curr--;
+    //         mc++;
+    //     }
+        
+    //     dbg(mc, cyc);
+
+    //     if(curr == n) {
+    //         ckmax(ret, 2);
+    //     } 
+    // }
+
+    set<int> read, unread, curr;
+    F0R(i, a) {
+        read.ins(i);
+        curr.ins(i);
+    }
+
+    FOR(i, a, n) unread.ins(i);
+
+    int cnt = 0;
+    
+    each(c, s) {
+        if(c == '+') {
+            cnt++;
+            bool flag = 1;
+            F0R(i, 300) {
+                if(!read.count(i) && unread.count(i)) {
+                    curr.ins(i);
+                    read.ins(i);
+                    unread.erase(i);
+                    flag = 0;
+                    break;
+                }
+            }
+
+            if(flag) {
+                curr.ins(*unread.begin());
+                read.ins(*unread.begin());
+                unread.erase(unread.begin());
+            }
+        } else {
+            cnt--;
+            bool flag = 1;
+            // erase something you've seen already
+            F0R(i, n) {
+                if(read.count(i) && curr.count(i)) {
+                    unread.insert(i);
+                    curr.erase(i);
+                    flag = 0;
+                    break;
+                }
+            }
+
+            // didn't erase, so add read
+            if(flag) {
+                assert(sz(curr));
+                unread.insert(*curr.begin());
+                curr.erase(curr.begin());
+            }
+        }
+
+        dbg(curr, read, unread);
+
+        if(sz(curr) >= n) ckmax(ret, 2);
+        if(sz(read) >= n) ckmax(ret, 1);
+    }
+
+    if(ret == 2) {
+        ps("YES");
+    } else if(ret == 1) {
+        ps("MAYBE");
+    } else {
+        ps("NO");
+    }
 }
 
 signed main() {
@@ -313,10 +399,10 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
-		// cerr << "[dbg] Case #" << _ + 1 << ":\n";
+		cerr << "[dbg] Case #" << _ + 1 << ":\n";
 		solve();
 	}
 

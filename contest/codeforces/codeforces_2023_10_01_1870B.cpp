@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -70,15 +70,12 @@ tcT> int lwb(V<T>& a, const T& b) { return int(lb(all(a),b)-bg(a)); }
 #define rep(a) F0R(_,a)
 #define each(a,x) for (auto& a: x)
 tcT> int sgn(T x) { return (x > 0) - (x < 0); }
-/* #endregion */
 
 const int MOD = 1e9+7; // 998244353;
 const ll INF = 1e18; // not too close to LLONG_MAX
 const db PI = acos((db)-1);
 const char nl = '\n';
 const int dx[4] = {1,0,-1,0}, dy[4] = {0,1,0,-1}; // for every grid problem!!
-
-/* #region template */
 mt19937 rng((uint32_t)chrono::steady_clock::now().time_since_epoch().count()); 
 template<class T> using pqg = priority_queue<T,vector<T>,greater<T>>;
 
@@ -305,7 +302,58 @@ const int mx = 2e5+1;
 
 
 void solve() {
-	
+    int n, m; re(n, m);
+    vi a(n); re(a);
+    vi b(m); re(b);
+
+    vi cT(32);
+    vi freq(32);
+
+    int x = 0;
+    each(y, a) {
+        x ^= y;
+        F0R(i, 32) {
+            if(!(y & (1 << i))) {
+                freq[i]++;
+            }
+        }
+    }
+
+    each(y, b) {
+        F0R(i, 32) {
+            if(y & (1 << i)) {
+                cT[i]++;
+            }
+        }
+    }
+
+    // can toggle if bit exists in b
+    // and odd in a
+
+    dbg(x);
+    dbg(cT);
+    dbg(freq);
+    int retMin = x, retMax = x;
+
+    F0R(i, 32) {
+        // if we can toggle
+        if(cT[i] && freq[i] % 2 == 1) {
+            // already on
+
+            // odd in a
+            if(x & (1 << i)) {
+                retMin ^= (1 << i);
+            } else {
+                retMax |= (1 << i);
+            }
+        }
+    }
+
+    ps(retMin, retMax);
+
+
+    // find out which bits you can toggle
+    // at least one is zero
 }
 
 signed main() {
@@ -313,10 +361,10 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
-		// cerr << "[dbg] Case #" << _ + 1 << ":\n";
+		cerr << "[dbg] Case #" << _ + 1 << ":\n";
 		solve();
 	}
 

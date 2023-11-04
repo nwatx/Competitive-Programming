@@ -303,9 +303,35 @@ const int mx = 2e5+1;
 
 /* #endregion */
 
-
+// not divisible by 3 and not divisible by a_{i + 2}
+// a_i + a_{i + 1}
+// any two can't sum to 3
+// 2 3 4 6
 void solve() {
-	
+    int n; re(n);
+    vi v(n);
+    v[0] = 4;
+    v[1] = 6;
+
+    FOR(i, 2, n) {
+        int rem = v[i - 1] % 3;
+        if(rem == 0) {
+            v[i] = v[i - 1] + 1;
+        } else if(rem == 1) {
+            v[i] = v[i - 1] + 3;
+        } else if(rem == 2) {
+            v[i] = v[i - 1] + 2;
+        }
+
+        // dbg(v);
+
+        assert((3 * v[i]) % (v[i - 1] + v[i - 2]));
+    }
+
+    F0R(i, n) {
+        pr(v[i], " ");
+    }
+    ps();
 }
 
 signed main() {
@@ -313,10 +339,10 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
-		// cerr << "[dbg] Case #" << _ + 1 << ":\n";
+		cerr << "[dbg] Case #" << _ + 1 << ":\n";
 		solve();
 	}
 
