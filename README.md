@@ -1,4 +1,4 @@
-# CP
+# Competitive Programming
 
 ### (VSCode version of bqi343's USACO)
 
