@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -293,60 +293,42 @@ inline namespace FileIO {
 
 // Changeable constants
 const db EPS = 1e-9;
-const int mx = 60;
+const int mx = 2e5+1;
 
 /* #region snippets */
 
 /* #endregion */
 
-// beginning of a layer indexed by height
-int max_height = 2;
-ll l_bg[mx];
-ll a, b, x, y;
-
-ll get_parent(ll x) {
-	if(x <= a) return 0;
-	int height = upper_bound(l_bg, l_bg + max_height, x) - l_bg;
-	int idx_f = l_bg[height - 1];
-	int layer_con = height & 1 ? a : b;
-	int offset = (x - idx_f) / layer_con;
-	return l_bg[height - 2] + offset;
-}
 
 void solve() {
-	re(a, b, x, y);
-
-	ll m = (ll)1e9;
-	while(m > 0) {
-		m /= min(a, b);
-		max_height++;
+	int n, k; re(n, k);
+	set<int> s;
+	rep(n) {
+		int x; cin >> x;
+		s.ins(x);
 	}
 
-	// generate heights
-	l_bg[0] = 1;
-	FOR(i, 1, max_height) {
-		l_bg[i] = (i & 1 ? a : b) * l_bg[i - 1];
+	int me = *s.rbegin();
+	if(me == n) {
+		ps(n * k + 1);
+		return;
 	}
 
-	// to get the index of the first node on each layer
-	FOR(i, 1, max_height) {
-		l_bg[i] += l_bg[i - 1];
+	vi hole;
+
+	// build succession pattern
+	// there can only be at most one way to get to A
+	// we can build a deque for this and find the "exit point"
+	// find the smallest point not in the array
+	FOR(i, 1, n + 1) {
+		if(!s.count(i)) hole.pb(i - 1);
 	}
 
-	dbg(max_height);
+	dbg(hole);
 
-	F0R(i, max_height) {
-		dbg(i, l_bg[i]);
-	}
+	deque<int> succ;
 
-	while(x != y) {
-		if(x > y) swap(x, y);
-		dbg(y, get_parent(y));
-		y = get_parent(y);
-	}
 
-	assert(x == y);
-	ps(x);
 }
 
 signed main() {
@@ -354,7 +336,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		cerr << "[dbg] Case #" << _ + 1 << ":\n";
