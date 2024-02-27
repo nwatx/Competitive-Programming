@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -209,10 +209,6 @@ inline namespace Input {
 	#define int1(...) ints(__VA_ARGS__); decrement(__VA_ARGS__);
 }
 
-#define def(t, args...)                                                        \
-	t args;                                                                    \
-	re(args);
-
 inline namespace ToString {
 	tcT> constexpr bool needs_output_v = !is_printable_v<T> && is_iterable_v<T>;
 
@@ -304,11 +300,135 @@ const db EPS = 1e-9;
 const int mx = 2e5+1;
 
 /* #region snippets */
+/**
+ * Description: 1D point update, range query where \texttt{comb} is
+	* any associative operation. If $N=2^p$ then \texttt{seg[1]==query(0,N-1)}.
+ * Time: O(\log N)
+ * Source: 
+	* http://codeforces.com/blog/entry/18051
+	* KACTL
+ * Verification: SPOJ Fenwick
+ */
 
+template<class T> struct Seg { // comb(ID,b) = b
+	const T ID = {0, 0}; T comb(T a, T b) { return {max(a.f + b.f), max(a.s + b.s)}; } 
+	int n; vector<T> seg;
+	void init(int _n) { n = _n; seg.assign(2*n,ID); }
+	void pull(int p) { seg[p] = comb(seg[2*p],seg[2*p+1]); }
+	void upd(int p, T val) { // set val at position p
+		seg[p += n] = val; for (p /= 2; p; p /= 2) pull(p); }
+	T query(int l, int r) {	// sum on interval [l, r]
+		T ra = ID, rb = ID; 
+		for (l += n, r += n+1; l < r; l /= 2, r /= 2) {
+			if (l&1) ra = comb(ra,seg[l++]);
+			if (r&1) rb = comb(seg[--r],rb);
+		}
+		return comb(ra,rb);
+	}
+};
 /* #endregion */
 
+struct seg {
+	int sum, pmin, pmax, smin, smax, tmin, tmax;
+};
+
+seg comb(seg lo, seg hi) {
+	seg ret;
+	ret.sum = lo.sum + hi.sum;
+	ret.pmin = min(lo.pmin, lo.sum + hi.pmin);
+	ret.pmax = max(lo.pmax, lo.sum + hi.pmax);
+	ret.smin = min(hi.smin, hi.sum + lo.smin);
+	ret.smax = max(hi.smax, hi.sum + lo.smax);
+	ret.tmin = min({lo.tmin, hi.tmin, lo.smin + hi.pmin});
+	ret.tmax = max({lo.tmax, hi.tmax, lo.smax + hi.pmax});
+	return ret;
+}
+
 void solve() {
-	
+	int n; re(n);
+	V<vi> par(20, vi(n + 2));
+
+	using T = seg;
+	V<V<T>> bl(20, V<T>(n + 2, {0, 0, 0, 0, 0, 0, 0}));
+	vi dep(n + 2);
+
+	// lowest number you can make vs highest number
+	// {prefix, suffix, prefix, suffix}
+	bl[0][1] = {1, 0, 0, 1, 1, 0, 1};
+
+	V<tuple<int, int, int>> queries;
+
+	int cnt = 1;
+	F0R(i, n) {
+		char t; re(t);
+		if(t == '+') {
+			int v, x; re(v, x);
+			++cnt;
+
+			dep[cnt] = dep[v] + 1;
+			par[0][cnt] = v;
+
+			if(x < 0) {
+				bl[0][cnt] = {x, x, 0, x, 0, x, 0};
+			} else {
+				bl[0][cnt] = {x, 0, x, 0, x, 0, x};
+			}
+
+			FOR(i, 1, 20) {
+				par[i][cnt] = par[i - 1][par[i - 1][cnt]];
+			}
+
+			FOR(i, 1, 20) {
+				auto lo = bl[i - 1][cnt];
+				auto hi = bl[i - 1][par[i - 1][cnt]];
+				bl[i][cnt] = comb(lo, hi);
+			}
+		} else {
+			ints(u, v, k);
+			dbg(u, v, k);
+
+			if(dep[u] < dep[v]) swap(u, v);
+			int d = dep[u] - dep[v];
+			seg a{0, 0, 0, 0, 0, 0, 0}, b{0, 0, 0, 0, 0, 0, 0};
+
+			R0F(i, 20) {
+				if(d & (1 << i)) {
+					a = comb(a, bl[i][u]);
+					u = par[i][u];
+				}
+			}
+
+			if(u == v) {
+				a = comb(a, bl[0][u]);
+			} else {
+				// on same level, lift until they are the same
+				R0F(i, 20) {
+					if(par[i][u] != par[i][v]) {
+						a = comb(a, bl[i][u]);
+						b = comb(b, bl[i][v]);
+
+						u = par[i][u];
+						v = par[i][v];
+					}
+				}
+
+				a = comb(a, bl[1][u]);
+				b = comb(b, bl[0][v]);
+			}
+
+			swap(b.pmin, b.smin);
+			swap(b.pmax, b.smax);
+
+			seg ret = comb(a, b);
+			dbg(ret.tmin, ret.tmax);
+
+			if(ret.tmin <= k && ret.tmax >= k) {
+				ps("YES");
+			} else {
+				ps("NO");
+			}
+		}
+	}
 }
 
 signed main() {
@@ -316,7 +436,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

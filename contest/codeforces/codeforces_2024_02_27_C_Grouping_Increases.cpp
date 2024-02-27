@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -307,8 +307,37 @@ const int mx = 2e5+1;
 
 /* #endregion */
 
+
 void solve() {
-	
+	def(int, n);
+	vi v(n); re(v);
+
+	if(n <= 2) {
+		ps(0);
+		return;
+	}
+
+	vi t{MOD, MOD};
+	dbg(v);
+	int ret = 0;
+	F0R(i, n) {
+		// make t sorted
+		int x = v[i];
+		if(t[0] > t[1]) swap(t[0], t[1]);
+
+		if(x <= t[0]) {
+			t[0] = x;
+		} else if(t[1] < x) {
+			t[0] = x;
+			ret++;
+		} else if(t[0] < x && x <= t[1]) {
+			t[1] = x;
+		}
+
+		dbg(t);
+	}
+
+	ps(ret);
 }
 
 signed main() {
@@ -316,7 +345,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

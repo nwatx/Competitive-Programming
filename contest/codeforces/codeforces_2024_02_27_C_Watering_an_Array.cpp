@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -209,10 +209,6 @@ inline namespace Input {
 	#define int1(...) ints(__VA_ARGS__); decrement(__VA_ARGS__);
 }
 
-#define def(t, args...)                                                        \
-	t args;                                                                    \
-	re(args);
-
 inline namespace ToString {
 	tcT> constexpr bool needs_output_v = !is_printable_v<T> && is_iterable_v<T>;
 
@@ -307,8 +303,40 @@ const int mx = 2e5+1;
 
 /* #endregion */
 
+
 void solve() {
-	
+	int n, k, d;
+	re(n, k, d);
+	dbg(n, k, d);
+
+	vi a(n); re(a);
+	vi v(k); re(v);
+
+	// can only do the action at most once
+	// so, just keep track of the first action
+	// and then query the second one
+
+	int best = 0;
+
+	auto score = [&] {
+		int ret = 0;
+		F0R(i, n) {
+			if(a[i] == i) ret++;
+		}
+		return ret;
+	};
+
+	F0R(i, min(n, d)) {
+		ckmax(best, score());
+
+		F0R(i, min(n, v[i % k])) {
+			a[i]++;
+		}
+
+		dbg(a);
+	}
+
+	ps(best);
 }
 
 signed main() {
@@ -316,7 +344,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

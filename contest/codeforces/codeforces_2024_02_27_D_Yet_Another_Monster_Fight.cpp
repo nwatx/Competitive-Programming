@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -209,10 +209,6 @@ inline namespace Input {
 	#define int1(...) ints(__VA_ARGS__); decrement(__VA_ARGS__);
 }
 
-#define def(t, args...)                                                        \
-	t args;                                                                    \
-	re(args);
-
 inline namespace ToString {
 	tcT> constexpr bool needs_output_v = !is_printable_v<T> && is_iterable_v<T>;
 
@@ -307,8 +303,80 @@ const int mx = 2e5+1;
 
 /* #endregion */
 
-void solve() {
+// void solve() {
+// 	int n; re(n);
+// 	vi v(n); re(v);
+// 	sorr(v);
 	
+// 	auto good = [&](int x) -> bool {
+// 		// first target is the biggest, obviously
+// 		// then, if not the biggest, choose the worst one
+// 		if(v[0] > x) return false;
+// 		--x;
+// 		int l = 1, r = sz(v) - 1;
+// 		while(l <= r) {
+// 			if(x < v[l] || x < v[r]) return false;
+// 			--x;
+// 			--r;
+// 		}
+
+// 		return true;
+// 	};
+
+// 	ps(fstTrue(1, MOD, good));
+// }
+/**
+ * Description: 1D point update, range query where \texttt{comb} is
+	* any associative operation. If $N=2^p$ then \texttt{seg[1]==query(0,N-1)}.
+ * Time: O(\log N)
+ * Source: 
+	* http://codeforces.com/blog/entry/18051
+	* KACTL
+ * Verification: SPOJ Fenwick
+ */
+
+template<class T> struct Seg { // comb(ID,b) = b
+	const T ID = 0; T comb(T a, T b) { return max(a, b); } 
+	int n; vector<T> seg;
+	void init(int _n) { n = _n; seg.assign(2*n,ID); }
+	void pull(int p) { seg[p] = comb(seg[2*p],seg[2*p+1]); }
+	void upd(int p, T val) { // set val at position p
+		seg[p += n] = val; for (p /= 2; p; p /= 2) pull(p); }
+	T query(int l, int r) {	// sum on interval [l, r]
+		T ra = ID, rb = ID; 
+		for (l += n, r += n+1; l < r; l /= 2, r /= 2) {
+			if (l&1) ra = comb(ra,seg[l++]);
+			if (r&1) rb = comb(seg[--r],rb);
+		}
+		return comb(ra,rb);
+	}
+};
+
+void solve() {
+	int n; re(n);
+	vi v(n); re(v);
+
+	Seg<int> sf, sb; sf.init(n); sb.init(n);
+	F0R(i, n) {
+		sf.upd(i, i + v[i]);
+		sb.upd(n - 1 - i, i + v[n - 1 - i]);
+	}
+
+	int ret = MOD;
+
+	F0R(i, n) {
+		int nleft = i, nright = n - i - 1;
+		int wl = 0;
+		if(nleft) wl = sb.query(0, i - 1) - (n - i) + nright;
+
+		int wr = 0;
+		if(nright) wr = sf.query(i + 1, n - 1) - (i + 1) + nleft;
+
+		int best = max(wl + 1, wr + 1, v[i]);
+		ckmin(ret, best);
+	}
+
+	ps(ret);
 }
 
 signed main() {

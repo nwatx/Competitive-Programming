@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -209,10 +209,6 @@ inline namespace Input {
 	#define int1(...) ints(__VA_ARGS__); decrement(__VA_ARGS__);
 }
 
-#define def(t, args...)                                                        \
-	t args;                                                                    \
-	re(args);
-
 inline namespace ToString {
 	tcT> constexpr bool needs_output_v = !is_printable_v<T> && is_iterable_v<T>;
 
@@ -307,8 +303,54 @@ const int mx = 2e5+1;
 
 /* #endregion */
 
+
 void solve() {
-	
+	// do a multisource bfs
+	int n, m; re(n, m);
+	dbg(n, m);
+	vi v(n); re(v);
+	V<vi> adj(n + 1);
+	F0R(i, m) {
+		int a, b; re(a, b);
+		adj[a].pb(b);
+		adj[b].pb(a);
+	}
+
+	queue<pi> bfs;
+	set<int> vis;
+
+	dbg(adj);
+
+	F0R(i, n) {
+		if(v[i] == 0 && !vis.count(i)) {
+			bfs.push({i + 1, 1});
+		}
+
+		while(sz(bfs)) {
+			auto top = bfs.front(); bfs.pop();
+			dbg(top);
+
+			if(top.s >= m) {
+				ps("YES");
+				return;
+			}
+
+			if(vis.count(top.f)) continue;
+			vis.insert(top.f);
+
+
+			each(e, adj[top.f]) {
+				// dbg(e, vis.count(e), vis);
+				if(!vis.count(e) && v[e] <= top.s) {
+					bfs.push({e, top.s + 1});
+				}
+			}
+		}
+
+	}
+
+
+	ps("NO");
 }
 
 signed main() {
@@ -316,7 +358,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

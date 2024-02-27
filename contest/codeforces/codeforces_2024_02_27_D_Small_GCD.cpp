@@ -1,9 +1,9 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
-// #pragma GCC optimize ("Ofast")
-// #pragma GCC target ("avx2")
+#pragma GCC optimize ("Ofast")
+#pragma GCC target ("avx2")
 
 #include <bits/stdc++.h>
 using namespace std;
@@ -301,14 +301,41 @@ inline namespace FileIO {
 
 // Changeable constants
 const db EPS = 1e-9;
-const int mx = 2e5+1;
+const int mx = 1e5+1;
 
 /* #region snippets */
 
 /* #endregion */
 
 void solve() {
-	
+	def(int, n);
+	vi v(n); re(v);
+	sor(v);
+
+	// loop from 0 to 1e5
+	// count how many times each number will be the gcd
+
+	ll ret = 0;
+
+	FOR(s, 1, mx) {
+		// fix gcd at s
+		int cnt = 0;
+		for(int i = s; i < mx; i += s) {
+			// # of gcd of s is # of elements 
+			
+		}
+	}
+
+	// get the # of multiples
+	// then keep factors array
+	// then do PIE; if big number, then get rid of all the intersections
+	// if a * b * c for example, need to do #a + #b + #c - #ab - #ac - #bc + #abc
+	// e.g. 12, 8
+	// {1, 2, 3, 4, 6, 12} => 8: 3 times
+
+	// {1, 2, 4, 8} => 8: 4 times
+
+	ps(ret);
 }
 
 signed main() {
@@ -316,7 +343,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -209,10 +209,6 @@ inline namespace Input {
 	#define int1(...) ints(__VA_ARGS__); decrement(__VA_ARGS__);
 }
 
-#define def(t, args...)                                                        \
-	t args;                                                                    \
-	re(args);
-
 inline namespace ToString {
 	tcT> constexpr bool needs_output_v = !is_printable_v<T> && is_iterable_v<T>;
 
@@ -307,8 +303,60 @@ const int mx = 2e5+1;
 
 /* #endregion */
 
+/*
+x = 1011
+
+operation 1:
+10110 - 1 = 10101
+
+2(2x - 1) + 1 = 4x + 1
+2(2x + 1) - 1 = 4x - 1
+
+// lhs is 2 rhs is binary representation
+
+17
+1 3 5 9 17
+
+1 3 7 15
+*/
+
 void solve() {
-	
+	// calculate distance from nearest power of 2
+	ll x; re(x);
+
+	FOR(i, 1, 40) {
+		ll est = (1LL << i);
+		ll diff = x - est;
+
+		ll lo = -(1LL << i) + 1;
+		dbg(i, diff, lo);
+
+		// solution found
+		if((diff - lo) % 2 == 0) {
+			// use binary rep where 0 = -1 and 1 = +1
+			ll r = (diff - lo) / 2;
+			dbg(r);
+			if(abs(r) >= (1 << i)) continue;
+			// find first index to use
+			// special case is all 0s
+			// total i moves
+			ps(i);
+
+			F0R(j, i) {
+				if(r & (1 << (i - 1 - j))) {
+					pr(2, " ");
+				} else {
+					pr(1, " ");
+				}
+			}
+
+			ps();
+
+			return;
+		}
+	}
+
+	ps(-1);
 }
 
 signed main() {
@@ -316,7 +364,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

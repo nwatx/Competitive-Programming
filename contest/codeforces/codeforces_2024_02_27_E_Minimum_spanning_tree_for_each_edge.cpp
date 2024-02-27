@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -209,10 +209,6 @@ inline namespace Input {
 	#define int1(...) ints(__VA_ARGS__); decrement(__VA_ARGS__);
 }
 
-#define def(t, args...)                                                        \
-	t args;                                                                    \
-	re(args);
-
 inline namespace ToString {
 	tcT> constexpr bool needs_output_v = !is_printable_v<T> && is_iterable_v<T>;
 
@@ -304,11 +300,146 @@ const db EPS = 1e-9;
 const int mx = 2e5+1;
 
 /* #region snippets */
+/**
+ * Description: Disjoint Set Union with path compression
+	* and union by size. Add edges and test connectivity. 
+	* Use for Kruskal's or Boruvka's minimum spanning tree.
+ * Time: O(\alpha(N))
+ * Source: CSAcademy, KACTL
+ * Verification: *
+ */
 
+struct DSU {
+	vi e; void init(int N) { e = vi(N,-1); }
+	int get(int x) { return e[x] < 0 ? x : e[x] = get(e[x]); } 
+	bool sameSet(int a, int b) { return get(a) == get(b); }
+	int size(int x) { return -e[get(x)]; }
+	bool unite(int x, int y) { // union by size
+		x = get(x), y = get(y); if (x == y) return 0;
+		if (e[x] > e[y]) swap(x,y);
+		e[x] += e[y]; e[y] = x; return 1;
+	}
+};
+
+/**template<class T> T kruskal(int N, vector<pair<T,pi>> ed) {
+	sort(all(ed));
+	T ans = 0; DSU D; D.init(N); // edges that unite are in MST
+	each(a,ed) if (D.unite(a.s.f,a.s.s)) ans += a.f; 
+	return ans;
+}*/
 /* #endregion */
 
 void solve() {
-	
+	int n, m; re(n, m);
+	V<pair<ll, pi>> ed; vi idx(m); iota(all(idx), 0);
+	vi in(m);
+	rep(m) {
+		int u, v, w; re(u, v, w);
+		ed.pb({w, {u, v}});
+	}
+
+	// get the initial mst edges
+	sort(all(idx), [&](int a, int b) {
+		return ed[a].f < ed[b].f;
+	});
+
+	// remove largest possible weight on original mst from a => b
+
+	DSU dsu; dsu.init(n + 1);
+
+	V<vpi> adj(n + 1);
+
+	ll sum = 0;
+	each(i, idx) {
+		auto &e = ed[i];
+		if(dsu.unite(e.s.f, e.s.s)) {
+			adj[e.s.f].pb({e.f, e.s.s});
+			adj[e.s.s].pb({e.f, e.s.f});
+			sum += e.f;
+			in[i] = 1;
+		}
+	}
+
+	const int LG = 20;
+	V<vi> par(LG, vi(n + 1)), cost(LG, vi(n + 1));
+	vi dep(n + 1);
+
+	auto dfs = [&](auto const &dfs, int v, int p) -> void {
+		each(e, adj[v]) {
+			if(e.s != p) {
+				// up 1
+				cost[0][e.s] = e.f;
+				dep[e.s] = dep[v] + 1;
+				par[0][e.s] = v;
+				dfs(dfs, e.s, v);
+			}
+		}
+	};
+
+	dfs(dfs, 1, 0);
+
+	dbg(in);
+
+	F0R(i, LG - 1) {
+		FOR(j, 1, n + 1) {
+			par[i + 1][j] = par[i][par[i][j]];
+			cost[i + 1][j] = max(cost[i][j], cost[i][par[i][j]]);
+		}
+	}
+
+	vl ret(m);
+
+	dbg(dep);
+	dbg(par);
+
+	// find maximal weight on path
+	each(i, idx) {
+		if(in[i]) {
+			ret[i] = sum;
+			continue;
+		}
+		
+		int u = ed[i].s.f, v = ed[i].s.s;
+
+		// find the maximal value from u -> v on the path
+		if(dep[u] < dep[v]) {
+			swap(u, v);
+		}
+
+		int a = 0, b = 0;
+		int d = dep[u] - dep[v];
+
+		// move u up to v
+		R0F(j, LG) {
+			if(d & (1 << j)) {
+				a = max(a, cost[j][u]);
+				u = par[j][u];
+			}
+		}
+
+		if(u != v) {
+			R0F(j, LG) {
+				int at = par[j][u];
+				int bt = par[j][v];
+
+				if(at != bt) {
+					a = max(a, cost[j][u]);
+					b = max(b, cost[j][v]);
+
+					u = at;
+					v = bt;
+				}
+			}
+		}
+
+		int rm = max({a, b});
+		if(u != v) ckmax(rm, max({cost[0][u], cost[0][v]}));
+		dbg(a, b, rm);
+
+		ret[i] = ll(sum) + ed[i].f - rm;
+	}
+
+	each(x, ret) cout << x << "\n";
 }
 
 signed main() {

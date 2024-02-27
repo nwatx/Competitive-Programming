@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cses
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -209,10 +209,6 @@ inline namespace Input {
 	#define int1(...) ints(__VA_ARGS__); decrement(__VA_ARGS__);
 }
 
-#define def(t, args...)                                                        \
-	t args;                                                                    \
-	re(args);
-
 inline namespace ToString {
 	tcT> constexpr bool needs_output_v = !is_printable_v<T> && is_iterable_v<T>;
 
@@ -308,7 +304,34 @@ const int mx = 2e5+1;
 /* #endregion */
 
 void solve() {
-	
+	string s; re(s);
+	vi has(4);
+	map<char, int> m{{'A', 0}, {'C', 1}, {'G', 2}, {'T', 3}};
+	int cnt = 0;
+	vi seg;
+	F0R(i, sz(s)) {
+		int x = m[s[i]];
+		if(!has[x]) {
+			has[x] = 1;
+			cnt++;
+			if(cnt == 4) {
+				F0R(i, 4) has[i] = 0;
+				seg.pb(i);
+				cnt = 0;
+			}
+		}
+	}
+
+	const char tl[4] = {'A', 'C', 'G', 'T'};
+	dbg(seg);
+
+	each(c, seg) pr(s[c]);
+	F0R(i, 4) {
+		if(!has[i]) {
+			pr(tl[i]);
+			break;
+		}
+	}
 }
 
 signed main() {

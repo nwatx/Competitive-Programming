@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -209,10 +209,6 @@ inline namespace Input {
 	#define int1(...) ints(__VA_ARGS__); decrement(__VA_ARGS__);
 }
 
-#define def(t, args...)                                                        \
-	t args;                                                                    \
-	re(args);
-
 inline namespace ToString {
 	tcT> constexpr bool needs_output_v = !is_printable_v<T> && is_iterable_v<T>;
 
@@ -307,8 +303,31 @@ const int mx = 2e5+1;
 
 /* #endregion */
 
+// (A - B)
+// alice maximize
+// bob minimize
 void solve() {
-	
+	int n; re(n);
+	vi a(n), b(n), idx(n);
+	re(a, b);
+
+	iota(all(idx), 0);
+
+	sort(all(idx), [&](int x, int y) {
+		return a[x] + b[x] > a[y] + b[y];
+	});
+
+	ll ret = 0;
+
+	F0R(i, n) {
+		if(i & 1) {
+			ret -= b[idx[i]] - 1;
+		} else {
+			ret += a[idx[i]] - 1;
+		}
+	}
+
+	ps(ret);
 }
 
 signed main() {
@@ -316,7 +335,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

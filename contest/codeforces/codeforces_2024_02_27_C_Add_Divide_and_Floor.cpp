@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -209,10 +209,6 @@ inline namespace Input {
 	#define int1(...) ints(__VA_ARGS__); decrement(__VA_ARGS__);
 }
 
-#define def(t, args...)                                                        \
-	t args;                                                                    \
-	re(args);
-
 inline namespace ToString {
 	tcT> constexpr bool needs_output_v = !is_printable_v<T> && is_iterable_v<T>;
 
@@ -307,8 +303,63 @@ const int mx = 2e5+1;
 
 /* #endregion */
 
+
 void solve() {
-	
+	int n; re(n);
+	vl v(n); re(v);
+	dbg(n, v);
+
+	// go from smallest to largest
+	int b = 0;
+
+	vi ret;
+
+	while(1) {
+		dbg(v);
+		if(b > 32) break;
+		// dbg(v, b);
+		bool same = true;
+		F0R(i, n) {
+			same = same && (v[i] == v[0]);
+		}
+
+		if(same) {
+			break;
+		}
+		int vo = v[0] & (1 << b);
+		same = true;
+		F0R(i, n) {
+			if((v[i] & (1 << b)) != vo) {
+				same = false;
+				break;
+			}
+		}
+
+		int d1 = *max_element(all(v)) - *min_element(all(v)) <= 1;
+		if(d1) {
+			ret.pb(1);
+			break;
+		}
+
+		if(!same) {
+			int add = (1 << b);
+			F0R(i, n) v[i] = (v[i] + add) / 2;
+			ret.pb(add);
+		} else {
+			b++;
+		}
+	}
+
+	dbg(v);
+
+	ps(sz(ret));
+	if(sz(ret) <= n) {
+		F0R(i, sz(ret)) {
+			pr(ret[i]);
+			if(i != sz(ret) - 1) pr(" ");
+			else ps();
+		}
+	}
 }
 
 signed main() {
@@ -316,7 +367,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

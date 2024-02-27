@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -209,10 +209,6 @@ inline namespace Input {
 	#define int1(...) ints(__VA_ARGS__); decrement(__VA_ARGS__);
 }
 
-#define def(t, args...)                                                        \
-	t args;                                                                    \
-	re(args);
-
 inline namespace ToString {
 	tcT> constexpr bool needs_output_v = !is_printable_v<T> && is_iterable_v<T>;
 
@@ -307,8 +303,68 @@ const int mx = 2e5+1;
 
 /* #endregion */
 
+
 void solve() {
-	
+	int n; re(n);
+	dbg(n);
+	// maximum possible height
+	int hmax = MOD;
+	int hmin = 0;
+	rep(n) {
+		int t; re(t);
+		dbg(hmin, hmax);
+		if(t == 1) {
+			int a, b, n; re(a, b, n);
+			int hg = (a - b) * (n - 1) + a;
+			int hm = n > 1 ? (a - b) * (n - 2) + a + 1 : 0;
+			dbg(a, b, n, hg, hm);
+			if(!((hmin <= hg && hg <= hmax) || (hmin <= hm && hm <= hmax))) {
+				pr(0, " ");
+				continue;
+			}
+			ckmin(hmax, hg);
+			ckmax(hmin, hm);
+			pr(1, " ");
+		} else {
+			int a, b; re(a, b);
+			dbg(a, b);
+
+			// x-days
+			auto f = [&](int x) {
+				int ch = (x - 1) * (a - b);
+				if(hmax - ch <= a) return true;
+				return false;
+			};
+
+			int mind = fstTrue(0, hmax, f), maxd = lstTrue(mind, MOD, f);
+			// dbg(days);
+			// let's look at the previous day... would they have went over the tree?
+
+			int dp = (a - b) * (mind - 1);
+			int dmin = mind > 1 ? (a - b) * (mind -  2) + a + 1 : 0;
+			int dmax = dp + a;
+
+			dmin = max(dmin, hmin);
+			dmax = min(dmax, hmax);
+			if(dmin > dmax || mind != maxd) pr(-1, " ");
+			else pr(mind, " ");
+
+			// if(days > 1) {
+			// 	// went over the tree
+			// 	if((days - 2) * (a - b) + a > hmax) {
+			// 		pr(-1, " ");
+			// 		continue;
+			// 	}
+
+			// 	if((days - 1) * (a - b) + a < hmin) {
+			// 		pr(-1, " "); continue;
+			// 	}
+			// }
+
+		}
+	}
+
+	ps();
 }
 
 signed main() {
@@ -316,7 +372,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

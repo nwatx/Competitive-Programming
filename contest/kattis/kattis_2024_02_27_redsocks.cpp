@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: kattis
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -301,14 +301,74 @@ inline namespace FileIO {
 
 // Changeable constants
 const db EPS = 1e-9;
-const int mx = 2e5+1;
+const int mx = 5e4+1;
 
 /* #region snippets */
 
 /* #endregion */
 
+
 void solve() {
-	
+	while(1) {
+		def(ll, p, q);
+		if(p == 0 && q == 0) {
+			return;
+		}
+
+		if(p == 0) {
+			ps(0, 0);
+			continue;
+		}
+
+		if(q == 0) {
+			ps("impossible");
+			continue;
+		}
+
+		// p/q must be factored into a/(a + b) * (a - 1) / (a + b - 1)
+
+		// a^2 - a = p
+		// q = a^2 + 2ab - a + b^2 - b 
+		// b(b - 1) = a^2 + 2ab - a - q
+		// b(b - 1) - 2ab = a^2 - a - q
+		// b(b - 1) - b(2a) = a^2 - a - q
+		// b(b - 1 - a) = a^2 - a - q
+
+		pl best = {MOD, MOD};
+		F0R(i, mx + 1) {
+			if(i * (i - 1) % p == 0) {
+				// then we hve a = i
+				int a = i;
+				int top = a * a - a;
+				if(top % p) continue;
+				int mul = top / p;
+				// check this is divisible by b
+
+				dbg(top, mul);
+
+				// check factors
+				for(int j = 1; j * j <= (a * a - a - q); j++) {
+					dbg(top % j == 0);
+					if(top % j == 0) {
+						// found solution
+						int b = j;
+						if(a + b < best.f + best.s) {
+							best = {a, b};
+						}
+					}
+				}
+			}
+		}
+
+		// dbg(best);
+
+		if(best.f != MOD && best.s != MOD) {
+			ps(best.f, best.s);
+		} else {
+			ps("impossible");
+		}
+
+	}
 }
 
 signed main() {

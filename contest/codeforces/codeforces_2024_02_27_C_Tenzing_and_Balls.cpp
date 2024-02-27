@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -209,10 +209,6 @@ inline namespace Input {
 	#define int1(...) ints(__VA_ARGS__); decrement(__VA_ARGS__);
 }
 
-#define def(t, args...)                                                        \
-	t args;                                                                    \
-	re(args);
-
 inline namespace ToString {
 	tcT> constexpr bool needs_output_v = !is_printable_v<T> && is_iterable_v<T>;
 
@@ -307,8 +303,50 @@ const int mx = 2e5+1;
 
 /* #endregion */
 
+
 void solve() {
-	
+	int n; re(n);
+	map<int, int> first, last;
+	vi v(n); re(v);
+	F0R(i, n) {
+		if(!first.count(v[i])) {
+			first[v[i]] = i;
+		}
+
+		last[v[i]] = i;
+	}
+
+	// aggregate last by making inverse mapping
+	map<int, vi> linv;
+	each(e, last) {
+		linv[e.s].pb(e.f);
+	}
+
+	dbg(linv);
+	dbg(first);
+
+	// first, not necessarily the largest;
+	// should choose the one with the highest dp + distance from the end
+	map<int, pair<int, pi>> desc;
+
+	vi dp(n);
+	F0R(i, n) {
+		if(i) dp[i] = dp[i - 1];
+
+		int x = v[i];
+		if(first[x] != i) {
+			ckmax(dp[i], desc[x].s.f + (i - desc[x].s.s + 1));
+		}
+
+		dbg(desc);
+
+		ckmax(desc[v[i]], {dp[i] + (n - i), {dp[i], i}});
+	}
+
+	dbg(dp);
+
+	int ret = *max_element(all(dp));
+	ps(ret);
 }
 
 signed main() {
@@ -316,7 +354,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

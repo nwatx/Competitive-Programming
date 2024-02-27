@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: kattis
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -307,8 +307,61 @@ const int mx = 2e5+1;
 
 /* #endregion */
 
+
 void solve() {
-	
+	str s;
+	str curproj;
+	map<str, set<str>> proj;
+	map<str, set<str>> sup;
+	while(getline(cin, s)) {
+		dbg(s);
+		if(s == "1") {
+			each(e, sup) {
+				if(sz(e.s) >= 2) {
+					each(p, e.s) {
+						proj[p].erase(proj[p].find(e.f));
+					}
+				}
+			}
+
+			V<pair<str, int>> signups;
+			each(e, proj) {
+				signups.push_back({e.f, sz(e.s)});
+			}
+
+			sort(all(signups), [](auto a, auto b) {
+				if(a.s != b.s) return a.s > b.s;
+				return a.f < b.f;
+			});
+
+			each(s, signups) {
+				ps(s.f, s.s);
+			}
+
+			proj.clear();
+			sup.clear();
+			continue;
+		}
+
+		if(s == "0") return;
+
+		bool isproj = true;
+		each(c, s) {
+			if(isalpha(c) && !isupper(c)) {
+				isproj = false;
+				break;
+			}
+		}
+
+		if(isproj) {
+			curproj = s;
+			if(!proj.count(curproj)) proj[curproj] = set<str>();
+		} else {
+			proj[curproj].insert(s);
+			sup[s].insert(curproj);
+		}
+
+	}
 }
 
 signed main() {

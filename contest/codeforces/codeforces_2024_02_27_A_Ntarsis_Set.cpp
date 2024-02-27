@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -209,10 +209,6 @@ inline namespace Input {
 	#define int1(...) ints(__VA_ARGS__); decrement(__VA_ARGS__);
 }
 
-#define def(t, args...)                                                        \
-	t args;                                                                    \
-	re(args);
-
 inline namespace ToString {
 	tcT> constexpr bool needs_output_v = !is_printable_v<T> && is_iterable_v<T>;
 
@@ -307,8 +303,83 @@ const int mx = 2e5+1;
 
 /* #endregion */
 
+/*
+notes:
+check for case 9 1434
+1 4 7 9 12 15 17 18 20
+
+after one iteration:
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16
+2 3 5 6 8 10 11 13 14 16 19
+
+- everything inside the set will move the same with cycle length x
+- everything outside the set will populate it
+*/
+// void solve() {
+// 	int n, k; re(n, k);
+// 	vi v(n); re(v);
+// 	set<int> ck(all(v));
+// 	vi S;
+// 	FOR(i, 1, 2 * n + 1) {
+// 		if(sz(S) == n) break;
+// 		if(!ck.count(i)) S.pb(i);
+// 	}
+
+// 	dbg(S);
+
+// 	vi par(n, -1);
+// 	// index of the parent
+// 	R0F(i, n) {
+// 		if(S[i] <= n) par[i] = S[i] - 1;
+// 	}
+
+// 	dbg(par);
+
+// 	function<int(int, int)> gp = [&](int i, int k) -> int {
+// 		if(k == 0) return S[i];
+// 		dbg(i, k);
+// 		if(par[i] != -1) {
+// 			return gp(par[i], k - 1);
+// 		} else {
+// 			return S[i] + n * k;
+// 		}
+// 	};
+
+// 	int best = MOD;
+// 	F0R(i, n) {
+// 		ckmin(best, gp(i, k));
+// 	}
+
+// 	ps(best);
+// }
+
 void solve() {
-	
+	int n, k; re(n, k);
+	vi v(n); re(v);
+
+	if(v[0] != 1) {
+		ps(1); return;
+	}
+
+	// # of days to make mid smallest
+	auto ck = [&](ll mid) -> bool {
+		ll tot = 0;
+		R0F(i, n) {
+			if(v[i] > mid) {
+				continue;
+			}
+
+			ll x = (mid - v[i]) / (i + 1) + 1;
+			tot += x;
+			mid -= x * (i + 1);
+
+			if(mid < 0) return false;
+		}
+
+		return tot > k;
+	};
+
+	ps(fstTrue(1LL, INF, ck));
 }
 
 signed main() {
@@ -316,7 +387,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

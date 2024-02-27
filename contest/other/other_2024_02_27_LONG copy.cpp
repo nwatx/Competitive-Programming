@@ -308,7 +308,16 @@ const int mx = 2e5+1;
 /* #endregion */
 
 void solve() {
-	
+	int n; re(n);
+	vs v(n); re(v);
+	int ret = 0;
+	each(e, v) {
+		each(x, e) {
+			ret += x == 'p' || x == 'P';
+		}
+	}
+
+	ps(ret);
 }
 
 signed main() {

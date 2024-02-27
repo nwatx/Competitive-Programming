@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -72,7 +72,7 @@ tcT> int lwb(V<T>& a, const T& b) { return int(lb(all(a),b)-bg(a)); }
 tcT> int sgn(T x) { return (x > 0) - (x < 0); }
 /* #endregion */
 
-const int MOD = 1e9+7; // 998244353;
+const int MOD = 37; // 998244353;
 const ll INF = 1e18; // not too close to LLONG_MAX
 const db PI = acos((db)-1);
 const char nl = '\n';
@@ -307,8 +307,165 @@ const int mx = 2e5+1;
 
 /* #endregion */
 
+/**
+ * Description: 2D matrix operations. Use array instead of 
+	* vector when possible.
+ * Source: KACTL
+ * Verification: https://dmoj.ca/problem/si17c1p5, SPOJ MIFF
+ */
+
+/**
+ * Description: modular arithmetic operations 
+ * Source: 
+	* KACTL
+	* https://codeforces.com/blog/entry/63903
+	* https://codeforces.com/contest/1261/submission/65632855 (tourist)
+	* https://codeforces.com/contest/1264/submission/66344993 (ksun)
+	* also see https://github.com/ecnerwala/cp-book/blob/master/src/modnum.hpp (ecnerwal)
+ * Verification: 
+	* https://open.kattis.com/problems/modulararithmetic
+ */
+
+template<int MOD, int RT> struct mint {
+	static const int mod = MOD;
+	static constexpr mint rt() { return RT; } // primitive root for FFT
+	int v; explicit operator int() const { return v; } // explicit -> don't silently convert to int
+	mint() { v = 0; }
+	mint(ll _v) { v = int((-MOD < _v && _v < MOD) ? _v : _v % MOD);
+		if (v < 0) v += MOD; }
+	friend bool operator==(const mint& a, const mint& b) { 
+		return a.v == b.v; }
+	friend bool operator!=(const mint& a, const mint& b) { 
+		return !(a == b); }
+	friend bool operator<(const mint& a, const mint& b) { 
+		return a.v < b.v; }
+	friend void re(mint& a) { ll x; re(x); a = mint(x); }
+	friend str ts(mint a) { return ts(a.v); }
+   
+	mint& operator+=(const mint& m) { 
+		if ((v += m.v) >= MOD) v -= MOD; 
+		return *this; }
+	mint& operator-=(const mint& m) { 
+		if ((v -= m.v) < 0) v += MOD; 
+		return *this; }
+	mint& operator*=(const mint& m) { 
+		v = int((ll)v*m.v%MOD); return *this; }
+	mint& operator/=(const mint& m) { return (*this) *= inv(m); }
+	friend mint pow(mint a, ll p) {
+		mint ans = 1; assert(p >= 0);
+		for (; p; p /= 2, a *= a) if (p&1) ans *= a;
+		return ans; }
+	friend mint inv(const mint& a) { assert(a.v != 0); 
+		return pow(a,MOD-2); }
+		
+	mint operator-() const { return mint(-v); }
+	mint& operator++() { return *this += 1; }
+	mint& operator--() { return *this -= 1; }
+	friend mint operator+(mint a, const mint& b) { return a += b; }
+	friend mint operator-(mint a, const mint& b) { return a -= b; }
+	friend mint operator*(mint a, const mint& b) { return a *= b; }
+	friend mint operator/(mint a, const mint& b) { return a /= b; }
+};
+
+typedef mint<MOD,5> mi; // 5 is primitive root for both common mods
+typedef vector<mi> vmi;
+typedef pair<mi,mi> pmi;
+typedef vector<pmi> vpmi;
+
+vector<vmi> scmb; // small combinations
+void genComb(int SZ) {
+	scmb.assign(SZ,vmi(SZ)); scmb[0][0] = 1;
+	FOR(i,1,SZ) F0R(j,i+1) 
+		scmb[i][j] = scmb[i-1][j]+(j?scmb[i-1][j-1]:0);
+}
+using T = mi;
+using Mat = V<V<T>>;
+
+Mat makeMat(int r, int c) { return Mat(r,vector<T>(c)); }
+Mat makeId(int n) { 
+	Mat m = makeMat(n,n);
+	F0R(i,n) m[i][i] = 1;
+	return m;
+}
+Mat& operator+=(Mat& a, const Mat& b) {
+	assert(sz(a) == sz(b) && sz(a[0]) == sz(b[0]));
+	F0R(i,sz(a)) F0R(j,sz(a[0])) a[i][j] += b[i][j];
+	return a;
+}
+Mat& operator-=(Mat& a, const Mat& b) {
+	assert(sz(a) == sz(b) && sz(a[0]) == sz(b[0]));
+	F0R(i,sz(a)) F0R(j,sz(a[0])) a[i][j] -= b[i][j];
+	return a;
+}
+Mat operator*(const Mat& a, const Mat& b) {
+	int x = sz(a), y = sz(a[0]), z = sz(b[0]); 
+	assert(y == sz(b)); Mat c = makeMat(x,z);
+	F0R(i,x) F0R(j,y) F0R(k,z) c[i][k] += a[i][j]*b[j][k];
+	return c;
+}
+Mat operator+(Mat a, const Mat& b) { return a += b; }
+Mat operator-(Mat a, const Mat& b) { return a -= b; }
+Mat& operator*=(Mat& a, const Mat& b) { return a = a*b; }
+Mat pow(Mat m, ll p) {
+	int n = sz(m); assert(n == sz(m[0]) && p >= 0);
+	Mat res = makeId(n);
+	for (; p; p /= 2, m *= m) if (p&1) res *= m;
+	return res;
+}
+
+int conv(char c) {
+	if(isalpha(c)) {
+		return c - 'A';
+	} else if (c == ' ') {
+		return 36;
+	} else {
+		return c - '0' + 26;
+	}
+}
+
+char convinv(int x) {
+	if(x < 26) {
+		return 'A' + x;
+	} else if(x != 36) {
+		return (x - 26) + '0';
+	} else {
+		return ' ';
+	}
+}
+
 void solve() {
-	
+	int n; re(n);
+	Mat mat = makeMat(n, n);
+	F0R(i, n) F0R(j, n) {
+		re(mat[i][j]);
+	}
+
+	string s;
+	getline(cin, s);
+	getline(cin, s);
+
+	dbg(s);
+
+	while(sz(s) % n) s = s + " ";
+
+	dbg("");
+	V<char> ret;
+	for(int i = 0; i < sz(s); i += n) {
+		// make a row vector
+		Mat vec = makeMat(n, 1);
+		F0R(j, n) {
+			vec[j][0] = mi(conv(s[i + j]));
+		}
+
+		Mat res = mat * vec;
+		each(e, res) {
+			each(r, e) {
+				ret.pb(convinv(r.v));
+			}
+		}
+	}
+
+	ps(str(all(ret)));
 }
 
 signed main() {

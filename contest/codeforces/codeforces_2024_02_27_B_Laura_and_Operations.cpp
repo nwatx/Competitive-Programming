@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -301,22 +301,80 @@ inline namespace FileIO {
 
 // Changeable constants
 const db EPS = 1e-9;
-const int mx = 2e5+1;
+const int mx = 101;
 
 /* #region snippets */
 
 /* #endregion */
 
+vi ans[mx + 2][mx + 2][mx + 2];
+
+vi comb(vi &a, vi &b) {
+	// dbg("hi");
+	vi ret(3);
+	F0R(i, 3) ret[i] = a[i] | b[i];
+	// dbg("hi");
+	return ret;
+}
+
+void gen() {
+	F0R(i, mx + 2) F0R(j, mx + 2) F0R(k, mx + 2) ans[i][j][k].resize(3, 0);
+	F0R(i, mx) ans[i][0][0] = {1, 0, 0};
+	F0R(i, mx) ans[0][i][0] = {0, 1, 0};
+	F0R(i, mx) ans[0][0][i] = {0, 0, 1};
+
+	// invert operation: add 2 digits, remove 1
+	F0R(i, mx) {
+		F0R(j, mx) {
+			F0R(k, mx) {
+				if(i) {
+					ans[i - 1][j + 1][k + 1] = comb(ans[i - 1][j + 1][k + 1], ans[i][j][k]);
+				}
+
+				if(j) {
+					ans[i + 1][j - 1][k + 1] = comb(ans[i + 1][j - 1][k + 1], ans[i][j][k]);
+				}
+
+				if(k) {
+					ans[i + 1][j + 1][k - 1] = comb(ans[i + 1][j + 1][k - 1], ans[i][j][k]);
+				}
+			}
+		}
+	}
+}
+
 void solve() {
-	
+	vi v(3); re(v);
+	// if other 2 digits can be equalized... (must have same parity)
+	// must be maximum element and the other two must have same partiy
+	// int me = *max_element(all(v));
+	F0R(i, 3) {
+		// if(v[i] != me) pr("0 ");
+		// else {
+			int ai = (i - 1 + 3) % 3;
+			int bi = (i + 1 + 3) % 3;
+			int a = v[ai];
+			int b = v[bi];
+
+			if(abs(a - b) % 2) {
+				pr("0 ");
+			} else {
+				pr("1 ");
+			}
+		// }
+	}
+
+	ps();
 }
 
 signed main() {
 	// clock_t start = clock();
 	setIO();
 
+	// gen();
+
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

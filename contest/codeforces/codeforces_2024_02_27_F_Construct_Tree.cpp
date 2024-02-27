@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -209,10 +209,6 @@ inline namespace Input {
 	#define int1(...) ints(__VA_ARGS__); decrement(__VA_ARGS__);
 }
 
-#define def(t, args...)                                                        \
-	t args;                                                                    \
-	re(args);
-
 inline namespace ToString {
 	tcT> constexpr bool needs_output_v = !is_printable_v<T> && is_iterable_v<T>;
 
@@ -307,8 +303,48 @@ const int mx = 2e5+1;
 
 /* #endregion */
 
+const int N = 10;
+
 void solve() {
-	
+	int n, d; re(n, d);
+	vi v(n); re(v);
+	sorr(v);
+
+	if(v[0] + v[1] > d) {
+		ps("No");
+		return;
+	}
+
+	// dp[i][j] = v', v_k
+	V<bitset<N>> dp(d + 1);
+	dp[0][0] = 1;
+	// can either contain i or not
+	FOR(i, 1, n) {
+		R0F(j, d + 1) {
+			if(j + v[i] <= d) {
+				// populate later elements with v[i]
+				dp[j + v[i]] |= dp[j];
+			}
+			dp[j] |= (dp[j] << v[i]);
+		}
+	}
+
+	each(x, dp) dbg(x);
+
+	// have we found an answer yet
+	bool found = dp[0][d - v[0]];
+
+	// given that i is root
+	FOR(i, v[0], d - v[0] + 1) {
+		// sum i and sum d - i
+		if(dp[i][d - i]) {
+			found = true;
+			break;
+		}
+	}
+
+	ps(found ? "Yes" : "No");
+
 }
 
 signed main() {
@@ -316,7 +352,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

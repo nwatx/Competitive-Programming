@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -209,10 +209,6 @@ inline namespace Input {
 	#define int1(...) ints(__VA_ARGS__); decrement(__VA_ARGS__);
 }
 
-#define def(t, args...)                                                        \
-	t args;                                                                    \
-	re(args);
-
 inline namespace ToString {
 	tcT> constexpr bool needs_output_v = !is_printable_v<T> && is_iterable_v<T>;
 
@@ -307,8 +303,17 @@ const int mx = 2e5+1;
 
 /* #endregion */
 
+
 void solve() {
-	
+	int n; re(n);
+	vi v(n); re(v);
+
+	V<vi> dp(n, vi(n)); // valid up to i with j ones
+	dp[0][0] = 1;
+
+	// how many ways to rearrange such that difference between elements is at most 1
+	// give vector with disabled elements
+	// doesn't exceed size; use bit trie?
 }
 
 signed main() {

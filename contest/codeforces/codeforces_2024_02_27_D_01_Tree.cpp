@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -307,8 +307,44 @@ const int mx = 2e5+1;
 
 /* #endregion */
 
+
 void solve() {
-	
+	def(int, N);
+	vi v(N); re(v);
+	priority_queue<pi> pq;
+	set<int> active;
+	F0R(i, N) {
+		pq.push({v[i], i});
+		active.ins(i);
+	}
+
+	while(sz(pq)) {
+		auto top = pq.top(); pq.pop();
+		auto it = active.find(top.s);
+		if(!active.count(top.s)) continue;
+
+		if(top.f == 0 && sz(active) == 1) {
+			ps("YES"); return;
+		}
+
+		++it;
+		bool ok = 0;
+		if(it != end(active) && v[*it] == top.f - 1) ok = 1;
+		while(it != begin(active)) {
+			if(v[*prev(it)] == top.f) active.erase(prev(it));
+			else {
+				ok |= v[*prev(it)] == top.f - 1;
+				break;
+			}
+		}
+
+		if(!ok) {
+			ps("NO");
+			return;
+		}
+	}
+
+	ps("NO");
 }
 
 signed main() {
@@ -316,7 +352,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

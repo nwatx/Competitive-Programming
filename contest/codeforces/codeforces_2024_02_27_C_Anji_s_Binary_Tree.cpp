@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -307,8 +307,42 @@ const int mx = 2e5+1;
 
 /* #endregion */
 
+
 void solve() {
-	
+	def(int, N);
+	string S; re(S);
+	V<pi> adj(N);
+	vi dist(N);
+	F0R(i, N) {
+		int1(a, b);
+		adj[i] = {a, b};
+	}
+
+	dbg(adj);
+
+	// get depths, and find minimal reductions for each root to node
+	int ret = MOD;
+	auto dfs = [&](const auto &self, int v) -> void {
+		pi p = adj[v];
+		if(p.f == -1 && p.s == -1) {
+			ckmin(ret, dist[v]);
+			return;
+		}
+
+		if(p.f != -1) {
+			dist[p.f] = dist[v] + (S[v] != 'L');
+			self(self, p.f);
+		}
+
+		if(p.s != -1) {
+			dist[p.s] = dist[v] + (S[v] != 'R');
+			self(self, p.s);
+		}
+	};
+	dfs(dfs, 0);
+
+	dbg(dist);
+	ps(ret);
 }
 
 signed main() {
@@ -316,7 +350,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";
