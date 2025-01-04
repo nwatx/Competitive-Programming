@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -304,7 +304,55 @@ const db EPS = 1e-9;
 const int mx = 2e5+1;
 
 void solve() {
-	
+    def(int, n, m, v);
+    vl a(n); re(a);
+    vl pfx(n + 1);
+    FOR(i, 1, n + 1) {
+        pfx[i] = pfx[i - 1] + a[i - 1];
+    }
+    vi l(n + 1), r(n + 1);
+    ll tot = 0;
+    each(x, a) tot += x;
+
+    int lsum = 0;
+    int lcnt = 0;
+
+    F0R(i, n) {
+        lsum += a[i];
+        if (lsum >= v) {
+            lsum = 0;
+            ++lcnt;
+        }
+
+        l[i + 1] = lcnt;
+    }
+
+    int rsum = 0;
+    int rcnt = 0;
+
+    R0F(i, n) {
+        rsum += a[i];
+        if (rsum >= v) {
+            rsum = 0;
+            ++rcnt;
+        }
+        r[i] = rcnt;
+    }
+
+    dbg(l, r);
+
+    ll ret = -1;
+    int j = 0;
+
+    F0R(i, n) {
+        while (j <= n && (l[i] + r[j]) >= m) {
+            ll sum = pfx[j] - pfx[i];
+            ckmax(ret, sum);
+            ++j;
+        }
+    }
+
+    ps(ret);
 }
 
 signed main() {
@@ -312,7 +360,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

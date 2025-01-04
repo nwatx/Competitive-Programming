@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -72,7 +72,7 @@ tcT> int lwb(V<T>& a, const T& b) { return int(lb(all(a),b)-bg(a)); }
 tcT> int sgn(T x) { return (x > 0) - (x < 0); }
 /* #endregion */
 
-const int MOD = 1e9+7; // 998244353;
+const int MOD = 998244353;
 const ll INF = 1e18; // not too close to LLONG_MAX
 const db PI = acos((db)-1);
 const char nl = '\n';
@@ -304,15 +304,56 @@ const db EPS = 1e-9;
 const int mx = 2e5+1;
 
 void solve() {
-	
+    int n; re(n);
+    vi v(n); re(v);
+    dbg(v);
+
+    vl pfx(n + 1);
+    F0R(i, n) {
+        pfx[i + 1] = pfx[i] + v[i];
+    }
+
+    dbg(pfx);
+
+    vl p2(2 * n + 1);
+    p2[0] = 1;
+    FOR(i, 1, sz(p2)) {
+        p2[i] = 2 * p2[i - 1] % MOD;
+    }
+
+    ll minpfx = *min_element(all(pfx));
+
+    if (minpfx == 0) {
+        ps(p2[n]);
+        return;
+    }
+
+    ll ret = 0;
+    ll sum = 0;
+    int cnt = 0;
+
+    F0R(i, n) {
+        sum += v[i];
+        if (sum == minpfx) {
+            dbg(sum, n - i + 1 + cnt);
+            ret = (ret + p2[n - i - 1 + cnt]) % MOD;
+        }
+
+        if (sum >= 0) ++cnt;
+
+        dbg(i, ret);
+    }
+
+    ps(ret);
 }
+
 
 signed main() {
 	// clock_t start = clock();
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

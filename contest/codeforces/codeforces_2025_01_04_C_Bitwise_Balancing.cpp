@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -304,7 +304,56 @@ const db EPS = 1e-9;
 const int mx = 2e5+1;
 
 void solve() {
-	
+	// we can add 2^i iff either b_i = 0 or c_i = 1
+    vb pos(64);
+    def(ll, b, c, d);
+    dbg(b, c, d);
+    F0R(i, 64) {
+        if (((b & (1LL << i)) == 0) || ((c & (1LL << i)) > 0)) {
+            pos[i] = 1;
+        }
+    }
+
+    ll mask = 0;
+    F0R(i, 64) if (pos[i]) mask |= (1LL << i);
+
+    ll unchanged = 0;
+
+    F0R(i, 64) {
+        if (((b & (1LL << i) == 0) && (c & (1LL << i)) > 0)) {
+            unchanged |= (1LL << i);
+        } else if ((b & (1LL << i)) > 0) {
+            unchanged |= (1LL << i);
+        }
+    }
+
+    ll diff = d - ((unchanged | b) - (unchanged & c));
+    ll changes = mask & diff;
+
+    ll ret = unchanged;
+
+    F0R(i, 64) {
+        // are we supposed to change the current unchanged?
+        if ((mask & (1LL << i)) == 0) continue;
+        if (changes & (1LL << i)) {
+            if ((b & (1LL << i)) == 0) {
+                ret |= (1LL << i);
+            } else {
+                if ((c & (1LL << i)) > 0) {
+                    ret ^= (1LL << i);
+                }
+            }
+        }
+    }
+
+
+    ll raw = ((ret | b) - (ret & c));
+    if (d == raw) {
+        ps(ret);
+    } else {
+        ps(-1);
+        return;
+    }
 }
 
 signed main() {
@@ -312,7 +361,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

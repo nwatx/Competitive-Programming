@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -304,7 +304,14 @@ const db EPS = 1e-9;
 const int mx = 2e5+1;
 
 void solve() {
-	
+    str x; re(x);
+    if(sz(x) < 3 || !(x[0] == '1' && x[1] == '0')) {
+        ps("NO"); return;
+    }
+
+    str next = x.substr(2);
+    if(stoi(next) >= 2 && next[0] != '0') ps("YES");
+    else ps("NO");
 }
 
 signed main() {
@@ -312,7 +319,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

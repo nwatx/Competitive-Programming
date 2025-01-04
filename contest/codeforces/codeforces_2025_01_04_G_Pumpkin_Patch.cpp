@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -304,7 +304,75 @@ const db EPS = 1e-9;
 const int mx = 2e5+1;
 
 void solve() {
-	
+	int n, m; re(n, m);
+    V<str> mat(n); re(mat);
+
+
+    map<pi, int> coins;
+    F0R(i, n) F0R(j, n) {
+        if(mat[i][j] == 'C') {
+            coins[{i, j}] = sz(coins);
+        }
+    }
+
+    int ncoins = sz(coins);
+
+    V<V<V<vi>>> dp(n, V<V<vi>>(m, V<vi>((1 << ncoins), vi(9))));
+
+    auto ff = [&](const auto &ff, int x, int y, int level) -> void {
+        dbg(x, y, level, dp[x][y][level]);
+        F0R(k, 4) {
+            int nx = x + dx[k];
+            int ny = y + dy[k];
+
+            if (nx < 0 || ny < 0|| nx >= n || ny >= m) continue;
+            if (dp[nx][ny][level] != MOD) continue;
+            if (mat[nx][ny] == 'P') continue;
+            if (mat[nx][ny] == 'C') {
+                if(dp[nx][ny][level | (1 << coins[{nx, ny}])] == MOD) {
+                    dp[nx][ny][level + 1] = dp[x][y][level] + 1;
+                    ff(ff, nx, ny, level + 1);
+                }
+            }
+
+            if (mat[nx][ny] == 'J') {
+                if(level > 0) {
+                    if(dp[nx][ny][level - 1] == MOD) {
+                        dp[nx][ny][level - 1] = dp[x][y][level] + 1;
+                        ff(ff, nx, ny, level - 1);
+                    }
+                }
+            }
+
+            if ((mat[nx][ny] == '.' || mat[nx][ny] == 'C' || mat[nx][ny] == 'E') && dp[nx][ny][level] == MOD) {
+                dp[nx][ny][level] = dp[x][y][level] + 1;
+                ff(ff, nx, ny, level);
+            }
+
+        }
+    };
+
+    pi ex;
+
+    F0R(i, n) F0R(j, m) {
+        if(mat[i][j] == 'S') {
+            dp[i][j][0] = 0;
+            ff(ff, i, j, 0);
+        }
+
+        if(mat[i][j] == 'E') {
+            ex = {i, j};
+        }
+    }
+
+    dbg(ex);
+
+    int ret = *min_element(all(dp[ex.f][ex.s]));
+    if (ret == MOD) {
+        ps("SPOOKED!");
+    } else {
+        ps(ret);
+    }
 }
 
 signed main() {

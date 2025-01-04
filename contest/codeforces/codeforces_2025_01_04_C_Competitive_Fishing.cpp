@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -303,8 +303,36 @@ inline namespace FileIO {
 const db EPS = 1e-9;
 const int mx = 2e5+1;
 
+// splitting at s[i] adds pfx[n] - pfx[i] to your score
+
 void solve() {
+	def(int, n, k);
+	str s; re(s);
+	vi pfx(n);
+	F0R(i, n) {
+		pfx[i] = s[i] == '0' ? -1 : 1;
+	}
+
+	partial_sum(all(pfx), bg(pfx));
 	
+	int splits = 1;
+	ll sum = 0;
+
+	dbg(pfx);
+
+	priority_queue<ll> cand;
+	F0R(i, n - 1) cand.push(pfx[n - 1] - pfx[i]);
+
+	while (sum < k && sz(cand)) {
+		sum += cand.top();
+		cand.pop();
+		++splits;
+	}
+
+	dbg(sum);
+
+	if (sum < k) ps(-1);
+	else ps(splits);
 }
 
 signed main() {
@@ -312,7 +340,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

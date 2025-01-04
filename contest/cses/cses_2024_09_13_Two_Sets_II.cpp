@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cses
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -304,7 +304,39 @@ const db EPS = 1e-9;
 const int mx = 2e5+1;
 
 void solve() {
-	
+	int n; re(n);
+    int sum = (1 + n) * n / 2;
+    if(sum % 2) {
+        ps(0);
+        return;
+    }
+
+    sum /= 2;
+
+    V<vi> dp(sum + 1, vi(n + 1));
+    dp[0][0] = 1;
+
+    // let dp[i][j] be the # of ways to get sum i
+    // with the first j numbers
+    FOR(s, 0, sum + 1) {
+        FOR(i, 1, n) {
+            dp[s][i] = dp[s][i - 1];
+            // suppose we just used number j
+            if(s - i >= 0) {
+                dp[s][i] = dp[s][i - 1] + dp[s - i][i - 1]; // # of ways to sum to i - j w/ biggest elem at most j
+                dp[s][i] %= MOD;
+            }
+        }
+    }
+
+    F0R(i, sum + 1) {
+        dbg(i, dp[i]);
+    }
+    dbg(sum, n);
+
+    int ret = dp[sum][n - 1];
+    // each(x, dp[sum / 2]) ret += x;
+    ps(ret);
 }
 
 signed main() {

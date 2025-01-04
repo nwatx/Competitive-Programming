@@ -304,7 +304,33 @@ const db EPS = 1e-9;
 const int mx = 2e5+1;
 
 void solve() {
-	
+	int n, a, b; re(n, a, b);
+    vi v(n); re(v);
+    sor(v);
+    if(a > b) swap(a, b);
+
+    int gcdab = gcd(a, b);
+    if(gcdab == 1) {
+        ps(0);
+        return;
+    }
+
+    F0R(i, n) {
+        v[i] %= gcd(a, b);
+    }
+
+    ll ret = MOD;
+    set<ll> s;
+    each(x, v) s.ins(x);
+    F0R(i, sz(s) + 1) {
+        // find hi - lo
+        ckmin(ret, *s.rbegin() - *s.begin());
+        ll sft = *s.begin();
+        s.erase(sft);
+        s.ins(sft + gcd(a, b));
+    }
+
+    ps(ret);
 }
 
 signed main() {
@@ -312,7 +338,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

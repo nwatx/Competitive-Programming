@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -304,15 +304,57 @@ const db EPS = 1e-9;
 const int mx = 2e5+1;
 
 void solve() {
-	
+	int n; cin >> n;
+    std::string s; cin >> s;
+
+    long long sum = 1LL * n * (n + 1) / 2;
+    std::vector<int> dp(n, 1);
+
+    std::deque<int> z_loc, one_loc;
+    for (int i = 0; i < n; ++i) {
+        char c = s[i];
+        if (c == '0') z_loc.push_back(i);
+        else one_loc.push_back(i);
+    }
+
+    for (int i = n - 1; i > 0; --i) {
+        if (s[i] == '1') {
+            if (i == one_loc.back()) one_loc.pop_back();
+            
+            if (z_loc.size() > 0) {
+                z_loc.pop_back();
+                sum -= i + 1;
+            } else if (one_loc.size()) {
+                sum -= i + 1;
+                s[one_loc.front()] = '0';
+                one_loc.pop_front();
+            }
+        } else {
+            if (sz(z_loc) && i == z_loc.back()) z_loc.pop_back();
+        }
+    }
+    
+    std::cout << sum << "\n";
 }
+
+// 123456
+
+// 123456
+// 101101
+// 1 2 3 4 5 6 => 21
+// -6, -4, -2
+
+// 1110111
+// 1 2 3 4 5 6 7 => 28
+// -7, -3, -2 => -12
+// 
 
 signed main() {
 	// clock_t start = clock();
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

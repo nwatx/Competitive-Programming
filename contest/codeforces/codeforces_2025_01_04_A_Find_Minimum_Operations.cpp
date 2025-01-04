@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -303,8 +303,30 @@ inline namespace FileIO {
 const db EPS = 1e-9;
 const int mx = 2e5+1;
 
-void solve() {
-	
+void solve() {;
+    def(ll, n, k);
+    // convert to base
+    // go from hi to lo
+
+    if (k == 1) {
+        ps(n);
+        return;
+    }
+
+    ll base = k;
+    while (base * k <= n) {
+        base *= k;
+    }
+
+    int tot = 0;
+
+    while (base > 0) {
+        tot += n / base;
+        n %= base;
+        base /= k;
+    }
+
+    ps(tot);
 }
 
 signed main() {
@@ -312,7 +334,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -303,8 +303,98 @@ inline namespace FileIO {
 const db EPS = 1e-9;
 const int mx = 2e5+1;
 
+/*
+observations
+- strings must all be the same substring or contains it all
+- question: assuming some length, can we count # of substrings that work?
+- question: think about one character, how many substrings can that character be part of (non-a)
+- think about this as removal problem - remove k substrings of size |k| then there is exactly n - k * |s| a's remaining
+*/
+
 void solve() {
-	
+    string s; cin >> s;
+    int n = sz(s);
+    int total_a = 0;
+
+    for (char c : s) total_a += c == 'a';
+
+    int leading_a = 0;
+    for (char c : s) {
+        if (c != 'a') break;
+        leading_a += 1;
+    }
+    
+    set<int> agree;
+    // find our "dissenting character"
+    for (int i = 0; i < n; ++i) {
+        char c = s[i];
+        if (agree.empty() && c != 'a') {
+            agree.insert(i);
+        } else if (c != 'a' && s[*agree.begin()] == c) {
+            agree.insert(i);
+        }
+    }
+
+    int mul = MOD;
+    for (int x : agree) {
+        int tot = 0;
+        for(int j = x - 1; j >= 0; --j) {
+            if (s[j] == 'a') ++tot;
+            else break;
+        }
+
+        ckmin(mul, tot);
+    }
+
+    mul += 1;
+
+    if (agree.empty()) {
+        cout << n - 1 << "\n";
+        return;
+    }
+
+    int cnt = 1;
+
+    if (agree.size() == 1) {
+        int rep = *agree.begin();
+        ps(rep * (n - rep + 1) + (rep != n - 1));
+        return;
+    }
+
+    dbg(s);
+    dbg(agree);
+
+    // agree contains all the indices that are the same character
+    int max_len = n - (*agree.begin());
+    int a_contained = 0;
+    for (int i = 0; i < min(n - 1, max_len); ++i) {
+        // all characters must be equal
+        char rep = s[*agree.begin() + i];
+        if (rep == 'a') {
+            ++a_contained;
+        }
+        // i - offset
+        vector<int> to_remove;
+        for (int idx : agree) {
+            if ((idx + i >= n) || s[idx + i] != rep) {
+                to_remove.push_back(idx);
+            }
+        }
+
+        for (int x : to_remove) {
+            agree.erase(agree.find(x));
+        }
+
+        int local_total_a = total_a - a_contained * agree.size();
+        int agree_len = i + 1;
+        dbg(i, n - agree.size() * agree_len, local_total_a, agree);
+
+        if (local_total_a == n - agree.size() * agree_len) {
+            cnt += 1 * mul;
+        }
+    }
+
+    cout << cnt << "\n";
 }
 
 signed main() {
@@ -312,7 +402,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

@@ -304,7 +304,67 @@ const db EPS = 1e-9;
 const int mx = 2e5+1;
 
 void solve() {
+	int n, m; re(n, m);
 	
+	vl dp(n + 1, INF);
+	vi par(n + 1);
+	vi deg(n + 1);
+	V<pair<int, pair<int, ll>>> ed;
+	rep(m) {
+		int u, v, w;
+		re(u, v, w);
+		ed.pb({u, {v, w}});
+		deg[v]++;
+	}
+
+	dp[1] = 0;
+
+	FOR(i, 1, n + 1) {
+		if (deg[i] == 0) {
+			dp[i] = 0;
+			if (i != 1) dp[1] = INF;
+		}
+	}
+
+	dbg(dp);
+
+	rep(n + 1) {
+		each(e, ed) {
+			int u = e.f;
+			int v = e.s.f;
+			ll w = e.s.s;
+
+			ll dist = dp[u] + w;
+			if (dist < dp[v]) {
+				if (_ == n) {
+					ps("YES");
+					vi ret;
+					int node = v;
+					set<int> vis;
+
+					while(!vis.count(node)) {
+						vis.ins(node);
+						ret.pb(node);
+						node = par[node];
+					}
+
+					ret.pb(node);
+					ret = vector<int>(find(all(ret), node), ret.end());
+
+					dbg(node, ret);
+
+					reverse(all(ret));
+					F0R(i, sz(ret)) pr(ret[i], " ");
+					return;
+				}
+				dp[v] = dist;
+				par[v] = u;
+			}
+		}
+		// dbg(dp);
+	}
+
+	ps("NO");
 }
 
 signed main() {

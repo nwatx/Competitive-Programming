@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -303,8 +303,87 @@ inline namespace FileIO {
 const db EPS = 1e-9;
 const int mx = 2e5+1;
 
+/**
+ * Description: coordinate compression, get index of x by counting # of elements < x
+ * Source: Own
+ * Verification: ?
+ */
+
+template<class T> void nor(vector<T>& v) {
+    sort(all(v)); v.erase(unique(all(v)),end(v)); }
+template<class T> int ind(vector<T>& v, T x) { 
+    return lb(all(v),x)-begin(v); }
+
 void solve() {
-	
+	int n; re(n);
+    vpi v(n); re(v);
+    map<pi, vi> idx;
+    F0R(i, n) idx[v[i]].pb(i);
+    nor(v);
+
+    // forms a dag, how do we get edges efficiently?
+    // add all the closed times for things that are currently open
+    // (closed, index)
+
+    set<pi> open, close; // (open_time, index) // (closed_time, index)
+    V<pair<int, pi>> events; // {time, {open/close, user}}
+
+    // TODO: whether or not open comes before closed
+    F0R(i, sz(v)) {
+        auto&& e = v[i];
+        events.pb({e.f, {1, i}});
+        events.pb({e.s, {0, i}});
+    }
+
+    sor(events);
+    dbg(events);
+
+    vi left(sz(v), -1), right(sz(v), -1);
+
+    each(e, events) {
+
+        bool is_open = e.s.f;
+        int i = e.s.s;
+        dbg(e, i, v[i]);
+        dbg(open, close);
+        if (is_open) {
+            // look at all the closed times
+            auto it = close.lower_bound({v[i].s, 0});
+            if (it != close.end()) {
+                dbg(*it);
+                right[i] = it->first;
+            }
+
+            // find first open less than e.f;
+            if (sz(open)) {
+                left[i] = open.rbegin()->first;
+            }
+
+            open.insert({e.f, i});
+            close.insert({v[i].s, i});
+        } else {
+            // erase from open
+            open.erase({v[i].f, i}); // erase the open time
+            close.erase({e.f, i});
+        }
+
+        dbg(left, right);
+    }
+
+    dbg(v);
+    dbg(left, right);
+    vi ans(n);
+    F0R(i, n) {
+        bool valid = left[i] != -1 && right[i] != -1;
+        if (valid) {
+            int ret = right[i] - left[i] - (v[i].s - v[i].f);
+            each(j, idx[v[i]]) {
+                ans[j] = ret;
+            }
+        }
+    }
+
+    each(answer, ans) ps(answer);
 }
 
 signed main() {
@@ -312,7 +391,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

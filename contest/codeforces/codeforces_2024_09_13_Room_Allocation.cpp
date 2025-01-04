@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -304,7 +304,45 @@ const db EPS = 1e-9;
 const int mx = 2e5+1;
 
 void solve() {
-	
+	int n; re(n);
+    vpi v(n); re(v);
+
+    map<int, int> used; set<int> open;
+    FOR(i, 1, n + 1) open.ins(i);
+
+    set<pi> arrive, leave;
+    
+
+    // set<int> coords;
+    // each(e, v) { coords.ins(e.f); coords.ins(e.s); coords.ins(e.s + 1); }
+    // map<int, int> idx;
+    // each(e, coords) idx[e] = sz(idx);
+    // each(e, v) {
+    //     e.f = idx[e.f];
+    //     e.s = idx[e.s];
+    // }
+
+    // vi pfx(sz(coords) + 1);
+    // each(e, v) {
+    //     ++pfx[e.f];
+    //     --pfx[e.s + 1];
+    // }
+
+    // FOR(i, 1, sz(coords) + 1) pfx[i] += pfx[i - 1];
+
+    // int most_needed = *max_element(all(pfx));
+    // ps(most_needed);
+
+    // set<int> open, closed;
+    // FOR(i, 1, most_needed + 1) open.ins(i);
+
+
+
+    // vi ret(n);
+    // F0R(i, n) {
+    //     auto p = v[i];
+    //     ret[i] = pfx[p.f];
+    // }
 }
 
 signed main() {

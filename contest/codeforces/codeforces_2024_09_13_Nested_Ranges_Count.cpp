@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -303,8 +303,64 @@ inline namespace FileIO {
 const db EPS = 1e-9;
 const int mx = 2e5+1;
 
+/**
+ * Description: A set (not multiset!) with support for finding the $n$'th
+ * element, and finding the index of an element. Change \texttt{null\_type} for map.
+ * Time: O(\log N)
+ * Source: KACTL
+   * https://codeforces.com/blog/entry/11080
+ * Verification: many
+ */
+
+#include <ext/pb_ds/tree_policy.hpp>
+#include <ext/pb_ds/assoc_container.hpp>
+using namespace __gnu_pbds;
+template <class T> using Tree = tree<T, null_type, less<T>, 
+    rb_tree_tag, tree_order_statistics_node_update>; 
+#define ook order_of_key
+#define fbo find_by_order
+
+/**
+int atMost(Tree<pi>& T, int r) { 
+    return T.ook({r,MOD}); }
+int getSum(Tree<pi>& T, int l, int r) { 
+    return atMost(T,r)-atMost(T,l-1); }
+*/
+
 void solve() {
-	
+	int n; re(n);
+    vpi v(n); re(v);
+    map<pi, int> idx;
+    F0R(i, n) {
+        idx[v[i]] = i;
+    }
+
+    sort(all(v), [](pi a, pi b) {
+        if(a.f != b.f) return a.f < b.f;
+        return a.s > b.s;
+    });
+
+    Tree<pi> t;
+    F0R(i, n) {
+        t.ins({v[i].s, v[i].f});
+    }
+
+    vi inside(n), outside(n);
+
+    dbg(v);
+
+    Tree<pi> o;
+
+    F0R(i, n) {
+        inside[idx[v[i]]] = t.ook({v[i].s, MOD}) - 1;
+        outside[idx[v[i]]] = o.size() - o.ook({v[i].s, 0});
+        t.erase(t.find({v[i].s, v[i].f}));
+        o.ins({v[i].s, v[i].f});
+    }
+
+    F0R(i, n) pr(inside[i] > 0, " ");
+    ps();
+    F0R(i, n) pr(outside[i] > 0, " ");
 }
 
 signed main() {

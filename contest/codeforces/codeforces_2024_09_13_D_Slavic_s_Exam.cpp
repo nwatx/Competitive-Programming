@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -304,7 +304,28 @@ const db EPS = 1e-9;
 const int mx = 2e5+1;
 
 void solve() {
-	
+    str s; re(s);
+    str x; re(x);
+
+    int t = 0;
+    F0R(i, sz(x)) {
+        int c = x[i];
+
+        while(t < sz(s) && s[t] != c && s[t] != '?') {
+            ++t;
+        }
+        if(s[t] == '?') s[t] = c;
+        if(t >= sz(s)) {
+            ps("NO");
+            return;
+        }
+
+        ++t;
+    }
+
+    replace(all(s), '?', 'a');
+    ps("YES");
+    ps(s);
 }
 
 signed main() {
@@ -312,7 +333,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

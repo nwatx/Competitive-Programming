@@ -13,6 +13,7 @@ files = list(filter(lambda x : any([ext in x for ext in file_extensions]), files
 
 for file_name in files:
 	with open(file_name) as f:
+		print(file_name)
 		first_line = f.readline()
 
 		# filter prefix

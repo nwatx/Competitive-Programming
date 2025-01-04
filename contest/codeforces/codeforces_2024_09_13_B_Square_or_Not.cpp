@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -304,7 +304,37 @@ const db EPS = 1e-9;
 const int mx = 2e5+1;
 
 void solve() {
-	
+	int n; re(n);
+    str s; re(s);
+    int len = (int)round(sqrt(n));
+    if (len * len != n) {
+        ps("No");
+        return;
+    }
+
+    V<str> v;
+    for(int i = 0; i < n; i += len) {
+        v.pb(s.substr(i, len));
+    }
+
+    F0R(i, len) {
+        F0R(j, len) {
+            bool isoutside = i == 0 || j == 0 || (i == len - 1) || (j == len - 1);
+            if(!isoutside) {
+                if(v[i][j] != '0') {
+                    ps("No");
+                    return;
+                }
+            } else {
+                if(v[i][j] != '1') {
+                    ps("No");
+                    return;
+                }
+            }
+        }
+    }
+
+    ps("Yes");
 }
 
 signed main() {
@@ -312,7 +342,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

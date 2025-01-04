@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -304,7 +304,42 @@ const db EPS = 1e-9;
 const int mx = 2e5+1;
 
 void solve() {
-	
+	int n; re(n);
+    // find median of distinct elements 40 times
+    vi v(n); re(v);
+    vi meds;
+
+    rep(40) {
+        remDup(v);
+        int med = (v[0] + v.back()) / 2;
+        // int med = 0;
+        // if (sz(v) % 2) {
+        //     med = v[sz(v) / 2];
+        // } else {
+        //     med = (v[sz(v) / 2] + v[sz(v) / 2 - 1]) / 2;
+        // }
+
+        if (med == 0) break;
+
+        F0R(i, sz(v)) {
+            v[i] = abs(med - v[i]);
+        }
+
+        meds.pb(med);
+    }
+
+    F0R(i, sz(v)) {
+        if(v[i] != 0) {
+            ps(-1);
+            return;
+        }
+    }
+
+    ps(sz(meds));
+    F0R(i, sz(meds)) {
+        pr(meds[i], " ");
+    }
+    ps();
 }
 
 signed main() {
@@ -312,7 +347,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

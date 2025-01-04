@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -303,8 +303,57 @@ inline namespace FileIO {
 const db EPS = 1e-9;
 const int mx = 2e5+1;
 
+vi adj[mx];
+
+bool vis[mx];
+set<int> instack;
+vector<int> st;
+
+void dfs(int x) {
+    vis[x] = true;
+    st.pb(x);
+    instack.insert(x);
+    dbg(st, instack);
+
+    each(e, adj[x]) {
+        if(!vis[e]) {
+            dfs(e);
+        } else if(instack.count(e)) {
+            vi ans;
+            ans.pb(e);
+            R0F(i, sz(st)) {
+                ans.pb(st[i]);
+                if(st[i] == e) break;
+            }
+
+            ps(sz(ans));
+            R0F(i, sz(ans))  {
+                pr(ans[i], " ");
+            }
+
+            exit(0);
+        }
+    }
+
+    instack.erase(instack.find(st.back()));
+    st.pop_back();
+}
+
 void solve() {
-	
+	int n, m; re(n, m);
+    rep(m) {
+        ints(a, b);
+        adj[a].pb(b);
+        // adj[b].pb(a);
+    }
+
+    FOR(i, 1, n + 1) {
+        if(!vis[i]) {
+            dfs(i);
+        }
+    }
+
+    ps("IMPOSSIBLE");
 }
 
 signed main() {

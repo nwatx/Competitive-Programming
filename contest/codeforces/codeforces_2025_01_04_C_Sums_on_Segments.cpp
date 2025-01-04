@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -304,7 +304,78 @@ const db EPS = 1e-9;
 const int mx = 2e5+1;
 
 void solve() {
-	
+    int n; re(n);
+    vi a(n); re(a);
+    dbg(a);
+
+    auto lohi = [&](vector<int> v) -> pi {
+        dbg(v);
+        vi pfx(sz(v) + 1);
+        F0R(i, sz(v)) pfx[i + 1] = v[i] + pfx[i];
+
+        vi lo(sz(v) + 1), hi(sz(v) + 1); // lowest/highest element to the right
+        multiset<int> items; each(e, pfx) items.ins(e);
+        F0R(i, sz(v) + 1) {
+            lo[i] = *items.begin();
+            hi[i] = *items.rbegin();
+            items.erase(items.find(pfx[i]));
+        }
+
+        dbg(pfx,lo, hi);
+
+        int lowest = 0, highest = 0;
+        F0R(i, sz(v)) {
+            ckmin(lowest, lo[i] - pfx[i]);
+            ckmax(highest, hi[i] - pfx[i]);
+        }
+
+        dbg(lowest, highest);
+
+        return {lowest, highest};
+    };
+
+    int mid = -1;
+    F0R(i, n) if (a[i] != -1 && a[i] != 1) mid = i;
+
+    auto lh = [&](int l, int r) -> pi {
+        vi temp;
+        FOR(i, l, r + 1) temp.pb(a[i]);
+        return lohi(temp);
+    };
+
+    vi ret;
+    if (mid == -1) {
+        auto it = lh(0, n - 1);
+        FOR(i, it.f, it.s + 1) ret.pb(i);
+    } else {
+        auto left = lh(0, mid - 1);
+        auto right = lh(mid + 1, n - 1);
+
+        int llo = 0, lhi = 0, rlo = 0, rhi = 0;
+        int cum = 0;
+        R0F(i, mid) {
+            cum += a[i];
+            ckmin(llo, cum);
+            ckmax(lhi, cum);
+        }
+        cum = 0;
+        FOR(i, mid + 1, n) {
+            cum += a[i];
+            ckmin(rlo, cum);
+            ckmax(rhi, cum);
+        }
+
+        set<int> range;
+        dbg(left, right);
+        FOR(i, left.f, left.s + 1) range.ins(i);
+        FOR(i, right.f, right.s + 1) range.ins(i);
+        FOR(i, llo + rlo, lhi + rhi + 1) range.ins(i + a[mid]);
+        each(e, range) ret.pb(e);
+    }
+
+    ps(sz(ret));
+    each(e, ret) pr(e, " ");
+    ps();
 }
 
 signed main() {
@@ -312,7 +383,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

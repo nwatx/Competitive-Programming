@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -303,8 +303,18 @@ inline namespace FileIO {
 const db EPS = 1e-9;
 const int mx = 2e5+1;
 
+// 3 2 4 5 4
+// 3 4 3 4
+// 
+
 void solve() {
-	
+	int n; re(n);
+    vl v(n); re(v);
+    F0R(i, n - 2) {
+        v[n - 2] -= v[i];
+    }
+
+    ps(v[n - 1] - v[n - 2]);
 }
 
 signed main() {
@@ -312,7 +322,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

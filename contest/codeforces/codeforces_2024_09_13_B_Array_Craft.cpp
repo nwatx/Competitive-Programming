@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -304,7 +304,35 @@ const db EPS = 1e-9;
 const int mx = 2e5+1;
 
 void solve() {
-	
+	// maximum prefix position is sum [0, i] = maximum prefix sum
+    // if the position is p then we need p 1s and then a -1
+    def(int, n, x, y);
+    --x; --y;
+
+    // from prefix perspective, index x is -1
+    vi v(n, 1);
+
+    FOR(i, x + 1, n) v[i] = -1;
+    R0F(i, y) v[i] = -1;
+
+    // // loop from the right side
+    // int rsum = 0;
+    // int maxrsum = 0;
+    // R0F(i, n) {
+    //     if (rsum == maxrsum) {
+
+    //     }
+    //     rsum += v[i];
+    //     ckmax(maxrsum, rsum);
+    // }
+
+    // same w/ suffix perspective
+
+
+    F0R(i, n) {
+        pr(v[i], " ");
+    }
+    ps();
 }
 
 signed main() {
@@ -312,7 +340,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -304,7 +304,80 @@ const db EPS = 1e-9;
 const int mx = 2e5+1;
 
 void solve() {
-	
+	def(int, n, m, a, b);
+
+	V<vpi> adj_a(n + 1), adj_b(n + 1);
+	rep(m) {
+		def(int, u, v, c, e);
+		adj_a[v].pb({u, c});
+		adj_b[v].pb({u, e});
+	}
+
+	vi s(a), t(b);
+	re(s, t);
+
+	using T = pair<ll, int>;
+
+	auto min_times = [&](V<vpi> adj) -> vl {
+		pqg<T> pq;
+		// start from all the ends
+		vl dist(n + 1, INF);
+		each(e, t) {
+			pq.push({0, e});
+			dist[e] = 0;
+		}
+
+		auto ad = [&](int a, ll b) {
+			if (dist[a] <= b) return;
+			pq.push({dist[a] = b,a});
+		};
+
+		while (sz(pq)) {
+			T x = pq.top(); pq.pop(); if (dist[x.s] < x.f) continue;
+			each(y,adj[x.s]) ad(y.f,x.f+y.s);
+		}
+
+		vl ret;
+
+		each(e, s) {
+			ret.pb(dist[e]);
+		}
+
+		return ret;
+	};
+
+	auto min_a = min_times(adj_a);
+	auto min_b = min_times(adj_b);
+
+	// count # of winning combos
+	sor(min_a);
+	sor(min_b);
+
+	dbg(min_a, min_b);
+
+	ll total_wins = 0;
+	ll max_achievable = 0;
+
+	each(e, min_a) {
+		int win_idx = ub(all(min_b), e) - min_b.begin(); // beats everything past this point
+		int tie_idx = lb(all(min_b), e) - min_b.begin(); // ties/beats everything past this point
+		dbg(win_idx, tie_idx);
+		int n_wins = sz(min_a) - win_idx;
+		int n_ties = win_idx - tie_idx;
+		total_wins += 2 * n_wins;
+		total_wins += n_ties;
+		max_achievable += 2 * sz(min_b);
+	}
+
+	dbg(total_wins, max_achievable);
+
+	if (2 * total_wins == max_achievable) {
+		ps("tie");
+	} else if (2 * total_wins > max_achievable) {
+		ps("chicken");
+	} else {
+		ps("egg");
+	}
 }
 
 signed main() {

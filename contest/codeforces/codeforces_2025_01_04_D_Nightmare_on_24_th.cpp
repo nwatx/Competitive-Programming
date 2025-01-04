@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -304,7 +304,28 @@ const db EPS = 1e-9;
 const int mx = 2e5+1;
 
 void solve() {
-	
+    def(int, n, q);
+    vl v(n); re(v);
+    FOR(i, 1, n) v[i] += v[i - 1];
+
+
+
+    rep(q) {
+        def(ll, x);
+
+        if(x == 0) {
+            ps(0);
+            continue;
+        }
+
+        auto it = lower_bound(all(v), x);
+        
+        if (it == v.end()) {
+            ps(-1);
+        } else {
+            ps(it - v.begin() + 1);
+        }
+    }
 }
 
 signed main() {

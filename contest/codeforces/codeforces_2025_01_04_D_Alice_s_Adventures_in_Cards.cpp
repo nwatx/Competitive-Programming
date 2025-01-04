@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -304,7 +304,36 @@ const db EPS = 1e-9;
 const int mx = 2e5+1;
 
 void solve() {
-	
+    def(int, n);
+    V<vi> mat(3, vi(n + 1));
+	F0R(i, 3) FOR(j, 1, n + 1) re(mat[i][j]);
+	V<pair<char, int>> sol(n + 1, {0, -1});
+	AR<int, 3> mins = {n, n, n};
+	str s = "qkj";
+	ROF(i, 1, n) {
+		int win = -1;
+		F0R(j, 3) if (mat[j][i] > mat[j][mins[j]]) win = j;
+		if (win == -1) continue;
+		sol[i] = {s[win], mins[win]};
+		F0R(j, 3) if (mat[j][i] < mat[j][mins[j]]) mins[j] = i;
+	}
+
+	if (sol[1].s == -1) {
+		ps("NO");
+		return;
+	}
+
+	ps("YES");
+	V<pair<char, int>> ans = {sol[1]};
+	while (ans.back().second >= 0) {
+		ans.pb(sol[ans.back().s]);
+	}
+
+	ans.pop_back();
+	ps(sz(ans));
+	for (auto &&[c, i] : ans) {
+		ps(c, i);
+	}
 }
 
 signed main() {
@@ -312,7 +341,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

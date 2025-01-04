@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -304,6 +304,42 @@ const db EPS = 1e-9;
 const int mx = 2e5+1;
 
 void solve() {
+	int n; re(n);
+	vi v(n); re(v);
+
+	int q; re(q);
+	dbg(n, q);
+	V<str> strs(q); re(strs);
+	dbg(strs);
+	rep(q) {
+		auto s = strs[_];
+		if(sz(s) != n) {
+			ps("NO");
+			continue;
+		}
+
+		map<int, char> m;
+		set<char> used;
+		bool good = true;
+		F0R(i, sz(s)) {
+			if(m.count(v[i])) {
+				if(m[v[i]] != s[i]) {
+					ps("NO");
+					good = false;
+					break;
+				}
+			} else if(used.count(s[i])) {
+				ps("NO");
+				good = false;
+				break;
+			}
+
+			used.insert(s[i]);
+			m.try_emplace(v[i], s[i]);
+		}
+
+		if(good) ps("YES");
+	}
 	
 }
 
@@ -312,7 +348,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

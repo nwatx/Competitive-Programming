@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -304,7 +304,30 @@ const db EPS = 1e-9;
 const int mx = 2e5+1;
 
 void solve() {
-	
+    int n; re(n);
+    vi v(n); re(v);
+    vl pfx(n + 1);
+    FOR(i, 1, n + 1) {
+        pfx[i] = v[i - 1] + pfx[i - 1];
+    }
+    str s; re(s);
+    // find index where Ls is equivalent to the R count from the right
+    vi li, ri;
+    F0R(i, n) {
+        if(s[i] == 'L') li.push_back(i);
+        if(s[i] == 'R') ri.push_back(i);
+    }
+
+    dbg(li, ri);
+    dbg(pfx);
+
+    ll ret = 0;
+    F0R(i, min(sz(li), sz(ri))) {
+        if(li[i] >= ri[sz(ri) - 1 - i]) break;
+        ret += pfx[ri[sz(ri) - 1 - i] + 1] - pfx[li[i]];
+    }
+
+    ps(ret);
 }
 
 signed main() {
@@ -312,7 +335,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

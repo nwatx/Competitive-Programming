@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -304,7 +304,51 @@ const db EPS = 1e-9;
 const int mx = 2e5+1;
 
 void solve() {
-	
+	def(int, n, q);
+	vi v(n); re(v);
+	F0R(i, n) --v[i];
+	str s; re(s);
+
+	vi inv(n);
+	F0R(i, n) inv[v[i]] = i;
+
+	vi cross(n);
+	F0R(i, n) {
+		cross[min(i, inv[i])]++;
+		cross[max(i, inv[i])]--;
+	}
+
+	FOR(i, 1, n) cross[i] += cross[i - 1];
+
+	dbg(cross);
+
+	set<int> bad;
+
+	F0R(i, n - 1) {
+		if (s[i] == 'L' && s[i + 1] == 'R' && cross[i])
+			bad.insert(i);
+	}
+
+	rep(q) {
+		int x; re(x);
+		--x;
+
+		s[x] = s[x] == 'L' ? 'R' : 'L';
+
+		if (s[x - 1] == 'L' && s[x] == 'R' && cross[x - 1]) {
+			bad.insert(x - 1);
+		} else {
+			bad.erase(x - 1);
+		}
+
+		if (s[x] == 'L' && s[x + 1] == 'R' && cross[x]) {
+			bad.insert(x);
+		} else {
+			bad.erase(x);
+		}
+
+		ps(sz(bad) == 0 ? "YES" : "NO");
+	}
 }
 
 signed main() {
@@ -312,7 +356,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

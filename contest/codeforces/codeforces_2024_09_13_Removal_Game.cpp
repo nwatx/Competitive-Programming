@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -304,7 +304,41 @@ const db EPS = 1e-9;
 const int mx = 2e5+1;
 
 void solve() {
+	int n; re(n);
+	vi v(n); re(v);
+
+	ll sum = 0;
+	each(x, v) sum += x;
+
+	V<vl> dp(n, vl(n, -INF));
+
+	// let dp[i][j] be the maximal score for [i, j], given that it's the first player's turn
+	// either you take left, which gives you v[l] - max(dp[i + 1][j])
+	// or you take right, which gives you v[r] - max(dp[i][j - 1])
 	
+	auto dfs = [&](const auto &dfs, int l, int r) -> ll {
+		if (l > r) return 0;
+		if (dp[l][r] != -INF) return dp[l][r];
+		// either take left or take right
+		ll left = v[l] - dfs(dfs, l + 1, r);
+		ll right = v[r] - dfs(dfs, l, r - 1);
+
+		ll ret = max(left, right);
+		dp[l][r] = ret;
+		return ret;
+	};
+
+	// x = y + ret
+	// x + y = sum
+	// x = sum - y
+	// x = sum - (x - ret)
+	// x = sum - x + ret
+	// 2x = sum + ret
+	// x = (sum + ret) / 2
+
+	ll ret = dfs(dfs, 0, n - 1);
+	// dbg(dp);
+	ps((sum + ret) / 2);
 }
 
 signed main() {

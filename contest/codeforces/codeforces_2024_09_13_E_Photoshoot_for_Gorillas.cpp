@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -304,7 +304,32 @@ const db EPS = 1e-9;
 const int mx = 2e5+1;
 
 void solve() {
-	
+    ints(n, m, k);
+    V<vi> grid(n, vi(m));
+    priority_queue<ll> pq;
+    F0R(i, n) {
+        F0R(j, m) {
+            int sw = min(k, i + 1, n - i, n - k + 1);
+            int sh = min(k, j + 1, m - j, m - k + 1);
+
+            grid[i][j] += sw * sh;
+            pq.push(grid[i][j]);
+        }
+    }
+
+    each(row, grid) dbg(row);
+    ll ret = 0;
+
+    int g; re(g);
+    vi v(g); re(v);
+    sorr(v);
+    F0R(i, g) {
+        dbg(ret, pq.top(), v[i]);
+        ret += pq.top() * v[i];
+        pq.pop();
+    }
+
+    ps(ret);
 }
 
 signed main() {
@@ -312,7 +337,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

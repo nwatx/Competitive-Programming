@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cses
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -304,7 +304,29 @@ const db EPS = 1e-9;
 const int mx = 2e5+1;
 
 void solve() {
-	
+	int n, x; re(x, n);
+    set<pi> pos;
+    pos.ins({0, x});
+    multiset<int> dist;
+    dist.insert(x);
+    rep(n) {
+        int p; re(p);
+
+        auto it = pos.lower_bound({p, 0});
+        --it;
+
+        dist.erase(dist.find(it->s - it->f));
+        
+        pi l{it->f, p}, r{p, it->s};
+        dist.insert(l.s - l.f);
+        dist.insert(r.s - r.f);
+        pos.erase(it);
+        pos.insert(l);
+        pos.insert(r);
+
+        pr(*dist.rbegin(), " ");
+    }
+
 }
 
 signed main() {

@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -304,7 +304,16 @@ const db EPS = 1e-9;
 const int mx = 2e5+1;
 
 void solve() {
-	
+    def(int, l, n, m);
+    // find options
+
+    // let dp[i][j][s] be the # of elements remaining
+
+    F0R(i, n) {
+        F0R(j, m) {
+
+        }
+    }
 }
 
 signed main() {

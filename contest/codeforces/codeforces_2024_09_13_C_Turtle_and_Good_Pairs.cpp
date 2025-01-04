@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -303,8 +303,63 @@ inline namespace FileIO {
 const db EPS = 1e-9;
 const int mx = 2e5+1;
 
+int ppcounter(str s) {
+    int n = sz(s);
+    int pairs = 0;
+    F0R(i, n) {
+        FOR(j, i + 1, n) {
+            bool good = false;
+            if(s[i] == s[j]) good = true;
+            FOR(k, i, j) if((s[k] != s[i] || s[k + 1] != s[j]) && s[k] != s[k + 1]) {
+                good = true;
+                break;
+            }
+
+            pairs += good;
+        }
+    }
+    return pairs;
+}
+
 void solve() {
-	
+	int n; re(n);
+    str s; re(s);
+
+    // pleasant pair exists if at least one diff in [i, j) or s[i] == s[j];
+    dbg(ppcounter(s));
+    map<char, int> freq;
+    each(c, s) freq[c]++;
+
+    V<char> l, r;
+    each(e, freq) {
+        F0R(i, e.s) {
+            if(i < e.s/2) l.pb(e.f);
+            else r.pb(e.f);
+        }
+    }
+
+    reverse(all(r));
+    l.insert(l.end(), all(r));
+    str ans(all(l));
+    dbg(ppcounter(s), ppcounter(ans));
+    ps(ans);
+    // V<pair<char, int>> vpc;
+    // each(e, freq) vpc.pb({e.second, e.first});
+    // sorr(vpc);
+    // V<char> ret(n);
+    // int idx = 0;
+    // each(p, vpc) {
+    //     int times = p.first;
+    //     while(times-->0) {
+    //         ret[idx++] = p.second;
+    //     }
+    // }
+    // str ans(all(ret));
+    // ps(ans);
+    // dbg(ppcounter(ans));
+    // dbg(ppcounter("oocsrfdcee"));
+    // dbg(ppcounter("tturle"));
+    // dbg(ppcounter("urtlet"));
 }
 
 signed main() {
@@ -312,7 +367,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -304,7 +304,36 @@ const db EPS = 1e-9;
 const int mx = 2e5+1;
 
 void solve() {
-	
+    int n, k; re(n, k);
+    vpi v(n); re(v);
+    map<int, int> ws;
+    F0R(i, n) {
+        int l = v[i].f, r = v[i].s;
+        if(r < l) swap(l, r);
+
+        int cost = 0;
+        F0R(j, l + 1) {
+            FOR(k, l, r + 1) {
+                int score = j + k;
+                cost += 
+            }
+        }
+
+    }
+
+    dbg(ws);
+
+    vi dp(k + 1, MOD);
+    dp[0] = 0;
+    F0R(i, k + 1) {
+        each(e, ws) {
+            ckmin(dp[min(k, i + e.f)], dp[i] + e.s); // add the cost
+        }
+    }
+
+    dbg(dp);
+
+    ps(dp[k]);
 }
 
 signed main() {
@@ -312,7 +341,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

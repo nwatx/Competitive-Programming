@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -304,7 +304,69 @@ const db EPS = 1e-9;
 const int mx = 2e5+1;
 
 void solve() {
-	
+    def(int, n, m, s, k, g);
+
+    V<vi> adj(n + 1);
+    rep(m) {
+        def(int, a, b);
+        adj[a].pb(b);
+        adj[b].pb(a);
+    }
+
+    set<int> exits;
+    rep(k) {
+        def(int, e); exits.ins(e);
+    }
+
+    set<int> ghosts;
+    rep(g) {
+        def(int, g); ghosts.ins(g);
+    }
+
+    queue<int> bfs;
+    vi dist(n + 1, MOD); // dist for the ghosts
+    each(g, ghosts) {
+        bfs.push(g);
+        dist[g] = 0;
+    }
+
+    while(sz(bfs)) {
+        int top = bfs.front();
+        bfs.pop();
+
+        each(e, adj[top]) {
+            if (dist[e] == MOD) {
+                dist[e] = dist[top] + 1;
+                bfs.push(e);
+            }
+        }
+    }
+
+    vi our_dist(n + 1, MOD);
+    our_dist[s] = 0;
+    bfs.push(s);
+    while(sz(bfs)) {
+        int top = bfs.front();
+        bfs.pop();
+        each(e, adj[top]) {
+            if (our_dist[e] == MOD) {
+                our_dist[e] = our_dist[top] + 1;
+                bfs.push(e);
+            }
+        }
+    }
+
+    dbg(dist);
+    dbg(our_dist);
+
+    int good_exits = 0;
+    each(i, exits) {
+        if (our_dist[i] < dist[i]) {
+            ++good_exits;
+        }
+    }
+
+    ps(good_exits);
 }
 
 signed main() {

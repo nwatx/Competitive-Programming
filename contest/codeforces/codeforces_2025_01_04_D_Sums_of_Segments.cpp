@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -304,8 +304,19 @@ const db EPS = 1e-9;
 const int mx = 2e5+1;
 
 void solve() {
+	// assume we have pairs (x, x) to (y, y)
+    // calculate sum
+	vector<int> v;
+	int n = sz(v); 
+    for (int i = 0; i < n; i++) {
+		int x, y; re(x, y);
+	}
 	
 }
+
+// v[x] + (v[x] + v[x + 1]) + (v[x] + v[x + 1] + v[x + 2]) + ...
+// s(l, r) => x appears s(l, r) times
+
 
 signed main() {
 	// clock_t start = clock();

@@ -1,14 +1,11 @@
 {
-    "code-runner.executorMap": {
-        "cpp": "cd $dir && g++ -std=c++17 $fileName -O2 -Wall -Wextra -Wno-unknown-pragmas -o a && $dira"
-    },
     "editor.minimap.side": "right",
     "editor.renderLineHighlight": "all",
     "editor.fontLigatures": true,
     "workbench.panel.defaultLocation": "right",
     "workbench.colorCustomizations": {
         "editorLineNumber.foreground": "#686868",
-        // "editorLineNumber.activeForeground": "#ffe600",
+        "editorLineNumber.activeForeground": "#ffe600",
         "editor.selectionBackground": "#6b6b6b"
     },
     "files.exclude": {
@@ -33,6 +30,7 @@
     "editor.tabSize": 4,
     "vim.vimrc.enable": true,
     "files.associations": {
+        "*.cpp": "cpp",
         "atomic": "cpp",
         "*.tcc": "cpp",
         "chrono": "cpp",
@@ -81,9 +79,11 @@
         "initializer_list": "cpp",
         "streambuf": "cpp",
         "charconv": "cpp",
-        "limits": "cpp"
+        "limits": "cpp",
+        "numbers": "cpp",
+        "queue": "cpp",
+        "set": "cpp"
     },
-    "gitdoc.enabled": false,
     "files.autoSave": "onFocusChange",
     "files.watcherExclude": {
         "/usr/include/simbody/**": true,
@@ -97,10 +97,6 @@
         "/usr/include/cuda.h": true,
         "/usr/include/**": true
     },
-    "C_Cpp.files.exclude": {
-        "/usr/include/simbody/**": true,
-        "/usr/include/netinet/**": true,
-        "/usr/include/cuda.h": true,
-        "/usr/include/**": true
-    }
+    "cph.general.saveLocation": "",
+    // "C_Cpp.autocomplete": "Disabled", "C_Cpp.formatting": "Disabled", "C_Cpp.errorSquiggles": "Disabled", "C_Cpp.intelliSenseEngine": "Disabled",
 }

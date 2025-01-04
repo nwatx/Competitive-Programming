@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -303,8 +303,44 @@ inline namespace FileIO {
 const db EPS = 1e-9;
 const int mx = 2e5+1;
 
+vi stalin(vi v, int start) {
+    vi ret;
+    F0R(i, start + 1) {
+        ret.pb(v[i]);
+    }
+
+    FOR(i, start + 1, sz(v)) {
+        if (ret.back() <= v[i]) ret.pb(v[i]);
+    }
+    return ret;
+}
+
+// +1 for every a < b < c < d until the maximum value
 void solve() {
-	
+    int n; re(n);
+    vi v(n); re(v);
+    int rm = 0;
+
+    dbg(v);
+
+    while (sz(v)) {
+        optional<int> cut_idx;
+        F0R(i, sz(v) - 1) {
+            if (v[i] < v[i + 1]) {
+                cut_idx = i;
+                break;
+            }
+        }
+
+        if (!cut_idx.has_value()) break;
+        v = stalin(v, cut_idx.value());
+        v.erase(v.begin() + cut_idx.value());
+        ++rm;
+
+        dbg(v, cut_idx.value());
+    }
+
+    ps(rm);
 }
 
 signed main() {
@@ -312,7 +348,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

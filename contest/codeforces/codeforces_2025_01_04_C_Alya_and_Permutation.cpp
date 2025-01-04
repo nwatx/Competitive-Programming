@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -304,7 +304,42 @@ const db EPS = 1e-9;
 const int mx = 2e5+1;
 
 void solve() {
-	
+    int n; re(n);
+    dbg(n);
+
+
+    if (n % 2 == 0) {
+        int target = p2(bits(n) + 1) - 1;
+        ps(target);
+
+        vi ret(3);
+        ret[0] = n;
+        // just need to find ret[1] & ret[2] = target ^ ret[0]
+        int z = target ^ ret[0];
+        ret[1] = z;
+        dbg(z, target);
+        
+        ROF(i, 1, n) {
+            if ((i & z) == z && i != z) {
+                ret[2] = i;
+                break;
+            }
+        }
+
+        FOR(i, 1, n) {
+            if (find(all(ret), i) == ret.end()) cout << i << " ";
+        }
+        ps(ret[2], ret[1], ret[0]);
+    } else {
+        ps(n);
+        int last = n;
+        int second_last = n - 1;
+        int third_last = n ^ (n - 1);
+
+        FOR(i, 1, n) if (i != second_last && i != third_last) cout << i << " ";
+        ps(third_last, second_last, last);
+    }
+
 }
 
 signed main() {
@@ -312,7 +347,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

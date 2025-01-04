@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -304,7 +304,25 @@ const db EPS = 1e-9;
 const int mx = 2e5+1;
 
 void solve() {
-	
+	str s; re(s);
+	map<char, int> freq;
+	each(c, s) freq[c]++;
+	V<char> ret(sz(s));
+	int idx = 0;
+	each(e, freq) {
+		while (e.second % 2 == 0 && e.second > 0) {
+			ret[idx] = e.first;
+			ret[sz(s) - 1 - idx] = e.first;
+			e.second -= 2;
+			++idx;
+		}
+
+		if (e.second % 2 == 1) {
+			ret[sz(s) / 2] = e.first;
+		}
+	}
+
+	ps(str(all(ret)));
 }
 
 signed main() {

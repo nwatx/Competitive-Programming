@@ -304,7 +304,52 @@ const db EPS = 1e-9;
 const int mx = 2e5+1;
 
 void solve() {
-	
+	int n; re(n);
+	str s; re(s);
+
+	int ret = n;
+
+	V<vi> dp(n + 1, vi(2, n));
+	if (n & 1) {
+		for (char c1 = 'a'; c1 <= 'z'; ++c1) {
+			for(char c2 = 'a'; c2 <= 'z'; ++c2) {
+				dp[0][0] = 0;
+				dp[1][0] = n;
+
+				F0R(i, n) {
+					if (i & 1) {
+						// if we're odd
+						dp[i + 1][0] = dp[i][0] + (s[i] != c2);
+						dp[i + 1][1] = min(dp[i][1] + (s[i] != c1), dp[i][0] + 1);
+					} else {
+						// if even, then
+						// either switch or delete
+						dp[i + 1][0] = dp[i][0] + (s[i] != c1);
+						dp[i + 1][1] = min(dp[i][1] + (s[i] != c2), dp[i][0] + 1);
+					}
+				}
+
+				dbg(c1, c2, dp);
+
+				ckmin(ret, dp[n][1]);
+			} 
+		}
+	} else {
+		for (char c1 = 'a'; c1 <= 'z'; ++c1) {
+			for(char c2 = 'a'; c2 <= 'z'; ++c2) {
+				int cur = 0;
+				for(int i = 0; i < n; i += 2) {
+					cur += (s[i] != c1);
+					cur += (s[i + 1] != c2);
+				}
+
+				ckmin(ret, cur);
+			}
+		}
+	}
+
+
+	ps(ret);
 }
 
 signed main() {
@@ -312,7 +357,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

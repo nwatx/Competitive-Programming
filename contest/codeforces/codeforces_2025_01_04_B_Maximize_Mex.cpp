@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -304,7 +304,39 @@ const db EPS = 1e-9;
 const int mx = 2e5+1;
 
 void solve() {
-	
+    // for each mex, store extra values
+    def(int, n, k);
+    map<int, int> extra;
+    vi v(n); re(v);
+    sor(v);
+    dbg(v);
+
+    int mex = 0;
+    int i = 0;
+    while (true) {
+        dbg(i, mex);
+        if (i < n && v[i] < mex) {
+            ++extra[v[i] % k];
+            ++i;
+            continue;
+        }
+        
+        // try to increase mex...
+        else if (i >= n || v[i] > mex) {
+            // then an increase is possible
+            if (extra[(mex % k)]) {
+                --extra[mex % k];
+                ++mex;
+            } else {
+                break;
+            }
+        } else {
+            ++mex;
+            ++i;
+        }
+    }
+
+    ps(mex);
 }
 
 signed main() {
@@ -312,7 +344,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

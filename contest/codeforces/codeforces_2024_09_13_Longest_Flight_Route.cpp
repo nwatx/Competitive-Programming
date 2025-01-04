@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -304,7 +304,57 @@ const db EPS = 1e-9;
 const int mx = 2e5+1;
 
 void solve() {
-	
+	int n, m; re(n, m);
+
+    vi dp(n + 1);
+    V<vi> adj(n + 1);
+    rep(m) {
+        int a, b; re(a, b);
+        adj[a].pb(b);
+    }
+
+    set<int> vis;
+    vi topo;
+    auto dfs = [&](const auto &dfs, int x) -> void {
+        if(vis.count(x)) return;
+        vis.ins(x);
+        each(e, adj[x]) {
+            dfs(dfs, e);
+        }
+        topo.pb(x);
+    };
+
+    dfs(dfs, 1);
+
+    reverse(all(topo));
+
+    dp[1] = 1;
+    vi prev(n + 1);
+
+    each(x, topo) {
+        each(e, adj[x]) {
+            int v = dp[x] + 1;
+            if (v > dp[e]) {
+                dp[e] = dp[x] + 1;
+                prev[e] = x;
+            }
+        }
+    }
+
+    if (dp[n] == 0) {
+        ps("IMPOSSIBLE");
+        return;
+    }
+
+    vi ret;
+    int cur = n;
+    while (cur != 1) {
+        ret.pb(cur);
+        cur = prev[cur];
+    }
+    ret.pb(1);
+    ps(sz(ret));
+    R0F(i, sz(ret)) pr(ret[i], " ");
 }
 
 signed main() {

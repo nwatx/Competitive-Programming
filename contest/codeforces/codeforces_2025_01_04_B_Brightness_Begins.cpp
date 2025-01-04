@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -303,16 +303,50 @@ inline namespace FileIO {
 const db EPS = 1e-9;
 const int mx = 2e5+1;
 
+vl squares;
+
+void init() {
+    // FOR(t, 1, 40) {
+    //     vi bulbs(t, 1);
+    //     FOR(i, 1, t + 1) {
+    //         FOR(j, 1, t + 1) {
+    //             if (j % i == 0) bulbs[j - 1] = !bulbs[j - 1];
+    //         }
+    //     }
+
+    //     // dbg(t, bulbs);
+    //     int sum = 0;
+    //     each(x, bulbs) sum += x;
+    //     dbg(sum, t);
+    // }
+}
+
 void solve() {
-	
+    ll n; re(n);
+
+    // count the # of squares
+
+    auto g = [&](ll x) -> bool {
+        auto f = [&](ll y) -> bool {
+            return y * y <= x;
+        };
+
+        ll cnt = lstTrue(1LL, ll(5e9), f);
+        return x - cnt >= n;
+    };
+
+    ll ret = fstTrue(1LL, 2 * INF, g);
+    ps(ret);
 }
 
 signed main() {
 	// clock_t start = clock();
 	setIO();
 
+    init();
+
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

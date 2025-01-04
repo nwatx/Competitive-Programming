@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -303,8 +303,29 @@ inline namespace FileIO {
 const db EPS = 1e-9;
 const int mx = 2e5+1;
 
+/*
+1-2n
+(n - 1) even edges
+(n - 1) odd edges
+*/
+
 void solve() {
-	
+	int n; re(n);
+    V<vi> adj(n);
+    rep(n - 1) {
+        int1(a, b);
+        adj[a].pb(b);
+        adj[b].pb(a);
+    }
+
+    // dfs ordering, add 1
+    auto dfs = [&](const auto &dfs, int v, int p) {
+        each(e, adj[v]) {
+            if (e != p) dfs(dfs, e, v);
+        }
+    };
+
+    
 }
 
 signed main() {
@@ -312,7 +333,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

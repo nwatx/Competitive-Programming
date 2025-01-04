@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -303,8 +303,120 @@ inline namespace FileIO {
 const db EPS = 1e-9;
 const int mx = 2e5+1;
 
+int lgcd(vi v) {
+    int ret = v[0];
+    FOR(i, 1, sz(v)) ret = gcd(ret, v[i]);
+    return ret;
+}
+
+/**
+ * Description: 1D point update, range query where \texttt{comb} is
+    * any associative operation. If $N=2^p$ then \texttt{seg[1]==query(0,N-1)}.
+ * Time: O(\log N)
+ * Source: 
+    * http://codeforces.com/blog/entry/18051
+    * KACTL
+ * Verification: SPOJ Fenwick
+ */
+
+template<class T> struct Seg { // comb(ID,b) = b
+    const T ID = 0; T comb(T a, T b) { return gcd(a, b); } 
+    int n; vector<T> seg;
+    void init(int _n) { n = _n; seg.assign(2*n,ID); }
+    void pull(int p) { seg[p] = comb(seg[2*p],seg[2*p+1]); }
+    void upd(int p, T val) { // set val at position p
+        seg[p += n] = val; for (p /= 2; p; p /= 2) pull(p); }
+    T query(int l, int r) {	// sum on interval [l, r]
+        T ra = ID, rb = ID; 
+        for (l += n, r += n+1; l < r; l /= 2, r /= 2) {
+            if (l&1) ra = comb(ra,seg[l++]);
+            if (r&1) rb = comb(seg[--r],rb);
+        }
+        return comb(ra,rb);
+    }
+};
+
+/**
+ * Description: Polynomial hash for substrings with two bases.
+ * Source:
+	* KACTL
+	* https://codeforces.com/contest/1207/submission/59309672
+ * Verification: 
+	* USACO Dec 17 Plat 1 (LCP :o)
+	* CF Check Transcription
+ */
+
+typedef array<int,2> H; // bases not too close to ends 
+uniform_int_distribution<int> BDIST(0.1*MOD,0.9*MOD);
+const H base = {BDIST(rng),BDIST(rng)};
+/// const T ibase = {(int)inv(mi(base[0])),(int)inv(mi(base[1]))};
+H operator+(H l, H r) { 
+	F0R(i,2) if ((l[i] += r[i]) >= MOD) l[i] -= MOD;
+	return l; }
+H operator-(H l, H r) { 
+	F0R(i,2) if ((l[i] -= r[i]) < 0) l[i] += MOD;
+	return l; }
+H operator*(H l, H r) { 
+	F0R(i,2) l[i] = (ll)l[i]*r[i]%MOD;
+	return l; }
+H makeH(char c) { return {c,c}; }
+/// H& operator+=(H& l, H r) { return l = l+r; }
+/// H& operator-=(H& l, H r) { return l = l-r; }
+/// H& operator*=(H& l, H r) { return l = l*r; }
+
+vector<H> pows = {{1,1}};
+struct HashRange {
+	str S; vector<H> cum = {{0,0}};
+	void add(char c) { S += c; cum.pb(base*cum.bk+makeH(c)); }
+	void add(str s) { each(c,s) add(c); }
+	void extend(int len) { while (sz(pows) <= len) pows.pb(base*pows.bk); }
+	H hash(int l, int r) { int len = r+1-l; extend(len);
+		return cum[r+1]-pows[len]*cum[l]; }
+	/**int lcp(HashRange& b) { return first_true([&](int x) { 
+		return cum[x] != b.cum[x]; },0,min(sz(S),sz(b.S)))-1; }*/
+};
+/// HashRange HR; HR.add("ababab"); F0R(i,6) FOR(j,i,6) ps(i,j,HR.hash(i,j));
+
 void solve() {
-	
+	int n; re(n);
+    vi a(n), b(n);
+    re(a, b);
+
+    Seg<int> sa, sb;
+    sa.init(n);
+    sb.init(n);
+    F0R(i, n) {
+        sa.upd(i, a[i]);
+        sb.upd(i, b[i]);
+    }
+
+    int ret = sa.query(0, n - 1) + sb.query(0, n - 1);
+    int ways = 1;
+
+    // two pointers, as long as gcd > 1 try swapping it
+    F0R(l, n) {
+        int r = l;
+        while(r < n && sa.query(l, r) > 1) {
+            int aside = gcd(gcd(sa.query(0, l - 1), sb.query(l, r)), sa.query(r + 1, n - 1));
+            int bside = gcd(gcd(sb.query(0, l - 1), sa.query(l, r)), sb.query(r + 1, n - 1));
+            dbg(l, r, aside, bside);
+            if (aside + bside >= ret) {
+                if(aside + bside == ret) ++ways;
+                else {
+                    ret = aside + bside;
+                    ways = 1;
+                }
+            }
+            ++r;
+        }
+    }
+
+    if (ret == 2) {
+        ps(2, n * (n + 1) / 2);
+        return;
+    }
+
+    ps(ret, ways);
 }
 
 signed main() {
@@ -312,7 +424,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

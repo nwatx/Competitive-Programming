@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -304,7 +304,41 @@ const db EPS = 1e-9;
 const int mx = 2e5+1;
 
 void solve() {
-	
+	int n; re(n);
+    vi b(n - 1); re(b);
+    // handle things on a bit by bit basis
+
+    vi a(n);
+
+    F0R(i, n - 1) {
+        F0R(j, 30) {
+            int x = (b[i] & (1 << j)) > 0;
+
+            if (x == 1) {
+                // then the next one must be a 1 as well
+                a[i] |= (1 << j);
+                a[i + 1] |= (1 << j);
+            }
+        }
+    }
+
+    dbg(a);
+    F0R(i, n) dbg(i, bitset<10>(a[i]));
+
+    F0R(i, n - 1) {
+        if ((a[i] & a[i + 1]) != b[i]) {
+            dbg(i);
+            ps(-1);
+            return;
+        }
+
+    }
+
+    F0R(i, n) {
+        pr(a[i], " ");
+    }
+
+    ps();
 }
 
 signed main() {
@@ -312,7 +346,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

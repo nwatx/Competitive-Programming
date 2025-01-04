@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -304,7 +304,39 @@ const db EPS = 1e-9;
 const int mx = 2e5+1;
 
 void solve() {
-	
+	str s; re(s);
+	dbg(s);
+
+	// each balanced str [l, r] will appear in (balanced strings before + 1) * (balanced strings after + 1)
+	// must be 01 or 10
+	// the # of times it appears is left * right
+	int n = sz(s);
+	vi pfx(n + 1);
+	F0R(i, n) {
+		pfx[i + 1] = pfx[i] + (s[i] == '0' ? 1 : -1);
+	}
+
+	map<int, vi> ind;
+
+	FOR(i, 1, n) {
+		ind[pfx[i]].pb(i - 1);
+	}
+
+	dbg(ind);
+
+	ll ret = 0;
+
+	each(e, ind) {
+		vi &v = e.second;
+		vi pfx_s(n + 1);
+		R0F(i, sz(v)) {
+			pfx_s[i] = pfx_s[i + 1] + v[i];
+		}
+
+		dbg(pfx_s);
+	}
+
+	ps(ret);
 }
 
 signed main() {
@@ -312,7 +344,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

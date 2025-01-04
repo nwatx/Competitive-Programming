@@ -304,15 +304,42 @@ const db EPS = 1e-9;
 const int mx = 2e5+1;
 
 void solve() {
-	
-}
+	int n, m; re(n, m);
+    vl v(n); re(v);
+    set<ll> vs(all(v));
+    dbg(vs);
+
+    rep(m) {
+        char t; re(t);
+        ints(l, r);
+        dbg(t, l, r);
+
+        if (t == '+') {
+            ll highest = *vs.rbegin();
+            if (highest >= l && highest <= r) {
+                vs.insert(highest + 1);
+            } 
+        } else {
+            ll highest = *vs.rbegin();
+            if (l <= highest && highest <= r) {
+                vs.erase(highest);
+                vs.insert(highest - 1);
+            }
+        }
+
+        dbg(vs);
+
+        pr(*vs.rbegin(), " ");
+    }
+    ps();
+}   
 
 signed main() {
 	// clock_t start = clock();
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

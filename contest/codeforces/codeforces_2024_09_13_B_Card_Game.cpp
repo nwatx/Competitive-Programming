@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -304,7 +304,26 @@ const db EPS = 1e-9;
 const int mx = 2e5+1;
 
 void solve() {
-	
+    vi a(2), b(2); re(a, b);
+    int ret = 0;
+    set<pair<pi, pi>> good;
+    F0R(i, 2) {
+        F0R(j, 2) {
+            F0R(oi, 2) {
+                F0R(oj, 2) {
+                    if(oi == i || oj == j) continue;
+                    int diff = sgn(a[i] - b[j]) + sgn(a[oi] - b[oj]);
+                    if(diff > 0) {
+                        good.insert({{i, oi}, {j, oj}});
+                    }
+                }
+            }
+        }
+    }
+
+    dbg(good);
+
+    ps(sz(good));
 }
 
 signed main() {
@@ -312,7 +331,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

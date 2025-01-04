@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -304,7 +304,23 @@ const db EPS = 1e-9;
 const int mx = 2e5+1;
 
 void solve() {
-	
+    int n; re(n);
+    vi v(n); re(v);
+    sor(v);
+    // get freq of highest number
+    map<int, int> m;
+    each(x, v) m[x]++;
+    
+    pi lst = *m.rbegin();
+
+    for (auto it = m.rbegin(); it != m.rend(); ++it) {
+        if (it->s % 2) {
+            ps("YES");
+            return;
+        }
+    }
+    
+    ps("NO");
 }
 
 signed main() {
@@ -312,7 +328,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

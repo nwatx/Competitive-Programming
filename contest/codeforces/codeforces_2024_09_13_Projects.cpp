@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -304,7 +304,57 @@ const db EPS = 1e-9;
 const int mx = 2e5+1;
 
 void solve() {
-	
+	int n; re(n);
+    V<pair<int, pi>> v;
+    vi coords;
+    F0R(i, n) {
+        ints(a, b, p);
+        coords.pb(a);
+		coords.pb(a - 1);
+        coords.pb(b);
+        v.pb({b, {a, p}});
+    }
+
+	sor(coords);
+
+    int idx = 0;
+    map<int, int> coord;
+    each(c, coords) {
+        if (coord.count(c)) continue;
+        coord[c] = idx;
+        ++idx;
+    }
+
+	F0R(i, n) {
+		v[i].f = coord[v[i].f];
+		v[i].s.f = coord[v[i].s.f];
+	}
+
+    // todo: coord compress
+    sor(v);
+
+    dbg(v);
+
+    int max_coord = sz(coord);
+	int j = 0;
+    vl dp(max_coord + 2);
+    F0R(i, n) {
+        int b = v[i].f;
+        int a = v[i].s.f;
+        int p = v[i].s.s;
+
+		while(j < b && j < sz(dp)) { j++; ckmax(dp[j], dp[j - 1]); }
+        ckmax(dp[b], dp[b - 1]);
+        ckmax(dp[b], dp[a - 1] + p);
+    }
+
+    dbg(dp);
+    
+    ps(*max_element(all(dp)));
+
+    // let dp[i] be the most pnl ending at <= i that's complete
+    // e..g if you're at ending point B then you get pnl = p + dp[A]
+    // sort by end time
 }
 
 signed main() {

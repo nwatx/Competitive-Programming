@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -303,8 +303,62 @@ inline namespace FileIO {
 const db EPS = 1e-9;
 const int mx = 2e5+1;
 
+pi mex2(const vi &ind) {
+    set<int> has(all(ind));
+    pi mex{-1, -1};
+    F0R(i, sz(ind) + 3) {
+        if(!has.count(i)) {
+            if(mex.f == -1 && mex.s == -1) mex.f = i;
+            else if(mex.s == -1) mex.s = i;
+            else break;
+        }
+    }
+    return mex;
+}
+
 void solve() {
-	
+	int n, m; re(n, m);
+    int maxmex = 0;
+    vpi mm;
+    map<int, vi> madj;
+    F0R(i, n) {
+        int vl; re(vl);
+        vi v(vl); re(v);
+        mm.pb(mex2(v));
+        ckmax(maxmex, mm[i].f, mm[i].s);
+        madj[mm[i].f].pb(0);
+        madj[mm[i].s].pb(mm[i].f);
+    }
+    dbg(madj);
+
+    vi dp(maxmex + 2);
+
+    R0F(i, maxmex + 2) {
+        ckmax(dp[i], i);
+        each(e, madj[i]) {
+            ckmax(dp[e], dp[i]);
+        }
+    }
+
+    R0F(i, maxmex + 2) ckmax(dp[i], dp[0]);
+
+    ll ret = 0;
+    F0R(i, min(m, maxmex) + 1) {
+        ret += max(i, dp[i], dp[0]);
+    }
+
+    dbg(dp);
+    dbg(ret);
+
+    if(m > maxmex) {
+        ll l = maxmex + 1;
+        ll r = m;
+        ll add = (r - l + 1) * (r + l) / 2;
+        ret += add;
+    }
+
+
+    ps(ret);
 }
 
 signed main() {
@@ -312,7 +366,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -304,7 +304,25 @@ const db EPS = 1e-9;
 const int mx = 2e5+1;
 
 void solve() {
-	
+	int n; re(n);
+    vi v(n); re(v);
+    map<int, int> freq;
+    each(x, v) freq[x]++;
+
+    vi freqs;
+    each(e, freq) freqs.pb(e.s);
+    sor(freqs);
+
+    dbg(freqs);
+    // alice takes 1, if present, otherwise finds lowest frequency
+    int sum = 0;
+    int oc = 0;
+    each(e, freqs) {
+        if (e == 1) ++oc;
+        else ++sum;
+    }
+
+    ps(sum + 2 * cdiv(oc, 2));
 }
 
 signed main() {
@@ -312,7 +330,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

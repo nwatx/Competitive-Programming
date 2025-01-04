@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -303,8 +303,130 @@ inline namespace FileIO {
 const db EPS = 1e-9;
 const int mx = 2e5+1;
 
+// backward to taller or forward to shorter
+// each rabbit should jump forward as much as possible
+// two things to calculate: for[x] => index of furthest tree it can reach
+// back[x] => highest tree it can jump backward to
+
 void solve() {
-	
+    // DSU?
+    // connect if two things are satisfied
+    // for each thing find the first shorter tree and first taller tree, connect with DSU
+    int n; cin >> n;
+    std::vector<int> a(n); re(a);
+    for (int i = 0; i < n; ++i) --a[i];
+
+    std::vector<int> par(n, -1);
+
+    auto get = [&](const auto &get, int x) -> int {
+        return par[x] < 0 ? x : get(get, par[x]);
+    };
+
+    auto dsz = [&](int x) {
+        return -par[get(get, x)];
+    };
+
+    auto unite = [&](int a, int b) -> bool {
+        dbg(a, b);
+        a = get(get, a); b = get(get, b);
+        if (a == b) return false;
+        if (dsz(a) < dsz(b)) std::swap(a, b);
+        par[a] += par[b];
+        par[b] = a;
+        return true;
+    };
+    
+    std::vector<int> rj(n, -1), lj(n, -1);
+
+    std::set<int> coords;
+    std::vector<std::pair<int, int>> ord;
+    for (int i = 0; i < n; ++i) ord.push_back({a[i], i});
+
+    std::sort(ord.rbegin(), ord.rend());
+
+    dbg(ord);
+
+    auto nj = [&](bool left_jump, int x) -> int {
+        auto it = coords.upper_bound(left_jump ? -x : x); // greatest one for left_jump
+        if (it == coords.end()) return -1;
+        return std::abs(*coords.rbegin());
+    };
+
+    auto process = [&](bool left_jump) {
+        auto& mod = left_jump ? lj : rj;
+
+        for (int i = 0; i < n;) {
+            int j = i;
+            std::vector<int> to_add;
+            while (j < n && ord[j].first == ord[i].first) {
+                to_add.push_back(ord[j].second);
+                ++j;
+            }
+
+            dbg(ord[i].first, coords, to_add);
+
+            for (int x : to_add) {
+                int pj = nj(left_jump, x);
+                if (left_jump && pj < x) mod[x] = pj;
+                if (!left_jump && pj > x) mod[x] = pj;
+            }
+
+            for (int x : to_add) coords.insert(left_jump ? -x : x);
+
+            i = j;
+
+            dbg(coords);
+        }
+    };
+
+    process(true);
+    std::sort(ord.begin(), ord.end());
+    coords.clear();
+    process(false);
+
+    // std::set<std::pair<int, int>> jump;
+    
+    // for (int i = 0; i < n; ++i) jump.insert({a[i], -i});
+    // for (int i = n - 1; i >= 0; --i) { // rightmost left jump
+    //     auto to = jump.upper_bound({a[i], n});
+    //     if (to != jump.end()) {
+    //         lj[i] = -to->second;
+    //     }
+    //     jump.erase({a[i], -i});
+    // }
+
+    // assert(sz(jump) == 0);
+
+    // for (int i = 0; i < n; ++i) jump.insert({-a[i], i});
+    // for (int i = 0; i < n; ++i) {
+    //     auto to = jump.upper_bound({-a[i], n});
+    //     if (to != jump.end()) {
+    //         rj[i] = to->second;
+    //     }
+    //     jump.erase({-a[i], i});
+    // }
+
+    // assert(sz(jump) == 0);
+
+
+    dbg(lj, rj);
+
+    for (int i = 0; i < n; ++i) {
+        if (lj[i] != -1) unite(lj[i], i);
+        if (rj[i] != -1) unite(rj[i], i);
+    }
+
+    std::vector<int> largest_height(n);
+    for (int i = 0; i < n; ++i) {
+        int p = get(get, i);
+        largest_height[p] = std::max(largest_height[p], a[i]);
+    }
+
+    for (int i = 0; i < n; ++i) {
+        std::cout << largest_height[get(get, i)] + 1 << " ";
+    }
+    
+    std::cout << "\n";
 }
 
 signed main() {
@@ -312,7 +434,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

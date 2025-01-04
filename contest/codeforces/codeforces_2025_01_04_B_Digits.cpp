@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -303,16 +303,46 @@ inline namespace FileIO {
 const db EPS = 1e-9;
 const int mx = 2e5+1;
 
+ll fac[10];
+
 void solve() {
-	
+	def(ll, n, d);
+
+    str check = "13579";
+    vb good(5);
+    good[0] = 1;
+    good[1] = n >= 9 || (fac[n] * d % 3 == 0);
+    good[2] = d == 5;
+
+    int sum = 0;
+    int car = 1;
+    dbg(n, d);
+    rep(fac[n % 6] % 6) {
+        sum += car * (d % 7);
+        sum %= 7;
+        car = car * 10 % 7;
+    }
+
+    dbg(sum);
+
+    good[3] = n >= 6 || sum == 0;
+    good[4] = n >= 9 || (fac[n] * d % 9 == 0);
+
+    F0R(i, 5) {
+        if (good[i]) pr(check[i], " ");
+    }
+    ps();
 }
 
 signed main() {
 	// clock_t start = clock();
 	setIO();
 
+    fac[0] = fac[1] = 1;
+    FOR(i, 2, 10) fac[i] = i * fac[i - 1];
+
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

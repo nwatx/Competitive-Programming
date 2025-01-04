@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -304,7 +304,31 @@ const db EPS = 1e-9;
 const int mx = 2e5+1;
 
 void solve() {
-	
+	int n; re(n);
+    V<vi> adj(n + 1);
+    rep(n - 1) {
+        def(int, a, b);
+        adj[a].pb(b);
+        adj[b].pb(a);
+    }
+
+    vi dpa(n + 1), dpb(n + 1);
+
+    auto dfs = [&](const auto &dfs, int v, int p) -> void {
+        dpa[v] = 1;
+
+        each(c, adj[v]) {
+            if (c != p) {
+                dfs(dfs, c, v);
+                dpa[v] += dpb[c];
+                dpb[v] += max(dpa[c], dpb[c]);
+            }
+        }
+    };
+
+    dfs(dfs, 1, 0);
+
+    ps(max(dpa[1], dpb[1]));
 }
 
 signed main() {
@@ -312,7 +336,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

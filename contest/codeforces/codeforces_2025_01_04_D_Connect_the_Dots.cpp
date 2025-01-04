@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -299,12 +299,60 @@ inline namespace FileIO {
 };
 #pragma endregion
 
+/**
+ * Description: Disjoint Set Union with path compression
+	* and union by size. Add edges and test connectivity. 
+	* Use for Kruskal's or Boruvka's minimum spanning tree.
+ * Time: O(\alpha(N))
+ * Source: CSAcademy, KACTL
+ * Verification: *
+ */
+
+struct DSU {
+	vi e; void init(int N) { e = vi(N,-1); }
+	int get(int x) { return e[x] < 0 ? x : e[x] = get(e[x]); } 
+	bool sameSet(int a, int b) { return get(a) == get(b); }
+	int size(int x) { return -e[get(x)]; }
+	bool unite(int x, int y) { // union by size
+		x = get(x), y = get(y); if (x == y) return 0;
+		if (e[x] > e[y]) swap(x,y);
+		e[x] += e[y]; e[y] = x; return 1;
+	}
+};
+
 // Changeable constants
 const db EPS = 1e-9;
 const int mx = 2e5+1;
 
 void solve() {
-	
+	def(int, n, m);
+
+	V<vi> dp(11, vi(n));
+	DSU dsu; dsu.init(n);
+
+	rep(m) {
+		def(int, a, k, d);
+		--a;
+		++dp[k][a];
+		if (a + k * (d) < n) --dp[k][a + k * (d)];
+	}
+
+	FOR(k, 1, 11) {
+		F0R(i, k) {
+			int sum = 0;
+			for (int j = i; j < n; j += k) {
+				sum += dp[k][j];
+
+				if (sum > 0) {
+					if (j + k < n) dsu.unite(j, j + k);
+				}
+			}
+		}
+	}
+
+	set<int> pars;
+	F0R(i, n) pars.insert(dsu.get(i));
+	ps(sz(pars));
 }
 
 signed main() {
@@ -312,7 +360,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

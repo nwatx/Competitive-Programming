@@ -304,7 +304,25 @@ const db EPS = 1e-9;
 const int mx = 2e5+1;
 
 void solve() {
-	
+    def(int, n);
+    vi v(n); re(v);
+    sorr(v);
+    if(sz(v) >= 2) sort(v.begin() + 1, v.end());
+    vi b = v;
+    vi c = v;
+    FOR(i, 1, n) {
+        ckmax(c[i], c[i - 1]);
+        ckmin(b[i], b[i - 1]);
+    }
+
+    dbg(c, b);
+
+    int ret = 0;
+    F0R(i, n) {
+        ret += c[i] - b[i];
+    }
+
+    ps(ret);
 }
 
 signed main() {
@@ -312,7 +330,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

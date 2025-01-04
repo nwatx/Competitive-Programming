@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -302,6 +302,23 @@ inline namespace FileIO {
 // Changeable constants
 const db EPS = 1e-9;
 const int mx = 2e5+1;
+
+// first index has to match, otherwise it doesn't work
+// then, there just has to be at least one of every element in array b
+// so basically you only care about the elements in array b
+
+// 1 -> 2 -> 3
+// for 1 1 2 3 3 2
+// for first query, nothing happens, should be ya
+// if you move something, just assume that you can always put it in the right spot
+// // so for second query, 2, 2 then 
+
+// i thiink instead, better to query for condition where you get rested
+// 1 2 3 2 => doesn't work since 1 needs to go after 3 => stuff fails if there is a sequence that goes to the end and 2 3 2
+
+// how to check => 
+// supppose you have array a and b
+
 
 void solve() {
 	

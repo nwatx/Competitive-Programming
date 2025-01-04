@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -304,7 +304,29 @@ const db EPS = 1e-9;
 const int mx = 2e5+1;
 
 void solve() {
-	
+    // find the longest decreasing subsequence
+    int n, m; re(n, m);
+    vi v(n); re(v);
+
+    vi deq;
+
+    F0R(i, n) {
+        if(deq.empty()) deq.pb(-v[i]);
+        else {
+            auto it = lower_bound(all(deq), -v[i]);
+            if(it == deq.end()) deq.pb(-v[i]);
+            else *it = -v[i];
+        }
+    }
+
+    int len = sz(deq);
+    rep(m) {
+        def(int, a, b);
+        if (v[a] < v[b]) --len;
+        else if (v[a] > v[b]) ++len;
+        swap(v[a], v[b]);
+        ps(len);
+    }
 }
 
 signed main() {

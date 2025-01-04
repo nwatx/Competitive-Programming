@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -228,6 +228,15 @@ inline namespace ToString {
 	tcTU> str ts(pair<T,U> p); // pairs
 	tcT> typename enable_if<needs_output_v<T>,str>::type ts(T v); // vectors, arrays
 	tcTU> str ts(pair<T,U> p) { return "("+ts(p.f)+", "+ts(p.s)+")"; }
+    tcT> str ts(priority_queue<T> pq) {
+        str res = "{";
+        while(sz(pq)) {
+            T top = pq.top(); pq.pop();
+            res += ts(top);
+            if (sz(pq)) res += ", ";
+        } res += "}";
+        return res;
+    }
 	tcT> typename enable_if<is_iterable_v<T>,str>::type ts_sep(T v, str sep) {
 		// convert container to string w/ separator sep
 		bool fst = 1; str res = "";
@@ -304,7 +313,47 @@ const db EPS = 1e-9;
 const int mx = 2e5+1;
 
 void solve() {
-	
+    def(int, n, m, k);
+    
+    V<vpi> adj(n + 1);
+    rep(m) {
+        ints(a, b, c);
+        adj[a].pb({b, c});
+    }
+
+    V<priority_queue<ll>> prev(n + 1); // {cost, prev}, should be 10 lowest
+    pqg<pl> q;
+    q.push({0, 1});
+    while(sz(q)) {
+        pl top = q.top(); q.pop();
+
+        if (sz(prev[top.s]) && top.f > prev[top.s].top()) continue;
+
+        each(e, adj[top.s]) {
+            int to = e.f;
+            int w = e.s;
+            ll dist = top.f + w;
+ 
+            if (sz(prev[to]) < k || dist < prev[to].top()) {
+                prev[to].push(dist);
+                q.push({dist, to});
+            }
+            if (sz(prev[to]) > k) prev[to].pop(); 
+        }
+    }
+
+    vl ret;
+    while(sz(prev[n])) {
+        ll top = prev[n].top();
+        prev[n].pop();
+        ret.pb(top);
+    }
+
+    sor(ret);
+
+    F0R(i, k) {
+        pr(ret[i], " ");
+    }
 }
 
 signed main() {

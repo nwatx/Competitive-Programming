@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -303,8 +303,61 @@ inline namespace FileIO {
 const db EPS = 1e-9;
 const int mx = 2e5+1;
 
+
 void solve() {
-	
+    V<char> ending{0, 'n','a','r','e','k'};
+    map<char, int> endingidx;
+    F0R(i, sz(ending)) endingidx[ending[i]] = i;
+	// can either use the string or not use the string
+    // let dp[i][j] be the best we can do with string i ending at k
+    // or empty
+    def(int, n, m);
+    V<str> v(n);
+    F0R(i, n) {
+        str s; re(s);
+        V<char> rm;
+        each(c, s) if (c == 'n' || c == 'a' || c == 'r' || c == 'e' || c == 'k') rm.pb(c);
+        v[i] = str(all(rm));
+    }
+
+    vi dp(6, -MOD);
+    vi prev(6, -MOD);
+
+    prev[0] = 0;
+
+    F0R(i, n) {
+        F0R(j, 6) dp[j] = -MOD;
+        R0F(j, 6) {
+            // assuming starting at ending
+            int score = -sz(v[i]);
+            int cur = j;
+            each(c, v[i]) {
+                int next = (cur + 1) % sz(ending);
+                if (c == ending[next]) {
+                    if (c == 'k') {
+                        score += 10;
+                        cur = 0;
+                        dp[0] = max(prev[j] + score, dp[0]);
+                    } else {
+                        cur = (cur + 1) % sz(ending);
+                    }
+
+                    dp[endingidx[c]] = max(prev[j] + score, dp[endingidx[c]]);
+                }
+            }
+
+            // dbg(j, score, prev[j] + score, prev[v[i].back()]);
+
+            ckmax(dp[j], prev[j]);
+        }
+
+        dbg(i);
+        dbg(dp);
+        dbg(prev);
+        swap(dp, prev);
+    }
+
+    ps(*max_element(all(prev)));
 }
 
 signed main() {
@@ -312,7 +365,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

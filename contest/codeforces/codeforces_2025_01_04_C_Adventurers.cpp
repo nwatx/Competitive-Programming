@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -303,8 +303,128 @@ inline namespace FileIO {
 const db EPS = 1e-9;
 const int mx = 2e5+1;
 
+template <class T> class BIT {
+  private:
+	int size;
+	vector<T> bit;
+	vector<T> arr;
+
+  public:
+	BIT(int size) : size(size), bit(size + 1), arr(size) {}
+
+	/** Sets the value at index ind to val. */
+	void set(int ind, T val) { add(ind, val - arr[ind]); }
+
+	/** Adds val to the element at index ind. */
+	void add(int ind, T val) {
+		arr[ind] += val;
+		ind++;
+		for (; ind <= size; ind += ind & -ind) { bit[ind] += val; }
+	}
+
+	/** @return The sum of all values in [0, ind]. */
+	T query(int ind) {
+		ind++;
+		T total = 0;
+		for (; ind > 0; ind -= ind & -ind) { total += bit[ind]; }
+		return total;
+	}
+
+    T query(int l, int r) {
+        return query(r) - query(l - 1);
+    }
+};
+
+/**
+ * Description: coordinate compression, get index of x by counting # of elements < x
+ * Source: Own
+ * Verification: ?
+ */
+
+template<class T> void nor(vector<T>& v) {
+    sort(all(v)); v.erase(unique(all(v)),end(v)); }
+template<class T> int ind(vector<T>& v, T x) { 
+    return lb(all(v),x)-begin(v); }
+
 void solve() {
-	
+    def(int, n);
+    vpi points(n);
+    F0R(i, n) {
+        re(points[i]);
+        points[i].f *= -1;
+        points[i].s *= -1;
+    }
+
+
+    sort(all(points));
+
+    // coord compress on y
+    vi y;
+    each(a, points) y.pb(a.s);
+    nor(y);
+
+    BIT<int> base(sz(y));
+    each(p, points) base.add(ind(y, p.s), 1);
+
+    auto good = [&](int R) -> pair<int, pi> {
+        dbg(R);
+        BIT<int> left(sz(y));
+        BIT<int> right = base;
+
+        for (int i = 0; i < sz(points);) {
+            int start_x = points[i].f;
+            while (i < n && points[i].f == start_x) {
+                right.add(ind(y, points[i].s), -1);
+                left.add(ind(y, points[i].s), 1);
+                ++i;
+            }
+
+            // binary search upwards
+            // should be the max of left and right
+            auto good_idx_l = [&](int y_level) { return left.query(0, y_level) >= R; };
+            auto good_idx_r = [&](int y_level) { return right.query(0, y_level) >= R; };
+
+            int left_good = fstTrue(0, sz(y), good_idx_l);
+            int right_good = fstTrue(0, sz(y), good_idx_r);
+
+            if (left_good >= sz(y) || right_good >= sz(y)) continue;
+            dbg(left_good, right_good);
+
+            int level = std::max(left_good, right_good);
+            int q3 = left.query(0, level);
+            int q2 = left.query(level + 1, sz(y) - 1);
+
+            int q4 = right.query(0, level);
+            int q1 = right.query(level + 1, sz(y) - 1);
+
+            dbg(start_x, level, q1, q2, q3, q4);
+
+            int worst = min(q1, q2, q3, q4);
+            if (worst >= R) return {worst, {start_x, y[level]}};
+        }
+
+        return {-1, {-1, -1}};
+    };
+
+    int l = 0, r = n;
+    pair<int, pi> ret;
+
+    while (l <= r) {
+        int mid = l + (r - l) / 2;
+        auto p = good(mid);
+        dbg(mid, p);
+        if (p.f == -1) {
+            r = mid - 1;
+        } else {
+            ret = p;
+            l = mid + 1;
+        }
+    }
+
+    dbg(ret);
+
+    ps(ret.f);
+    ps(-ret.s.f, -ret.s.s);
 }
 
 signed main() {
@@ -312,7 +432,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

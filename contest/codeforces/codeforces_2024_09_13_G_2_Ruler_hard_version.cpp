@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -301,10 +301,34 @@ inline namespace FileIO {
 
 // Changeable constants
 const db EPS = 1e-9;
-const int mx = 2e5+1;
 
 void solve() {
-	
+    int mx = 999;
+    int lo = 2, hi = mx;
+
+    while(lo < hi) {
+        dbg(hi, lo);
+        int d = hi - lo;
+        
+        int l = lo + d / 3, r = lo + d * 2 / 3;
+
+        cout << "? " << l << " " << r << endl;
+        int prod; cin >> prod;
+
+        dbg(prod, l, r);
+
+        if(prod == (l + 1) * (r + 1)) {
+            hi = l;
+        } else if(prod == l * (r + 1)) {
+            lo = l, hi = r;
+        } else if(prod == l * r) {
+            lo = r + 1;
+        } else {
+            // assert(false);
+        }
+    }
+
+    ps("!", lo);
 }
 
 signed main() {
@@ -312,7 +336,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

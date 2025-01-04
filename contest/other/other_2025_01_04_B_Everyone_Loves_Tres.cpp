@@ -304,7 +304,22 @@ const db EPS = 1e-9;
 const int mx = 2e5+1;
 
 void solve() {
-	
+    int n; re(n);
+    if (n == 1 || n == 3) ps(-1);
+    else if (n == 2) ps(66);
+    else {
+        if (n % 2 == 0) {
+            rep(n - 2) cout << "3";
+            cout << "66";
+        } else {
+            rep(n - 4) {
+                cout << "3";
+            }
+            cout << "6366";
+        }
+
+        ps();
+    }
 }
 
 signed main() {
@@ -312,7 +327,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

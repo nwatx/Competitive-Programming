@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -304,7 +304,25 @@ const db EPS = 1e-9;
 const int mx = 2e5+1;
 
 void solve() {
-	
+	int n; re(n);
+    rep(n) {
+        def(int, x, y);
+        int sum = x + 2 * y;
+        if(sum % 2) {
+            ps("NO");
+            continue;
+        }
+
+        sum /= 2;
+
+        int used2 = min(y, sum / 2);
+        sum -= 2 * used2;
+        if (x >= sum) {
+            ps("YES");
+        } else {
+            ps("NO");
+        }
+    }
 }
 
 signed main() {

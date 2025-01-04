@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -304,7 +304,28 @@ const db EPS = 1e-9;
 const int mx = 2e5+1;
 
 void solve() {
-	
+    def(int, n, m, q);
+    dbg(n, m, q);
+    vl a(n), d(n), l(m), t(q);
+    re(a, d, l, t);
+
+    dbg(a);
+    dbg(d);
+    dbg(l);
+    dbg(t);
+
+    vi last(n);
+    F0R(i, n) last[i] = d[i] - a[i];
+    sor(last);
+    dbg(last); // last time possible to start a task
+
+    // tasks scheduled as late as possible
+    // when completing in order, find maximal number you can fit before the deadline.
+
+    each(q, t) {
+        dbg(q);
+        
+    }
 }
 
 signed main() {
@@ -312,7 +333,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

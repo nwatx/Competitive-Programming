@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -304,7 +304,26 @@ const db EPS = 1e-9;
 const int mx = 2e5+1;
 
 void solve() {
-	
+    int n, s, m; re(n, s, m);
+	set<int> ends, starts;
+    ends.insert(0);
+    starts.insert(m);
+
+    F0R(i, n) {
+        int l, r; re(l, r);
+        ends.insert(r);
+        starts.insert(l);
+    }
+
+    each(x, ends) {
+        int closest = *starts.lower_bound(x);
+        dbg(x, closest);
+        if(closest - x >= s) {
+            ps("YES");
+            return;
+        }
+    }
+    ps("NO");
 }
 
 signed main() {
@@ -312,7 +331,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

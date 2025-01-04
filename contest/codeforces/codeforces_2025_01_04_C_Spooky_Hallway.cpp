@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -304,7 +304,23 @@ const db EPS = 1e-9;
 const int mx = 2e5+1;
 
 void solve() {
-	
+	int n; re(n);
+    def(str, s);
+
+    int c0 = 0;
+    int c1 = 0;
+    
+    F0R(i, n) {
+        if (s[i] != s[i + 1]) {
+            if (s[i] == '1') {
+                c0++;
+            } else {
+                c1++;
+            }
+        }
+    }
+
+    ps(min(c0, c1));
 }
 
 signed main() {

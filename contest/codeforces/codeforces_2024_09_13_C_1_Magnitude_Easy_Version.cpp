@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -72,7 +72,7 @@ tcT> int lwb(V<T>& a, const T& b) { return int(lb(all(a),b)-bg(a)); }
 tcT> int sgn(T x) { return (x > 0) - (x < 0); }
 /* #endregion */
 
-const int MOD = 1e9+7; // 998244353;
+const int MOD = 998244353;
 const ll INF = 1e18; // not too close to LLONG_MAX
 const db PI = acos((db)-1);
 const char nl = '\n';
@@ -304,15 +304,58 @@ const db EPS = 1e-9;
 const int mx = 2e5+1;
 
 void solve() {
-	
+    int n; re(n);
+    vi v(n); re(v);
+    V<vl> dp(n + 1, vl(2));
+    V<vl> ways(n + 1, vl(2));
+
+    fill(all(dp[0]), -INF);
+    fill(all(dp[1]), -INF);
+
+    dp[0][0] = 0;
+    dp[0][1] = 0;
+    ways[0][0] = 1;
+
+    F0R(i, n) {
+        int x = v[i];
+        dp[i + 1][0] = max(dp[i][0] + x, abs(dp[i][1] + x));
+
+        if (dp[i][0] + x == dp[i + 1][0]) {
+            ways[i + 1][0] += ways[i][0];
+        }
+
+        if (abs(dp[i][1] + x) == dp[i + 1][0]) {
+            ways[i + 1][0] += ways[i][1];
+        }
+
+        dp[i + 1][1] = min(dp[i][1] + x, dp[i][0] + x);
+
+        if(dp[i][1] + x == dp[i + 1][1]) {
+            ways[i + 1][1] += ways[i][1];
+        }
+
+        if(dp[i][0] + x == dp[i + 1][1]) {
+            ways[i + 1][1] += ways[i][0];
+        }
+    }
+
+    dbg(dp);
+
+    // ps(dp[n][0]);
+    if(dp[n][0] == dp[n][1]) {
+        ps(ways[n][0] + ways[n][1]);
+    } else {
+        ps(ways[n][0]);
+    }
 }
+
 
 signed main() {
 	// clock_t start = clock();
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";

@@ -1,4 +1,4 @@
-// [auto_folder]: 
+// [auto_folder]: cf
 // ^ type folder name for scripted placement
 
 // Codeforces
@@ -303,8 +303,91 @@ inline namespace FileIO {
 const db EPS = 1e-9;
 const int mx = 2e5+1;
 
+/**
+ * Description: Disjoint Set Union with Rollback
+ * Source: see DSU
+ * Verification: *
+ */
+
+struct DSUrb {
+    vi e; void init(int n) { e = vi(n,-1); }
+    int get(int x) { return e[x] <= 0 ? x : get(e[x]); } 
+    bool sameSet(int a, int b) { return get(a) == get(b); }
+    int size(int x) { return -e[get(x)]; }
+    vector<array<int,4>> mod;
+    bool unite(int x, int y) { // union-by-rank
+        x = get(x), y = get(y); 
+        if (x == y) { mod.pb({-1,-1,-1,-1}); return 0; }
+        if (e[x] > e[y]) swap(x,y);
+        mod.pb({x,y,e[x],e[y]});
+        e[x] += e[y]; e[y] = x; return 1;
+    }
+    void rollback() {
+        auto a = mod.bk; mod.pop_back();
+        if (a[0] != -1) e[a[0]] = a[2], e[a[1]] = a[3];
+    }
+};
+
+
 void solve() {
-	
+	// need an auxilary graph in each row and each column
+    int n, m; re(n, m);
+    dbg(n, m);
+    DSUrb dsu; dsu.init(n * m + n + m);
+    F0R(i, n + m) dsu.e[n * m + i] = 0;
+
+    auto id = [&](int r, int c) -> int {
+        return r * m + c;
+    };
+
+    auto idrow = [&](int r) {
+        return n * m + r;
+    };
+
+    auto idcol = [&](int c) {
+        return n * m + n + c;
+    };
+
+    vi hcol(m), hrow(n);
+
+    V<str> mat(n); re(mat);
+    F0R(i, n) {
+        F0R(j, m) {
+            char c = mat[i][j];
+            if (c == '#') {
+                F0R(k, 4) {
+                    int nx = i + dx[k];
+                    int ny = j + dy[k];
+                    if (nx < 0 || ny < 0 || nx >= n || ny >= m) continue;
+                    if (mat[nx][ny] == '#') dsu.unite(id(i, j), id(nx, ny));
+                }
+
+                ++hcol[i]; ++hrow[j];
+            }
+        }
+    }
+
+    int best = 0;
+
+    // auxilary adds 2 to the size
+    F0R(i, n) {
+        F0R(j, m) {
+            if (mat[i][j] == '#') {
+                if(i < n - 1) dsu.unite(id(i, j), idrow(i + 1));
+                if(j < m - 1) dsu.unite(id(i, j), idcol(j + 1));
+            }
+
+            bool rb = dsu.unite(idrow(i), idcol(j));
+
+            int compsz = dsu.size(idrow(i));
+            dbg(i, j, compsz);
+            int size = n + m - 1 - hrow[i] - hcol[j] + compsz;
+            ckmax(best, size);
+            if (rb) dsu.rollback();
+        }
+    }
+
+    ps(best);
 }
 
 signed main() {
@@ -312,7 +395,7 @@ signed main() {
 	setIO();
 
 	int n = 1;
-	// re(n);
+	re(n);
 	rep(n) {
 		// pr("Case #", _ + 1, ": "); // Kickstart
 		// cerr << "[dbg] Case #" << _ + 1 << ":\n";
