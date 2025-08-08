@@ -82,7 +82,9 @@
         "limits": "cpp",
         "numbers": "cpp",
         "queue": "cpp",
-        "set": "cpp"
+        "set": "cpp",
+        "map": "cpp",
+        "ios": "cpp"
     },
     "files.autoSave": "onFocusChange",
     "files.watcherExclude": {
